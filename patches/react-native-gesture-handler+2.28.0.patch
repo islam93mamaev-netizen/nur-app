@@ -1,0 +1,28 @@
+diff --git a/node_modules/react-native-gesture-handler/src/handlers/gestures/GestureDetector.tsx b/node_modules/react-native-gesture-handler/src/handlers/gestures/GestureDetector.tsx
+index 0000001..0000002 100644
+--- a/node_modules/react-native-gesture-handler/src/handlers/gestures/GestureDetector.tsx
++++ b/node_modules/react-native-gesture-handler/src/handlers/gestures/GestureDetector.tsx
+@@ -10,17 +10,19 @@ import { Reanimated, SharedValue } from './reanimatedWrapper';
+ import { registerHandler, unregisterHandler } from '../handlersRegistry';
+ import RNGestureHandlerModule from '../../RNGestureHandlerModule';
+ import {
+-  baseGestureHandlerWithMonitorProps,
+-  filterConfig,
+-  findNodeHandle,
++  baseGestureHandlerWithDetectorProps as baseGestureHandlerWithMonitorProps,
+   GestureTouchEvent,
+   GestureUpdateEvent,
+   GestureStateChangeEvent,
+   HandlerStateChangeEvent,
+-  scheduleFlushOperations,
+   UserSelect,
+   TouchAction,
+ } from '../gestureHandlerCommon';
++import {
++  filterConfig,
++  findNodeHandle,
++  scheduleFlushOperations,
++} from '../utils';
+ import {
+   GestureStateManager,
+   GestureStateManagerType,

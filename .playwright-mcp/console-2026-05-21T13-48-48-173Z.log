@@ -1,0 +1,14 @@
+[     381ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:26832
+[     417ms] [WARNING] "shadow*" style props are deprecated. Use "boxShadow". @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:33205
+[     441ms] [LOG] Running application "main" with appParams:
+ {rootTag: #root, hydrate: false} 
+Development-level warnings: ON.
+Performance optimizations: OFF. @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:920
+[     467ms] [WARNING] props.pointerEvents is deprecated. Use style.pointerEvents @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:33205
+[   26907ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:26832
+[   26918ms] [WARNING] "shadow*" style props are deprecated. Use "boxShadow". @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:33205
+[   26926ms] [LOG] Running application "main" with appParams:
+ {rootTag: #root, hydrate: false} 
+Development-level warnings: ON.
+Performance optimizations: OFF. @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:920
+[   26933ms] [WARNING] props.pointerEvents is deprecated. Use style.pointerEvents @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:33205

@@ -1,0 +1,115 @@
+// Маленький стор настроек, не связанных с прогрессом и темой.
+// Хранит:
+//   - Сервис для просмотра хадисов (Иснад / Sunnah.com)
+//   - API-ключ для AI-помощника (DeepSeek через OpenRouter или официальный)
+//   - Провайдер AI (openrouter | deepseek)
+
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const HADITH_SERVICE_KEY = '@nur_app/hadith_service_v1';
+const AI_API_KEY = '@nur_app/ai_api_key_v1';
+const AI_PROVIDER_KEY = '@nur_app/ai_provider_v1';
+
+export const HADITH_SERVICES = {
+  ISNAD: 'isnad',
+  SUNNAH: 'sunnah',
+};
+
+export const HADITH_SERVICE_LABEL = {
+  [HADITH_SERVICES.ISNAD]:  { short: 'Иснад',      long: 'Иснад (Isnad.link, рус.)' },
+  [HADITH_SERVICES.SUNNAH]: { short: 'Sunnah.com', long: 'Sunnah.com (англ./араб.)' },
+};
+
+const DEFAULT_HADITH_SERVICE = HADITH_SERVICES.ISNAD;
+
+// AI-провайдеры
+export const AI_PROVIDERS = {
+  OPENROUTER: 'openrouter', // OpenRouter с моделью DeepSeek V4 Flash (free)
+  DEEPSEEK:   'deepseek',   // Официальный API DeepSeek (https://api.deepseek.com)
+};
+
+export const AI_PROVIDER_LABEL = {
+  [AI_PROVIDERS.OPENROUTER]: {
+    short: 'OpenRouter',
+    long:  'OpenRouter — DeepSeek V4 Flash (бесплатно)',
+    keyUrl: 'https://openrouter.ai/settings/keys',
+  },
+  [AI_PROVIDERS.DEEPSEEK]: {
+    short: 'DeepSeek',
+    long:  'Официальный DeepSeek API',
+    keyUrl: 'https://platform.deepseek.com/api_keys',
+  },
+};
+
+const DEFAULT_AI_PROVIDER = AI_PROVIDERS.OPENROUTER;
+
+const Ctx = createContext(null);
+
+export function SettingsProvider({ children }) {
+  const [hadithService, setHadithServiceState] = useState(DEFAULT_HADITH_SERVICE);
+  const [aiApiKey, setAiApiKeyState] = useState('');
+  const [aiProvider, setAiProviderState] = useState(DEFAULT_AI_PROVIDER);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const raw = await AsyncStorage.getItem(HADITH_SERVICE_KEY);
+        if (raw === HADITH_SERVICES.ISNAD || raw === HADITH_SERVICES.SUNNAH) {
+          setHadithServiceState(raw);
+        }
+        const k = await AsyncStorage.getItem(AI_API_KEY);
+        if (k) setAiApiKeyState(k);
+        const p = await AsyncStorage.getItem(AI_PROVIDER_KEY);
+        if (p === AI_PROVIDERS.OPENROUTER || p === AI_PROVIDERS.DEEPSEEK) {
+          setAiProviderState(p);
+        }
+      } catch (e) { /* ignore */ }
+      setLoaded(true);
+    })();
+  }, []);
+
+  const setHadithService = useCallback(async (next) => {
+    if (next !== HADITH_SERVICES.ISNAD && next !== HADITH_SERVICES.SUNNAH) return;
+    setHadithServiceState(next);
+    try { await AsyncStorage.setItem(HADITH_SERVICE_KEY, next); } catch (e) { /* ignore */ }
+  }, []);
+
+  const setAiApiKey = useCallback(async (next) => {
+    const trimmed = (next || '').trim();
+    setAiApiKeyState(trimmed);
+    try {
+      if (trimmed) await AsyncStorage.setItem(AI_API_KEY, trimmed);
+      else await AsyncStorage.removeItem(AI_API_KEY);
+    } catch (e) { /* ignore */ }
+  }, []);
+
+  const setAiProvider = useCallback(async (next) => {
+    if (next !== AI_PROVIDERS.OPENROUTER && next !== AI_PROVIDERS.DEEPSEEK) return;
+    setAiProviderState(next);
+    try { await AsyncStorage.setItem(AI_PROVIDER_KEY, next); } catch (e) { /* ignore */ }
+  }, []);
+
+  const value = {
+    loaded,
+    hadithService, setHadithService,
+    aiApiKey, setAiApiKey,
+    aiProvider, setAiProvider,
+  };
+  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
+}
+
+export function useSettings() {
+  const ctx = useContext(Ctx);
+  if (!ctx) {
+    // Безопасный fallback вне провайдера
+    return {
+      loaded: true,
+      hadithService: DEFAULT_HADITH_SERVICE, setHadithService: () => {},
+      aiApiKey: '', setAiApiKey: () => {},
+      aiProvider: DEFAULT_AI_PROVIDER, setAiProvider: () => {},
+    };
+  }
+  return ctx;
+}

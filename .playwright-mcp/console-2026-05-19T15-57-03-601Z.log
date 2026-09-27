@@ -1,0 +1,17 @@
+[     133ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:26832
+[     142ms] [WARNING] "shadow*" style props are deprecated. Use "boxShadow". @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:33205
+[     147ms] [LOG] Running application "main" with appParams:
+ {rootTag: #root, hydrate: false} 
+Development-level warnings: ON.
+Performance optimizations: OFF. @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:920
+[     153ms] [WARNING] props.pointerEvents is deprecated. Use style.pointerEvents @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:33205
+[  553272ms] [ERROR] Unexpected text node: . A text node cannot be a child of a <View>. @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:35087
+[  553273ms] [ERROR] Unexpected text node: . A text node cannot be a child of a <View>. @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:35087
+[  579133ms] [ERROR] Unexpected text node: . A text node cannot be a child of a <View>. @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:35087
+[  705402ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:26832
+[  705424ms] [WARNING] "shadow*" style props are deprecated. Use "boxShadow". @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:33205
+[  705438ms] [LOG] Running application "main" with appParams:
+ {rootTag: #root, hydrate: false} 
+Development-level warnings: ON.
+Performance optimizations: OFF. @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:920
+[  705453ms] [WARNING] props.pointerEvents is deprecated. Use style.pointerEvents @ http://localhost:8081/index.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.routerRoot=app:33205

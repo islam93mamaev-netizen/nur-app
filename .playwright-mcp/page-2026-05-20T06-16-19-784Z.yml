@@ -1,0 +1,112 @@
+- generic [ref=e10]:
+  - generic [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]: Ассаламу алейкум
+        - generic [ref=e21]: Продолжайте свой путь сегодня
+      - generic [ref=e22]:
+        - generic [ref=e23]: 🔥
+        - generic [ref=e24]: "1"
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]: Уровень
+        - generic [ref=e29]: Студент
+      - generic [ref=e30]:
+        - generic [ref=e31]: 122 XP
+        - generic [ref=e32]: 72/150
+    - generic [ref=e37]: Аят дня
+    - generic [ref=e38]:
+      - generic [ref=e39]: وَبَشِّرِ ٱلصَّٰبِرِينَ
+      - generic [ref=e40]: Wa bašširi ṣ-ṣābirīn
+      - generic [ref=e41]: И обрадуй же терпеливых.
+      - generic [ref=e43]: Сура «Аль-Бакара», 2:155
+    - generic [ref=e46]: Хадис дня
+    - generic [ref=e47] [cursor=pointer]:
+      - generic [ref=e49]: Халяль и харам
+      - generic [ref=e50]: Дозволенное и запретное
+      - generic [ref=e51]: "Пророк ﷺ сказал: «Поистине, дозволенное (халяль) очевидно, запретное (харам) очевидно, а между ними — сомнительное, о котором многие не знают…»"
+      - generic [ref=e52]: Бухари, Муслим (40 хадисов ан-Навави, № 6)
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: "2"
+        - generic [ref=e56]: из 19 уроков
+      - generic [ref=e57]:
+        - generic [ref=e58]: "26"
+        - generic [ref=e59]: выученных слов
+      - generic [ref=e60]:
+        - generic [ref=e61]: "0"
+        - generic [ref=e62]: на повторение
+    - generic [ref=e65]: Сегодня
+    - generic [ref=e66]:
+      - generic [ref=e67]: "Дневная цель: 10 минут"
+      - generic [ref=e68]:
+        - generic [ref=e69]: 📖
+        - generic [ref=e70]: Пройти 1 урок
+      - generic [ref=e71]:
+        - generic [ref=e72]: 🔤
+        - generic [ref=e73]: Повторить 5 слов
+      - generic [ref=e74]:
+        - generic [ref=e75]: ✅
+        - generic [ref=e76]: Сдать 1 мини-тест
+    - generic [ref=e79]: Продолжить
+    - generic [ref=e80] [cursor=pointer]:
+      - generic [ref=e82]: "Коран: знакомство"
+      - generic [ref=e83]: Структура Корана
+      - generic [ref=e84]: 114 сур, аяты, джузы — как устроен Коран.
+    - generic [ref=e87]: Действия
+    - generic [ref=e88]:
+      - generic [ref=e89] [cursor=pointer]:
+        - generic [ref=e90]: ✏️
+        - generic [ref=e91]: Алфавит
+      - generic [ref=e92] [cursor=pointer]:
+        - generic [ref=e93]: 🎓
+        - generic [ref=e94]: Тесты
+      - generic [ref=e95] [cursor=pointer]:
+        - generic [ref=e96]: ❓
+        - generic [ref=e97]: Вопросы
+      - generic [ref=e98] [cursor=pointer]:
+        - generic [ref=e99]: 🕐
+        - generic [ref=e100]: Намазы
+      - generic [ref=e101] [cursor=pointer]:
+        - generic [ref=e102]: 📜
+        - generic [ref=e103]: Хадисы
+      - generic [ref=e104] [cursor=pointer]:
+        - generic [ref=e105]: 🃏
+        - generic [ref=e106]: Карточки
+      - generic [ref=e107] [cursor=pointer]:
+        - generic [ref=e108]: 🕌
+        - generic [ref=e109]: Практика
+      - generic [ref=e110] [cursor=pointer]:
+        - generic [ref=e111]: ✨
+        - generic [ref=e112]: AI-помощник
+  - tablist [ref=e114]:
+    - link "🏠 🏠 Главная" [ref=e115] [cursor=pointer]:
+      - /url: /Main/Home
+      - generic:
+        - generic [ref=e117]: 🏠
+        - generic [ref=e119]: 🏠
+      - generic [ref=e120]: Главная
+    - link "📚 📚 Уроки" [ref=e121] [cursor=pointer]:
+      - /url: /Main/Foundations
+      - generic:
+        - generic [ref=e123]: 📚
+        - generic [ref=e125]: 📚
+      - generic [ref=e126]: Уроки
+    - link "📖 📖 Коран" [ref=e127] [cursor=pointer]:
+      - /url: /Main/Quran
+      - generic:
+        - generic [ref=e129]: 📖
+        - generic [ref=e131]: 📖
+      - generic [ref=e132]: Коран
+    - link "🔤 🔤 Слова" [ref=e133] [cursor=pointer]:
+      - /url: /Main/Words
+      - generic:
+        - generic [ref=e135]: 🔤
+        - generic [ref=e137]: 🔤
+      - generic [ref=e138]: Слова
+    - link "👤 👤 Профиль" [ref=e139] [cursor=pointer]:
+      - /url: /Main/Profile
+      - generic:
+        - generic [ref=e141]: 👤
+        - generic [ref=e143]: 👤
+      - generic [ref=e144]: Профиль

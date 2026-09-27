@@ -1,0 +1,142 @@
+- generic [ref=e10]:
+  - generic [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]: Ассаламу алейкум
+        - generic [ref=e21]: Продолжайте свой путь сегодня
+      - generic [ref=e22]:
+        - generic [ref=e23]: 🔥
+        - generic [ref=e24]: "1"
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]: Уровень
+        - generic [ref=e29]: Студент
+      - generic [ref=e30]:
+        - generic [ref=e31]: 122 XP
+        - generic [ref=e32]: 72/150
+    - generic [ref=e37]: Аят дня
+    - generic [ref=e38]:
+      - generic [ref=e39]: إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا
+      - generic [ref=e40]: Inna maʿa l-ʿusri yusran
+      - generic [ref=e41]: Воистину, вместе с трудностью приходит облегчение.
+      - generic [ref=e43]: Сура «Аш-Шарх», 94:6
+    - generic [ref=e46]: Хадис дня
+    - generic [ref=e47] [cursor=pointer]:
+      - generic [ref=e49]: Искренность
+      - generic [ref=e50]: Религия — это искренность
+      - generic [ref=e51]: "Пророк ﷺ сказал: «Религия — это искренность». Мы спросили: «По отношению к кому?» Он сказал: «По отношению к Аллаху, Его Книге, Его посланнику, имамам мусульман и простым мусульманам»."
+      - generic [ref=e52]: Муслим (40 хадисов ан-Навави, № 7)
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: "2"
+        - generic [ref=e56]: из 19 уроков
+      - generic [ref=e57]:
+        - generic [ref=e58]: "26"
+        - generic [ref=e59]: выученных слов
+      - generic [ref=e60]:
+        - generic [ref=e61]: "26"
+        - generic [ref=e62]: на повторение
+    - generic [ref=e65]: Сегодня
+    - generic [ref=e66]:
+      - generic [ref=e67]: "Дневная цель: 10 минут"
+      - generic [ref=e68]:
+        - generic [ref=e69]: 📖
+        - generic [ref=e70]: Пройти 1 урок
+      - generic [ref=e71]:
+        - generic [ref=e72]: 🔤
+        - generic [ref=e73]: Повторить 5 слов
+      - generic [ref=e74]:
+        - generic [ref=e75]: ✅
+        - generic [ref=e76]: Сдать 1 мини-тест
+    - generic [ref=e79]: Продолжить
+    - generic [ref=e80] [cursor=pointer]:
+      - generic [ref=e82]: "Коран: знакомство"
+      - generic [ref=e83]: Структура Корана
+      - generic [ref=e84]: 114 сур, аяты, джузы — как устроен Коран.
+    - generic [ref=e87]: Поклонение
+    - generic [ref=e88]:
+      - generic [ref=e89] [cursor=pointer]:
+        - generic [ref=e91]: 🕐
+        - generic [ref=e92]: Намазы
+      - generic [ref=e93] [cursor=pointer]:
+        - generic [ref=e95]: 🧭
+        - generic [ref=e96]: Кибла
+      - generic [ref=e97] [cursor=pointer]:
+        - generic [ref=e99]: 📿
+        - generic [ref=e100]: Тасбих
+      - generic [ref=e101] [cursor=pointer]:
+        - generic [ref=e103]: 🤲
+        - generic [ref=e104]: Дуа
+    - generic [ref=e107]: Изучение языка
+    - generic [ref=e108]:
+      - generic [ref=e109] [cursor=pointer]:
+        - generic [ref=e111]: ✏️
+        - generic [ref=e112]: Алфавит
+      - generic [ref=e113] [cursor=pointer]:
+        - generic [ref=e115]: 👨‍🏫
+        - generic [ref=e116]: Грамматика
+      - generic [ref=e117] [cursor=pointer]:
+        - generic [ref=e119]: 🃏
+        - generic [ref=e120]: Карточки
+      - generic [ref=e121] [cursor=pointer]:
+        - generic [ref=e123]: ✨
+        - generic [ref=e124]: 99 имён
+    - generic [ref=e127]: Знание
+    - generic [ref=e128]:
+      - generic [ref=e129] [cursor=pointer]:
+        - generic [ref=e131]: 📜
+        - generic [ref=e132]: Хадисы
+      - generic [ref=e133] [cursor=pointer]:
+        - generic [ref=e135]: ⚖️
+        - generic [ref=e136]: Этика
+      - generic [ref=e137] [cursor=pointer]:
+        - generic [ref=e139]: ❓
+        - generic [ref=e140]: Вопросы
+      - generic [ref=e141] [cursor=pointer]:
+        - generic [ref=e143]: 🕌
+        - generic [ref=e144]: Практика
+    - generic [ref=e147]: Инструменты
+    - generic [ref=e148]:
+      - generic [ref=e149] [cursor=pointer]:
+        - generic [ref=e151]: 🎓
+        - generic [ref=e152]: Тесты
+      - generic [ref=e153] [cursor=pointer]:
+        - generic [ref=e155]: 📅
+        - generic [ref=e156]: Хиджра
+      - generic [ref=e157] [cursor=pointer]:
+        - generic [ref=e159]: 🔖
+        - generic [ref=e160]: Закладки
+      - generic [ref=e161] [cursor=pointer]:
+        - generic [ref=e163]: 🤖
+        - generic [ref=e164]: AI
+  - tablist [ref=e166]:
+    - link "🏠 🏠 Главная" [ref=e167] [cursor=pointer]:
+      - /url: /Main/Home
+      - generic:
+        - generic [ref=e169]: 🏠
+        - generic [ref=e171]: 🏠
+      - generic [ref=e172]: Главная
+    - link "📚 📚 Уроки" [ref=e173] [cursor=pointer]:
+      - /url: /Main/Foundations
+      - generic:
+        - generic [ref=e175]: 📚
+        - generic [ref=e177]: 📚
+      - generic [ref=e178]: Уроки
+    - link "📖 📖 Коран" [ref=e179] [cursor=pointer]:
+      - /url: /Main/Quran
+      - generic:
+        - generic [ref=e181]: 📖
+        - generic [ref=e183]: 📖
+      - generic [ref=e184]: Коран
+    - link "🔤 🔤 Слова" [ref=e185] [cursor=pointer]:
+      - /url: /Main/Words
+      - generic:
+        - generic [ref=e187]: 🔤
+        - generic [ref=e189]: 🔤
+      - generic [ref=e190]: Слова
+    - link "👤 👤 Профиль" [ref=e191] [cursor=pointer]:
+      - /url: /Main/Profile
+      - generic:
+        - generic [ref=e193]: 👤
+        - generic [ref=e195]: 👤
+      - generic [ref=e196]: Профиль

@@ -1,0 +1,109 @@
+- generic [ref=e10]:
+  - generic [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]: Ассаламу алейкум
+        - generic [ref=e21]: Продолжайте свой путь сегодня
+      - generic [ref=e22]:
+        - generic [ref=e23]: 🔥
+        - generic [ref=e24]: "1"
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]: Уровень
+        - generic [ref=e29]: Студент
+      - generic [ref=e30]:
+        - generic [ref=e31]: 112 XP
+        - generic [ref=e32]: 62/150
+    - generic [ref=e37]: Аят дня
+    - generic [ref=e38]:
+      - generic [ref=e39]: أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ
+      - generic [ref=e40]: Alā bi-ḏikri llāhi taṭmaʾinnu l-qulūb
+      - generic [ref=e41]: Воистину, поминанием Аллаха находят покой сердца.
+      - generic [ref=e43]: Сура «Ар-Рад», 13:28
+    - generic [ref=e46]: Хадис дня
+    - generic [ref=e47] [cursor=pointer]:
+      - generic [ref=e49]: Сунна
+      - generic [ref=e50]: Нововведения в религии
+      - generic [ref=e51]: "Пророк ﷺ сказал: «Кто внесёт в наше дело то, что не из него, — это отвергнуто»."
+      - generic [ref=e52]: Бухари, Муслим (40 хадисов ан-Навави, № 5)
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: "2"
+        - generic [ref=e56]: из 19 уроков
+      - generic [ref=e57]:
+        - generic [ref=e58]: "16"
+        - generic [ref=e59]: выученных слов
+      - generic [ref=e60]:
+        - generic [ref=e61]: "0"
+        - generic [ref=e62]: на повторение
+    - generic [ref=e65]: Сегодня
+    - generic [ref=e66]:
+      - generic [ref=e67]: "Дневная цель: 10 минут"
+      - generic [ref=e68]:
+        - generic [ref=e69]: 📖
+        - generic [ref=e70]: Пройти 1 урок
+      - generic [ref=e71]:
+        - generic [ref=e72]: 🔤
+        - generic [ref=e73]: Повторить 5 слов
+      - generic [ref=e74]:
+        - generic [ref=e75]: ✅
+        - generic [ref=e76]: Сдать 1 мини-тест
+    - generic [ref=e79]: Продолжить
+    - generic [ref=e80] [cursor=pointer]:
+      - generic [ref=e82]: "Коран: знакомство"
+      - generic [ref=e83]: Структура Корана
+      - generic [ref=e84]: 114 сур, аяты, джузы — как устроен Коран.
+    - generic [ref=e87]: Действия
+    - generic [ref=e88]:
+      - generic [ref=e89] [cursor=pointer]:
+        - generic [ref=e90]: ✏️
+        - generic [ref=e91]: Алфавит
+      - generic [ref=e92] [cursor=pointer]:
+        - generic [ref=e93]: 🎓
+        - generic [ref=e94]: Тесты
+      - generic [ref=e95] [cursor=pointer]:
+        - generic [ref=e96]: 🕐
+        - generic [ref=e97]: Намазы
+      - generic [ref=e98] [cursor=pointer]:
+        - generic [ref=e99]: 📜
+        - generic [ref=e100]: Хадисы
+      - generic [ref=e101] [cursor=pointer]:
+        - generic [ref=e102]: 🃏
+        - generic [ref=e103]: Карточки
+      - generic [ref=e104] [cursor=pointer]:
+        - generic [ref=e105]: 🕌
+        - generic [ref=e106]: Практика
+      - generic [ref=e107] [cursor=pointer]:
+        - generic [ref=e108]: ✨
+        - generic [ref=e109]: AI-помощник
+  - tablist [ref=e111]:
+    - link "🏠 🏠 Главная" [ref=e112] [cursor=pointer]:
+      - /url: /Main/Home
+      - generic:
+        - generic [ref=e114]: 🏠
+        - generic [ref=e116]: 🏠
+      - generic [ref=e117]: Главная
+    - link "📚 📚 Уроки" [ref=e118] [cursor=pointer]:
+      - /url: /Main/Foundations
+      - generic:
+        - generic [ref=e120]: 📚
+        - generic [ref=e122]: 📚
+      - generic [ref=e123]: Уроки
+    - link "📖 📖 Коран" [ref=e124] [cursor=pointer]:
+      - /url: /Main/Quran
+      - generic:
+        - generic [ref=e126]: 📖
+        - generic [ref=e128]: 📖
+      - generic [ref=e129]: Коран
+    - link "🔤 🔤 Слова" [ref=e130] [cursor=pointer]:
+      - /url: /Main/Words
+      - generic:
+        - generic [ref=e132]: 🔤
+        - generic [ref=e134]: 🔤
+      - generic [ref=e135]: Слова
+    - link "👤 👤 Профиль" [ref=e136] [cursor=pointer]:
+      - /url: /Main/Profile
+      - generic:
+        - generic [ref=e138]: 👤
+        - generic [ref=e140]: 👤
+      - generic [ref=e141]: Профиль
