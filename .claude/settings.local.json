@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(npm --version)",
+      "Bash(npm install *)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(grep -E '^cli$')",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:8081)",
+      "Bash(curl -s http://localhost:8081)",
+      "Read(//Applications/Google Chrome.app/**)",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --hide-scrollbars --window-size=420,900 --screenshot=/tmp/nur-home.png --virtual-time-budget=8000 \"http://localhost:8081\")",
+      "Bash(echo \"EXIT $?\")",
+      "Bash(ipconfig getifaddr *)",
+      "Bash(python3 -c \"import qrcode; print\\('py-qrcode ok'\\)\")",
+      "Bash(python3 -c \"import segno; print\\('py-segno ok'\\)\")",
+      "Bash(python3 -m pip install --quiet segno)",
+      "Bash(python3 -c \"import segno; print\\('segno ready'\\)\")",
+      "Bash(python3 -m pip install --quiet --break-system-packages segno)",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" \"http://192.168.1.8:8081\")"
+    ]
+  }
+}
