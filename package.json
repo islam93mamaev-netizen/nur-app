@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "node scripts/test.js",
-    "postinstall": "patch-package"
+    "postinstall": "node scripts/patch-node-modules.js"
   },
   "dependencies": {
     "@expo-google-fonts/amiri": "^0.4.1",
