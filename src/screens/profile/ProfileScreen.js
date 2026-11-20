@@ -284,6 +284,12 @@ export default function ProfileScreen({ navigation }) {
             onPress={() => navigation.navigate('Backup')}
           />
           <View style={{ height: spacing.sm }} />
+          <Button
+            title="Источники и проверка"
+            variant="outline"
+            onPress={() => navigation.navigate('Sources')}
+          />
+          <View style={{ height: spacing.sm }} />
           <Button title="Сбросить прогресс" variant="outline" onPress={confirmReset} />
         </View>
       </ScrollView>

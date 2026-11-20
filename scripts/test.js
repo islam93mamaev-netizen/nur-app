@@ -230,6 +230,112 @@ test('formatTime показывает время в поясе выбранно�
   assert.ok(prayer.formatTime(d, 'Нет/Такого').length === 5, 'неизвестный пояс должен падать на время устройства');
 });
 
+// ===== Целостность данных (контент) =====
+// Ловит ошибки в data-файлах: дубли id, пустые обязательные поля,
+// ссылки на несуществующие экраны, хадисы без источника.
+console.log('\nЦелостность данных');
+const babel = require('@babel/core');
+const Module = require('module');
+const esmCache = {};
+// ESM → CJS через babel; всё, что не data/constants/utils, подменяется заглушкой
+function loadEsm(rel) {
+  const abs = path.resolve(ROOT, rel.endsWith('.js') ? rel : rel + '.js');
+  if (esmCache[abs]) return esmCache[abs].exports;
+  const { code } = babel.transformFileSync(abs, {
+    babelrc: false, configFile: false,
+    plugins: ['@babel/plugin-transform-modules-commonjs'],
+  });
+  const m = new Module(abs);
+  esmCache[abs] = m;
+  m.require = (req) => {
+    const ok = req.startsWith('.') && /\/(data|constants|utils)\//.test(path.resolve(path.dirname(abs), req) + '/');
+    if (req.startsWith('.') && (ok || /\/src\/(data|constants|utils)\//.test(path.resolve(path.dirname(abs), req)))) {
+      return loadEsm(path.relative(ROOT, path.resolve(path.dirname(abs), req)));
+    }
+    const stub = new Proxy(function () {}, { get: (t, k) => (k === '__esModule' ? true : stub), apply: () => stub });
+    return stub;
+  };
+  m._compile(code, abs);
+  return m.exports;
+}
+
+const dataDir = path.join(ROOT, 'src/data');
+const dataFiles = fs.readdirSync(dataDir).filter((f) => f.endsWith('.js'));
+const loaded = {};
+test(`все ${dataFiles.length} data-файлов загружаются`, () => {
+  for (const f of dataFiles) loaded[f] = loadEsm('src/data/' + f);
+});
+
+test('нет дублей id внутри списков', () => {
+  const problems = [];
+  for (const [f, mod] of Object.entries(loaded)) {
+    for (const [name, val] of Object.entries(mod)) {
+      if (!Array.isArray(val)) continue;
+      const seen = new Set();
+      for (const it of val) {
+        if (!it || typeof it !== 'object' || it.id == null) continue;
+        if (seen.has(it.id)) problems.push(`${f}:${name} → ${it.id}`);
+        seen.add(it.id);
+      }
+    }
+  }
+  assert.deepStrictEqual(problems, []);
+});
+
+const HADITH_SETS = [['hadiths.js', 'hadiths'], ['arbain.js', 'arbainHadiths']];
+test('у каждого хадиса есть источник и текст', () => {
+  const bad = [];
+  for (const [f, key] of HADITH_SETS) {
+    const list = loaded[f] && loaded[f][key];
+    assert.ok(Array.isArray(list), `${f}: нет экспорта ${key}`);
+    for (const h of list) {
+      const id = h.id ?? h.n;
+      if (!String(h.source || '').trim()) bad.push(`${f}:${id} без источника`);
+      if (!String(h.text || h.ru || '').trim()) bad.push(`${f}:${id} без текста`);
+    }
+  }
+  assert.deepStrictEqual(bad, []);
+});
+
+test('FAQ: вопрос, ответ, мазхаб и существующая категория', () => {
+  const { faqs, faqCategories } = loaded['faq.js'];
+  const cats = new Set(faqCategories.map((c) => c.id));
+  const bad = faqs.filter((q) => !q.question || !q.answer || !q.mazhabNote || !cats.has(q.category)).map((q) => q.id);
+  assert.deepStrictEqual(bad, []);
+});
+
+// Зарегистрированные экраны (stack + вкладки)
+const navSrc = ['src/navigation/RootNavigator.js', 'src/navigation/TabNavigator.js']
+  .map((f) => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('\n');
+const ROUTES = new Set([...navSrc.matchAll(/name="([A-Za-z]+)"/g)].map((m) => m[1]));
+
+test('кнопки главной ведут на существующие экраны', () => {
+  const { HOME_SECTIONS } = loaded['homeSections.js'];
+  const bad = HOME_SECTIONS.flatMap((s) => s.items).filter((i) => !ROUTES.has(i.route)).map((i) => i.route);
+  assert.deepStrictEqual(bad, []);
+});
+
+test('сунны дня ссылаются на существующие экраны', () => {
+  const bad = loaded['sunnahDaily.js'].sunnahDaily.filter((s) => s.refRoute && !ROUTES.has(s.refRoute)).map((s) => s.refRoute);
+  assert.deepStrictEqual(bad, []);
+});
+
+const { hadithGrade } = loadEsm('src/utils/hadithGrade.js');
+test('степень хадиса: Бухари/Муслим → сахих, иначе только явно', () => {
+  assert.strictEqual(hadithGrade({ source: 'Бухари 8, Муслим 16' }).id, 'sahih');
+  assert.strictEqual(hadithGrade({ source: 'Тирмизи 2516' }), null);
+  assert.strictEqual(hadithGrade({ source: 'Тирмизи', grade: 'hasan' }).id, 'hasan');
+  assert.strictEqual(hadithGrade({ source: 'передан как хасан' }).id, 'hasan');
+});
+
+// Отчёт для проверки знающим человеком (не ошибка)
+const ungraded = HADITH_SETS
+  .flatMap(([f, k]) => (loaded[f]?.[k] || []).filter((h) => !hadithGrade(h)).map((h) => `${k}:${h.id ?? h.n} (${h.source})`));
+if (ungraded.length) {
+  console.log(`  ℹ хадисов без указанной степени: ${ungraded.length} — ждут проверки`);
+  if (process.env.VERBOSE) ungraded.forEach((u) => console.log('     ·', u));
+}
+
 // ===== Итог =====
 console.log(`\n${passed} прошло, ${failed} упало`);
 process.exit(failed ? 1 : 0);

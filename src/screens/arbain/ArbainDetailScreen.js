@@ -7,6 +7,7 @@ import Button from '../../components/Button';
 import Pill from '../../components/Pill';
 import BookmarkButton from '../../components/BookmarkButton';
 import ReferenceText from '../../components/ReferenceText';
+import HadithGrade from '../../components/HadithGrade';
 import { spacing, typography } from '../../constants/theme';
 import { arbainHadiths, findArbain } from '../../data/arbain';
 import { useTheme } from '../../store/themeStore';
@@ -55,6 +56,7 @@ export default function ArbainDetailScreen({ navigation, route }) {
         <Text style={styles.sectionLabel}>Источник</Text>
         <Card>
           <ReferenceText text={h.source} style={styles.src} />
+          <HadithGrade item={h} />
         </Card>
 
         {h.themes && h.themes.length > 0 && (

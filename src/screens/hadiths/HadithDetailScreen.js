@@ -8,6 +8,7 @@ import { spacing, typography } from '../../constants/theme';
 import { hadiths } from '../../data/hadiths';
 import ReferenceText from '../../components/ReferenceText';
 import BookmarkButton from '../../components/BookmarkButton';
+import HadithGrade from '../../components/HadithGrade';
 import { useTheme } from '../../store/themeStore';
 
 export default function HadithDetailScreen({ navigation, route }) {
@@ -61,6 +62,7 @@ export default function HadithDetailScreen({ navigation, route }) {
         <Text style={styles.sectionLabel}>Источник (нажмите чтобы открыть)</Text>
         <Card>
           <ReferenceText text={hadith.source} style={styles.source} />
+          <HadithGrade item={hadith} />
         </Card>
 
         <View style={{ marginTop: spacing.lg, flexDirection: 'row', justifyContent: 'space-between' }}>

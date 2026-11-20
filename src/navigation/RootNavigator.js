@@ -30,6 +30,7 @@ import ArabicPathScreen from '../screens/path/ArabicPathScreen';
 import PathUnitScreen from '../screens/path/PathUnitScreen';
 import BackupScreen from '../screens/backup/BackupScreen';
 import SunnahScreen from '../screens/sunnah/SunnahScreen';
+import SourcesScreen from '../screens/sources/SourcesScreen';
 import AsmaScreen from '../screens/asma/AsmaScreen';
 import AsmaDetailScreen from '../screens/asma/AsmaDetailScreen';
 import GrammarScreen from '../screens/grammar/GrammarScreen';
@@ -123,6 +124,7 @@ export default function RootNavigator() {
             <Stack.Screen name="PathUnit" component={PathUnitScreen} />
             <Stack.Screen name="Backup" component={BackupScreen} />
             <Stack.Screen name="Sunnah" component={SunnahScreen} />
+            <Stack.Screen name="Sources" component={SourcesScreen} />
             <Stack.Screen name="FaqDetail" component={FaqDetailScreen} />
             <Stack.Screen name="Asma" component={AsmaScreen} />
             <Stack.Screen name="AsmaDetail" component={AsmaDetailScreen} />
