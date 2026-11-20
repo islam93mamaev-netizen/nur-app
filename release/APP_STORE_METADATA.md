@@ -8,7 +8,7 @@
 
 ### Name (30 символов)
 ```
-Нур — Ислам и Коран
+Нур - Ислам и Коран
 ```
 
 ### Subtitle (30 символов)
@@ -84,7 +84,7 @@
 
 ### Support URL (обязательно)
 ```
-https://github.com/is-mamaev/nur-app (создать репо или страницу)
+https://islam93mamaev-netizen.github.io/nur-app/#support
 ```
 
 ### Marketing URL (необязательно)
@@ -94,7 +94,7 @@ https://github.com/is-mamaev/nur-app (создать репо или стран�
 
 ### Privacy Policy URL (обязательно — иначе Apple отклонит)
 ```
-https://is-mamaev.github.io/nur-app/privacy (после публикации на GitHub Pages)
+https://islam93mamaev-netizen.github.io/nur-app/#privacy
 ```
 
 ### Category
