@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Нур — Приложение для изучения Ислама</title>
+  <meta name="description" content="Нур — учебное приложение для мусульман. Коран, хадисы, намаз, дуа, кибла, обучение арабскому." />
+  <style>
+    :root {
+      --primary: #0F4C3A;
+      --primary-dark: #063326;
+      --accent: #C9A55B;
+      --bg: #F8F4EC;
+      --surface: #FFFFFF;
+      --text: #1A1A1A;
+      --text-muted: #5A5A5A;
+      --border: #E5DDD0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 40px 20px 60px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 8px; font-size: 34px; }
+    header p { margin: 0; opacity: 0.85; }
+    nav { margin-top: 20px; }
+    nav a {
+      color: var(--accent);
+      text-decoration: none;
+      margin: 0 12px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    nav a:hover { text-decoration: underline; }
+    main {
+      max-width: 780px;
+      margin: -30px auto 60px;
+      padding: 32px 28px;
+      background: var(--surface);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+    h2 {
+      color: var(--primary-dark);
+      margin-top: 36px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 6px;
+    }
+    h3 { color: var(--primary); }
+    a { color: var(--primary); }
+    code {
+      background: #F1EADE;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 90%;
+    }
+    ul { padding-left: 22px; }
+    li { margin: 4px 0; }
+    .lang-switch {
+      text-align: right;
+      margin-bottom: 16px;
+    }
+    .lang-switch a {
+      background: var(--primary);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    footer {
+      text-align: center;
+      padding: 24px 0 40px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .updated {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    hr {
+      border: 0;
+      border-top: 2px dashed var(--border);
+      margin: 40px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Нур</h1>
+    <p>Учебное приложение для изучения Ислама</p>
+    <nav>
+      <a href="#privacy">Политика конфиденциальности</a>
+      <a href="#support">Поддержка</a>
+      <a href="#en">English</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="privacy">
+      <h2>Политика конфиденциальности</h2>
+      <p class="updated">Последнее обновление: 14 сентября 2026 г.</p>
+
+      <p>Приложение <strong>«Нур»</strong> — это оффлайн-ресурс для изучения основ ислама, чтения Корана и хадисов, поминаний, времён намаза и других повседневных инструментов практикующего мусульманина.</p>
+
+      <h3>Кратко</h3>
+      <ul>
+        <li>Мы <strong>не собираем персональные данные</strong> и <strong>не отправляем их на наши серверы</strong> — у нас нет серверов.</li>
+        <li>Весь ваш прогресс, закладки и настройки хранятся <strong>только на вашем устройстве</strong>.</li>
+        <li>Уведомления, геолокация и микрофон — используются локально.</li>
+        <li>Сторонние сервисы (Quran.com, Sunnah.com, isnad.link, OpenRouter/DeepSeek) имеют собственные политики и вызываются только когда вы явно этого требуете.</li>
+      </ul>
+
+      <h3>1. Данные, которые обрабатывает приложение</h3>
+      <p><strong>Локально — на вашем устройстве:</strong> прогресс уроков, тестов, серии дней, XP, уровень, закладки, заметки, ваш AI API-ключ (если вводите), настройки. Всё это хранится в <code>AsyncStorage</code> и никогда не отправляется наружу.</p>
+
+      <p><strong>Геолокация.</strong> Приложение запрашивает разрешение при использовании раздела «Времена намаза». Координаты обрабатываются локально через библиотеку <code>adhan</code> и никуда не отправляются.</p>
+
+      <p><strong>Уведомления.</strong> Локальные, планируются на устройстве (аят дня, напоминания о намазах). Push-серверов нет.</p>
+
+      <p><strong>Микрофон.</strong> Приложение не использует микрофон. Разрешение объявлено только из-за зависимости <code>expo-audio</code>.</p>
+
+      <h3>2. Сторонние сервисы</h3>
+      <p>Обращение происходит только в момент вашего действия. Приложение не отправляет туда персональные данные — только контент запроса.</p>
+      <ul>
+        <li><a href="https://quran.com/terms" target="_blank" rel="noopener">Quran.com API</a> — текст и переводы сур, аудио</li>
+        <li><a href="https://sunnah.com/about" target="_blank" rel="noopener">Sunnah.com</a> — ссылки на хадисы</li>
+        <li><a href="https://isnad.link" target="_blank" rel="noopener">isnad.link</a> — ссылки на хадисы на русском</li>
+        <li>quran.ksu.edu.sa / everyayah.com — CDN для аудио аятов</li>
+        <li><strong>AI-помощник</strong>: <a href="https://openrouter.ai/terms" target="_blank" rel="noopener">OpenRouter</a> / <a href="https://platform.deepseek.com/terms" target="_blank" rel="noopener">DeepSeek</a>. Работает <em>только если вы ввели свой API-ключ</em> в Профиле. Мы не имеем доступа к вашим сообщениям.</li>
+      </ul>
+
+      <h3>3. Данные детей</h3>
+      <p>Приложение подходит для семейного использования и <strong>не собирает никаких данных о пользователях, включая детей</strong> (COPPA-совместимо, GDPR-Art. 8 совместимо).</p>
+
+      <h3>4. Ваши права</h3>
+      <p><strong>Удалить всё</strong> — удалите приложение с устройства. Все данные удалятся вместе с ним, потому что у нас нет серверов.</p>
+      <p><strong>Отозвать разрешения</strong> — в Настройках iOS/Android для приложения «Нур».</p>
+
+      <h3>5. Изменения политики</h3>
+      <p>Мы можем обновлять эту политику. Дата вверху отражает последнее обновление. Существенные изменения будут анонсированы в описании обновления в App Store.</p>
+
+      <h3>6. Контакты</h3>
+      <p><strong>Разработчик:</strong> Ислам Мамаев<br>
+         <strong>E-mail:</strong> <a href="mailto:islam93.mamaev@gmail.com">islam93.mamaev@gmail.com</a></p>
+    </section>
+
+    <section id="support">
+      <hr>
+      <h2>Поддержка</h2>
+      <p>Если у вас есть вопрос, замечание или пожелание — напишите нам:</p>
+      <p><strong>E-mail:</strong> <a href="mailto:islam93.mamaev@gmail.com">islam93.mamaev@gmail.com</a></p>
+      <p>Мы стараемся отвечать в течение 2 рабочих дней.</p>
+    </section>
+
+    <section id="en">
+      <hr>
+      <h2>Privacy Policy (English)</h2>
+      <p class="updated">Last updated: September 14, 2026</p>
+
+      <p><strong>Nur</strong> is an offline-first educational app for Islamic studies: Qur'an reading, hadith, adhkar, prayer times and daily worship tools.</p>
+
+      <h3>TL;DR</h3>
+      <ul>
+        <li>We collect <strong>no personal data</strong> and have <strong>no servers</strong>.</li>
+        <li>Progress, bookmarks, settings and your (optional) AI API key are stored <strong>on-device only</strong>.</li>
+        <li>Location, notifications, and microphone permissions are used locally.</li>
+        <li>Third-party services (Quran.com, Sunnah.com, isnad.link, OpenRouter/DeepSeek) are contacted only when you explicitly invoke them.</li>
+      </ul>
+
+      <h3>Data handled by the app</h3>
+      <p><strong>On-device only</strong> via AsyncStorage: progress, XP, streak, bookmarks, notes, settings, your AI API key.</p>
+      <p><strong>Location:</strong> requested for prayer time calculation via the on-device <code>adhan</code> library. Coordinates are never transmitted.</p>
+      <p><strong>Notifications:</strong> local only, scheduled via iOS/Android APIs. No push servers.</p>
+      <p><strong>Microphone:</strong> not used. <code>NSMicrophoneUsageDescription</code> is declared solely because <code>expo-audio</code> requires it.</p>
+
+      <h3>Third-party services</h3>
+      <p>Contacted only on your explicit action: Quran.com API, Sunnah.com / isnad.link (external hadith links), everyayah.com / quran.ksu.edu.sa (audio CDN), OpenRouter / DeepSeek (AI, only if you paste your own key).</p>
+
+      <h3>Children</h3>
+      <p>No data is collected about any users, including children.</p>
+
+      <h3>Your rights</h3>
+      <p>Delete the app to erase all data — there is nothing on our servers because we have none.</p>
+
+      <h3>Contact</h3>
+      <p><strong>Developer:</strong> Islam Mamaev<br>
+         <strong>E-mail:</strong> <a href="mailto:islam93.mamaev@gmail.com">islam93.mamaev@gmail.com</a></p>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 Islam Mamaev · Все права защищены
+  </footer>
+</body>
+</html>
