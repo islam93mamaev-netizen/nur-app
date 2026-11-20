@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
 import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
@@ -9,6 +9,7 @@ import { spacing, radii, typography } from '../../constants/theme';
 import { exams, examLevels, getExamsByLevel } from '../../data/exams';
 import { useProgress } from '../../store/progressStore';
 import { useTheme } from '../../store/themeStore';
+import { confirmAction } from '../../utils/dialogs';
 
 export default function ExamsScreen({ navigation }) {
   const { colors } = useTheme();
@@ -16,25 +17,21 @@ export default function ExamsScreen({ navigation }) {
   const { state, resetQuiz, resetAllQuizzes } = useProgress();
 
   const confirmResetOne = (id, title) => {
-    Alert.alert(
-      'Сбросить результат?',
-      `«${title}» — пройти заново. Текущий результат будет удалён.`,
-      [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Сбросить', style: 'destructive', onPress: () => resetQuiz('exam_' + id) },
-      ]
-    );
+    confirmAction({
+      title: 'Сбросить результат?',
+      message: `«${title}» — пройти заново. Текущий результат будет удалён.`,
+      confirmText: 'Сбросить',
+      onConfirm: () => resetQuiz('exam_' + id),
+    });
   };
 
   const confirmResetAll = () => {
-    Alert.alert(
-      'Сбросить все тесты?',
-      'Все результаты тестов и экзаменов будут удалены. Прогресс по урокам и словам сохранится.',
-      [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Сбросить всё', style: 'destructive', onPress: resetAllQuizzes },
-      ]
-    );
+    confirmAction({
+      title: 'Сбросить все тесты?',
+      message: 'Все результаты тестов и экзаменов будут удалены. Прогресс по урокам и словам сохранится.',
+      confirmText: 'Сбросить всё',
+      onConfirm: resetAllQuizzes,
+    });
   };
 
   const masterExam = exams.master;

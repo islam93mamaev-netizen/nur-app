@@ -8,7 +8,7 @@
 // настройки намазов, Рамадан, счётчики), КРОМЕ API-ключа AI (секрет).
 
 import React, { useMemo, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, Alert, Share, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, Share, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Screen from '../../components/Screen';
 import DetailHeader from '../../components/DetailHeader';
@@ -17,21 +17,13 @@ import Button from '../../components/Button';
 import Icon from '../../components/Icon';
 import { spacing, radii, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
+import { notify } from '../../utils/dialogs';
 
 const PREFIX = '@nur_app/';
 // Секреты в копию не включаем
 const EXCLUDE = new Set(['@nur_app/ai_api_key_v1']);
 
 const isWeb = Platform.OS === 'web';
-
-function notify(title, msg) {
-  if (isWeb) {
-    // eslint-disable-next-line no-alert
-    window.alert(`${title}\n\n${msg}`);
-  } else {
-    Alert.alert(title, msg);
-  }
-}
 
 async function collectBackup() {
   const keys = (await AsyncStorage.getAllKeys()).filter(
@@ -101,7 +93,7 @@ export default function BackupScreen({ navigation }) {
       notify('Готово', `Восстановлено разделов: ${count}. Страница перезагрузится.`);
       window.location.reload();
     } else {
-      Alert.alert(
+      notify(
         'Готово',
         `Восстановлено разделов: ${count}.\n\nПолностью закройте приложение и откройте заново, чтобы данные применились.`
       );

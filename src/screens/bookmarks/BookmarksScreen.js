@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Alert,
   Modal,
   KeyboardAvoidingView,
   Platform,
@@ -19,6 +18,7 @@ import Pill from '../../components/Pill';
 import { spacing, radii, typography } from '../../constants/theme';
 import { useProgress } from '../../store/progressStore';
 import { useTheme } from '../../store/themeStore';
+import { confirmAction } from '../../utils/dialogs';
 
 const TYPE_LABELS = {
   ayat: { label: 'Аят', icon: '📖', color: '#0F4C3A' },
@@ -63,14 +63,12 @@ export default function BookmarksScreen({ navigation }) {
   };
 
   const confirmRemoveBookmark = (b) => {
-    Alert.alert(
-      'Удалить закладку?',
-      b.title || '',
-      [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Удалить', style: 'destructive', onPress: () => removeBookmark(b.type, b.refId) },
-      ],
-    );
+    confirmAction({
+      title: 'Удалить закладку?',
+      message: b.title || '',
+      confirmText: 'Удалить',
+      onConfirm: () => removeBookmark(b.type, b.refId),
+    });
   };
 
   const openNewNote = () => setNoteModal({ open: true, id: null, text: '' });
@@ -92,14 +90,12 @@ export default function BookmarksScreen({ navigation }) {
   };
 
   const confirmRemoveNote = (n) => {
-    Alert.alert(
-      'Удалить заметку?',
-      n.text.slice(0, 80) + (n.text.length > 80 ? '…' : ''),
-      [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Удалить', style: 'destructive', onPress: () => removeNote(n.id) },
-      ],
-    );
+    confirmAction({
+      title: 'Удалить заметку?',
+      message: n.text.slice(0, 80) + (n.text.length > 80 ? '…' : ''),
+      confirmText: 'Удалить',
+      onConfirm: () => removeNote(n.id),
+    });
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Switch, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Switch, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Screen from '../../components/Screen';
 import DetailHeader from '../../components/DetailHeader';
@@ -12,6 +12,7 @@ import { getSurah, getAyatAudioUrl, RECITERS, getReciter, setReciter } from '../
 import * as audio from '../../services/audioService';
 import Icon from '../../components/Icon';
 import { useTheme } from '../../store/themeStore';
+import { notify } from '../../utils/dialogs';
 
 // Нормализация арабского слова для поиска в словаре:
 // убираем огласовки, танвины, коранические знаки и татвиль.
@@ -112,7 +113,7 @@ export default function SurahScreen({ navigation, route }) {
         if (alive) setSurah(data);
       } catch (e) {
         if (!fallback && alive) {
-          Alert.alert('Ошибка', 'Не удалось загрузить суру. Проверьте интернет.');
+          notify('Ошибка', 'Не удалось загрузить суру. Проверьте интернет.');
         }
       } finally {
         if (alive) setLoading(false);
@@ -166,7 +167,7 @@ export default function SurahScreen({ navigation, route }) {
     } catch (e) {
       setPlaying(null);
       setLoadingAyat(null);
-      Alert.alert('Аудио', 'Не удалось воспроизвести аят. Проверьте интернет.');
+      notify('Аудио', 'Не удалось воспроизвести аят. Проверьте интернет.');
     }
   };
 

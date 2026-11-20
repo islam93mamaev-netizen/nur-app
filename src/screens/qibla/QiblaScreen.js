@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, Platform, Alert } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import * as Location from 'expo-location';
 import Svg, { Circle, Path, Text as SvgText, G } from 'react-native-svg';
 import Screen from '../../components/Screen';
@@ -7,6 +7,7 @@ import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import { spacing, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
+import { notify } from '../../utils/dialogs';
 
 const KAABA = { lat: 21.4225, lon: 39.8262 };
 
@@ -36,7 +37,7 @@ export default function QiblaScreen({ navigation }) {
       try {
         const perm = await Location.requestForegroundPermissionsAsync();
         if (perm.status !== 'granted') {
-          Alert.alert('Разрешение', 'Без местоположения используется Мекка.');
+          notify('Разрешение', 'Без местоположения используется Мекка.');
           setCoords({ latitude: KAABA.lat, longitude: KAABA.lon });
           return;
         }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import * as Location from 'expo-location';
 import Screen from '../../components/Screen';
 import DetailHeader from '../../components/DetailHeader';
@@ -15,12 +15,7 @@ import { useTheme } from '../../store/themeStore';
 import { findCity } from '../../data/cities';
 import CityPickerModal from '../../components/CityPickerModal';
 import Icon from '../../components/Icon';
-
-// Alert.alert не работает на вебе — там window.alert
-function notify(title, msg) {
-  if (Platform.OS === 'web') window.alert(`${title}\n\n${msg}`); // eslint-disable-line no-alert
-  else Alert.alert(title, msg);
-}
+import { notify } from '../../utils/dialogs';
 
 export default function PrayerTimesScreen({ navigation }) {
   const { colors } = useTheme();
@@ -168,7 +163,7 @@ export default function PrayerTimesScreen({ navigation }) {
   const enableNotifications = async () => {
     const granted = await requestPermissions();
     if (!granted) {
-      Alert.alert('Уведомления', 'Разрешите уведомления в настройках устройства.');
+      notify('Уведомления', 'Разрешите уведомления в настройках устройства.');
       return;
     }
     if (times) {
@@ -180,7 +175,7 @@ export default function PrayerTimesScreen({ navigation }) {
         isha: times.isha,
       });
       setNotifEnabled(true);
-      Alert.alert('Готово', 'Напоминания о намазах включены на сегодня.');
+      notify('Готово', 'Напоминания о намазах включены на сегодня.');
     }
   };
 

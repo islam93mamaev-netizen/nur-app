@@ -15,7 +15,8 @@
 
 import * as Speech from 'expo-speech';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform, Alert } from 'react-native';
+import { Platform } from 'react-native';
+import { notify } from '../utils/dialogs';
 
 const VOICE_KEY = '@nur_app/tts_voice_id';
 const RATE_KEY = '@nur_app/tts_rate';
@@ -242,7 +243,6 @@ export async function stop() {
 export function isSpeaking() { return currentlySpeaking; }
 
 // Единое кросс-платформенное уведомление «нет арабского голоса»
-// (Alert.alert не работает на вебе — там window.alert).
 export function notifyNoArabicVoice() {
   const title = 'Озвучка недоступна';
   const msg =
@@ -251,12 +251,7 @@ export function notifyNoArabicVoice() {
       : Platform.OS === 'android'
         ? 'На устройстве нет арабского голоса.\n\nУстановите «Синтез речи Google» и добавьте арабский язык: Настройки → Система → Язык и ввод → Синтез речи.'
         : 'В браузере нет арабского голоса. Попробуйте Chrome, Edge или Safari.';
-  if (Platform.OS === 'web') {
-    // eslint-disable-next-line no-alert
-    window.alert(`${title}\n\n${msg}`);
-  } else {
-    Alert.alert(title, msg);
-  }
+  notify(title, msg);
 }
 
 // Платформа — для UI (показать подсказку под платформу пользователя)

@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, TextInput, Linking } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Linking } from 'react-native';
 import Screen from '../../components/Screen';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
@@ -10,6 +10,7 @@ import { words } from '../../data/words';
 import { hadiths } from '../../data/hadiths';
 import { useTheme, FONT_SCALES } from '../../store/themeStore';
 import { useSettings, HADITH_SERVICES, HADITH_SERVICE_LABEL, AI_PROVIDERS, AI_PROVIDER_LABEL } from '../../store/settingsStore';
+import { confirmAction, notify } from '../../utils/dialogs';
 
 const ACHIEVEMENTS = [
   { id: 'first_lesson', icon: '🌱', title: 'Первый шаг', desc: 'Пройдите 1 урок', test: (s) => Object.keys(s.completedLessons).length >= 1 },
@@ -34,7 +35,7 @@ export default function ProfileScreen({ navigation }) {
 
   const saveAiKey = () => {
     setAiApiKey(aiKeyDraft);
-    Alert.alert('Ключ сохранён', aiKeyDraft ? 'AI-помощник готов к работе.' : 'Ключ удалён — AI работает в офлайн-режиме.');
+    notify('Ключ сохранён', aiKeyDraft ? 'AI-помощник готов к работе.' : 'Ключ удалён — AI работает в офлайн-режиме.');
   };
   const openKeyUrl = () => {
     const url = AI_PROVIDER_LABEL[aiProvider]?.keyUrl;
@@ -47,14 +48,12 @@ export default function ProfileScreen({ navigation }) {
   const dueWords = wordsDueForReview().length;
 
   const confirmReset = () => {
-    Alert.alert(
-      'Сбросить прогресс?',
-      'Все данные о пройденных уроках и выученных словах будут удалены.',
-      [
-        { text: 'Отмена', style: 'cancel' },
-        { text: 'Сбросить', style: 'destructive', onPress: reset },
-      ]
-    );
+    confirmAction({
+      title: 'Сбросить прогресс?',
+      message: 'Все данные о пройденных уроках и выученных словах будут удалены.',
+      confirmText: 'Сбросить',
+      onConfirm: reset,
+    });
   };
 
   return (
