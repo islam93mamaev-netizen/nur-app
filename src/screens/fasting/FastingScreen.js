@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import ReferenceText from '../../components/ReferenceText';
 import { spacing, radii, typography } from '../../constants/theme';
@@ -22,13 +23,11 @@ export default function FastingScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.title}>Пост</Text>
         <Text style={styles.subtitle}>Обязательные, по сунне и запрещённые дни</Text>
-      </View>
+      </DetailHeader>
 
       {/* Переключатель разделов — как в Этике */}
       <View style={styles.tabsRow}>
@@ -94,7 +93,7 @@ export default function FastingScreen({ navigation }) {
                 </View>
               )}
 
-              {f.note && (
+              {!!f.note && (
                 <View style={styles.noteBox}>
                   <Text style={styles.noteLabel}>💡 Замечание</Text>
                   <Text style={styles.noteText}>{f.note}</Text>
@@ -109,13 +108,6 @@ export default function FastingScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxxl,
-    paddingBottom: spacing.lg,
-  },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
   title: { ...typography.h1, color: '#fff' },
   subtitle: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
 

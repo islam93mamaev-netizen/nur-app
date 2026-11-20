@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
-import { spacing, typography, radii } from '../../constants/theme';
+import { spacing, typography } from '../../constants/theme';
 import { modules } from '../../data/modules';
 import { useTheme } from '../../store/themeStore';
 
@@ -16,14 +17,12 @@ export default function PracticeScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: practice.color }]}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginBottom: spacing.md }}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader onBack={() => navigation.goBack()} background={practice.color}>
+        
         <Text style={styles.icon}>{practice.icon}</Text>
         <Text style={styles.title}>{practice.title}</Text>
         <Text style={styles.desc}>{practice.description}</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {/* Баннер: пошаговый интерактивный урок намаза */}
@@ -68,8 +67,6 @@ export default function PracticeScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl },
-  back: { ...typography.bodyMedium, color: '#fff' },
   icon: { fontSize: 36, marginBottom: spacing.sm },
   title: { ...typography.h1, color: '#fff' },
   desc: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },

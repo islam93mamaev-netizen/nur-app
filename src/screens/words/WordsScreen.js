@@ -4,6 +4,7 @@ import {
   Modal, Pressable,
 } from 'react-native';
 import Screen from '../../components/Screen';
+import CategoryIcon from '../../components/CategoryIcon';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import Icon from '../../components/Icon';
@@ -11,11 +12,7 @@ import Button from '../../components/Button';
 import { spacing, typography, radii } from '../../constants/theme';
 import { words, wordCategories, getWordsByCategory } from '../../data/words';
 import { useProgress } from '../../store/progressStore';
-import {
-  speak, stop, isSpeaking,
-  getArabicVoices, getSelectedVoiceId, setVoice,
-  getRate, setRate, loadSettings, platformInfo,
-} from '../../services/ttsService';
+import { speak, stop, getArabicVoices, getSelectedVoiceId, setVoice, getRate, setRate, loadSettings, platformInfo } from '../../services/ttsService';
 import { useTheme } from '../../store/themeStore';
 
 const SPEED_OPTIONS = [
@@ -162,9 +159,10 @@ export default function WordsScreen({ navigation }) {
                 onPress={() => setCategory(c.id)}
                 style={[styles.tab, active && styles.tabActive]}
               >
-                <Text style={[styles.tabText, active && styles.tabTextActive]}>
-                  {c.icon} {c.title}
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <CategoryIcon icon={c.icon} size={14} color={active ? '#fff' : colors.textSecondary} style={{ marginRight: 6 }} />
+                  <Text style={[styles.tabText, active && styles.tabTextActive]}>{c.title}</Text>
+                </View>
               </TouchableOpacity>
             );
           })}

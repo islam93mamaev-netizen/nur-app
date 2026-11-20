@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import { spacing, typography } from '../../constants/theme';
@@ -20,11 +21,9 @@ export default function SiraChapterScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К содержанию" pattern>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← К содержанию</Text>
-          </TouchableOpacity>
+          
           <BookmarkButton
             type="sira"
             refId={ch.id}
@@ -39,7 +38,7 @@ export default function SiraChapterScreen({ navigation, route }) {
         <Text style={styles.num}>Глава {ch.n}</Text>
         <Text style={styles.title}>{ch.title}</Text>
         <Text style={styles.period}>{ch.period}</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Card>
@@ -64,9 +63,7 @@ export default function SiraChapterScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl, alignItems: 'center' },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'stretch', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   icon: { fontSize: 44, marginBottom: spacing.sm },
   num: { ...typography.caption, color: colors.accentLight, fontWeight: '700' },
   title: { ...typography.h1, color: '#fff', marginTop: 4, textAlign: 'center' },

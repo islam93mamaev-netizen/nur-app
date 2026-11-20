@@ -1,13 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import CategoryIcon from '../../components/CategoryIcon';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
-import Pill from '../../components/Pill';
 import SectionTestsBlock from '../../components/SectionTestsBlock';
 import { spacing, radii, typography } from '../../constants/theme';
-import {
-  ethicsSections, ethicsCategories, getCategoriesBySection, getArticlesByCategory,
-} from '../../data/ethics';
+import { ethicsSections, getCategoriesBySection, getArticlesByCategory } from '../../data/ethics';
 import { useTheme } from '../../store/themeStore';
 
 export default function EthicsScreen({ navigation }) {
@@ -18,13 +17,11 @@ export default function EthicsScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.title}>Этика и права</Text>
         <Text style={styles.subtitle}>Как должен жить мусульманин</Text>
-      </View>
+      </DetailHeader>
 
       {/* Переключатель разделов */}
       <View style={styles.tabsRow}>
@@ -36,7 +33,7 @@ export default function EthicsScreen({ navigation }) {
               onPress={() => setSection(s.id)}
               style={[styles.tab, active && { backgroundColor: s.color }]}
             >
-              <Text style={styles.tabIcon}>{s.icon}</Text>
+              <CategoryIcon icon={s.icon} size={18} color={active ? '#fff' : s.color} style={{ marginRight: 6 }} />
               <Text style={[styles.tabTitle, active && { color: '#fff' }]}>
                 {s.title}
               </Text>
@@ -61,7 +58,7 @@ export default function EthicsScreen({ navigation }) {
               <Card style={[styles.catCard, { borderLeftWidth: 4, borderLeftColor: cat.color }]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={[styles.iconBox, { backgroundColor: cat.color + '15' }]}>
-                    <Text style={{ fontSize: 28 }}>{cat.icon}</Text>
+                    <CategoryIcon icon={cat.icon} size={26} color={cat.color} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.catTitle}>{cat.title}</Text>
@@ -98,14 +95,11 @@ function pluralize(n, forms) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
   title: { ...typography.h1, color: '#fff' },
   subtitle: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
 
   tabsRow: { flexDirection: 'row', padding: spacing.sm, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.divider },
   tab: { flex: 1, paddingVertical: 14, alignItems: 'center', borderRadius: radii.md, flexDirection: 'row', justifyContent: 'center', marginHorizontal: 2 },
-  tabIcon: { fontSize: 20, marginRight: 6 },
   tabTitle: { ...typography.bodyMedium, color: colors.textPrimary, fontWeight: '700' },
 
   sectionIntro: {

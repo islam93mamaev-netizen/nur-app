@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import Screen from '../../components/Screen';
+import CategoryIcon from '../../components/CategoryIcon';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import { spacing, radii, typography } from '../../constants/theme';
@@ -34,13 +36,12 @@ export default function FaqScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Часто задаваемые вопросы</Text>
-        <Text style={styles.subtitle}>{faqs.length} ответов по фикху • с указанием источников</Text>
-      </View>
+      <DetailHeader
+        onBack={() => navigation.goBack()}
+        title="Часто задаваемые вопросы"
+        subtitle={`${faqs.length} ответов по фикху • с указанием источников`}
+        pattern
+      />
 
       <View style={styles.searchBox}>
         <Text style={styles.searchIcon}>🔍</Text>
@@ -77,9 +78,10 @@ export default function FaqScreen({ navigation }) {
                   onPress={() => setActiveCategory(c.id)}
                   style={[styles.tab, active && [styles.tabActive, { backgroundColor: c.color }]]}
                 >
-                  <Text style={[styles.tabText, active && styles.tabTextActive]}>
-                    {c.icon} {c.title}
-                  </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <CategoryIcon icon={c.icon} size={14} color={active ? '#fff' : colors.textSecondary} style={{ marginRight: 6 }} />
+                    <Text style={[styles.tabText, active && styles.tabTextActive]}>{c.title}</Text>
+                  </View>
                 </TouchableOpacity>
               );
             })}
@@ -126,7 +128,7 @@ const FaqItem = React.memo(function FaqItem({ item, cat, colors, styles, onPress
     <TouchableOpacity activeOpacity={0.85} onPress={onPress}>
       <Card style={{ marginBottom: spacing.md, borderLeftWidth: 4, borderLeftColor: cat?.color || colors.primary }}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-          <Text style={styles.itemIcon}>{cat?.icon || '❓'}</Text>
+          <CategoryIcon icon={cat?.icon || '❓'} size={24} color={cat?.color || colors.primary} style={{ marginRight: spacing.md, marginTop: 2 }} />
           <View style={{ flex: 1 }}>
             <Text style={styles.itemQuestion}>{item.question}</Text>
             <Text style={styles.itemShort} numberOfLines={2}>{item.short}</Text>
@@ -146,10 +148,6 @@ const FaqItem = React.memo(function FaqItem({ item, cat, colors, styles, onPress
 });
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
-  title: { ...typography.h1, color: '#fff' },
-  subtitle: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
 
   searchBox: {
     flexDirection: 'row',
@@ -184,7 +182,6 @@ const makeStyles = (colors) => StyleSheet.create({
   tabText: { ...typography.small, color: colors.textSecondary, fontWeight: '600' },
   tabTextActive: { color: colors.textOnPrimary },
 
-  itemIcon: { fontSize: 28, marginRight: spacing.md },
   itemQuestion: { ...typography.h4, color: colors.textPrimary, marginBottom: 4 },
   itemShort: { ...typography.small, color: colors.textSecondary, lineHeight: 18 },
   chev: { fontSize: 28, color: colors.textMuted, marginLeft: spacing.sm, alignSelf: 'center' },

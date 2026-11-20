@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, Platform, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Platform, Alert } from 'react-native';
 import * as Location from 'expo-location';
 import Svg, { Circle, Path, Text as SvgText, G } from 'react-native-svg';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
-import { spacing, radii, typography } from '../../constants/theme';
+import { spacing, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
 
 const KAABA = { lat: 21.4225, lon: 39.8262 };
@@ -93,13 +94,11 @@ export default function QiblaScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.title}>Кибла</Text>
         {city ? <Text style={styles.subtitle}>{city}</Text> : null}
-      </View>
+      </DetailHeader>
 
       <View style={styles.body}>
         <Svg width={280} height={280} viewBox="0 0 280 280">
@@ -160,8 +159,6 @@ export default function QiblaScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
   title: { ...typography.h1, color: '#fff' },
   subtitle: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
   body: { padding: spacing.lg, alignItems: 'center' },

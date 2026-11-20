@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Svg, { Circle, Path, Rect, Line, Ellipse, G } from 'react-native-svg';
+import Svg, { Circle, Path, Ellipse } from 'react-native-svg';
 import { spacing, typography } from '../constants/theme';
 import { useTheme } from '../store/themeStore';
 

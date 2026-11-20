@@ -3,7 +3,7 @@
 // прямо на экране (Сира, Этика, Пророки и т.д.), без необходимости идти в общий хаб «Тесты».
 
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import Card from './Card';
 import Pill from './Pill';
 import { spacing, radii, typography } from '../constants/theme';

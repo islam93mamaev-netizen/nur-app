@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import CategoryIcon from '../../components/CategoryIcon';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
-import { spacing, radii, typography } from '../../constants/theme';
+import { spacing, typography } from '../../constants/theme';
 import { adhkarSections } from '../../data/adhkar';
 import { useTheme } from '../../store/themeStore';
 
@@ -12,13 +14,12 @@ export default function AdhkarScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Азкары</Text>
-        <Text style={styles.subtitle}>Утренние, вечерние, после намаза и предсонные поминания — крепость мусульманина</Text>
-      </View>
+      <DetailHeader
+        onBack={() => navigation.goBack()}
+        title="Азкары"
+        subtitle="Утренние, вечерние, после намаза и предсонные поминания — крепость мусульманина"
+        pattern
+      />
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {adhkarSections.map((s) => (
@@ -29,7 +30,7 @@ export default function AdhkarScreen({ navigation }) {
           >
             <Card style={{ marginBottom: spacing.md, backgroundColor: s.color + '12', borderLeftWidth: 4, borderLeftColor: s.color }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ fontSize: 38, marginRight: spacing.md }}>{s.icon}</Text>
+                <CategoryIcon icon={s.icon} size={32} color={s.color} style={{ marginRight: spacing.md }} />
                 <View style={{ flex: 1 }}>
                   <Text style={[styles.secTitle, { color: s.color }]}>{s.title}</Text>
                   <Text style={styles.secSub}>{s.items.length} азкаров</Text>
@@ -53,10 +54,6 @@ export default function AdhkarScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
-  title: { ...typography.h1, color: '#fff' },
-  subtitle: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
 
   secTitle: { ...typography.h3, fontWeight: '700' },
   secSub: { ...typography.small, color: colors.textSecondary, marginTop: 2 },

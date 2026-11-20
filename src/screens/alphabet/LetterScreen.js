@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
-import Pill from '../../components/Pill';
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
 import { spacing, radii, typography } from '../../constants/theme';
@@ -69,10 +69,8 @@ export default function LetterScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginBottom: spacing.md }}>
-          <Text style={styles.back}>← Алфавит</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← Алфавит" pattern>
+        
 
         <Text style={styles.bigLetter}>{letter.letter}</Text>
         <Text style={styles.letterName}>{letter.name}</Text>
@@ -96,7 +94,7 @@ export default function LetterScreen({ navigation, route }) {
             <Text style={styles.voiceBtnChev}>›</Text>
           </TouchableOpacity>
         )}
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {arVoiceWarn && (
@@ -112,10 +110,10 @@ export default function LetterScreen({ navigation, route }) {
         <Card style={{ marginBottom: spacing.md }}>
           <Text style={styles.label}>Описание звука</Text>
           <Text style={styles.bodyText}>{letter.sound}</Text>
-          {letter.ru && <Text style={[styles.bodyText, { fontStyle: 'italic', marginTop: 4 }]}>{letter.ru}</Text>}
+          {!!letter.ru && <Text style={[styles.bodyText, { fontStyle: 'italic', marginTop: 4 }]}>{letter.ru}</Text>}
         </Card>
 
-        {letter.tip && (
+        {!!letter.tip && (
           <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '12' }}>
             <Text style={[styles.label, { color: colors.accentDark }]}>💡 Подсказка</Text>
             <Text style={styles.bodyText}>{letter.tip}</Text>
@@ -247,14 +245,6 @@ export default function LetterScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxxl,
-    paddingBottom: spacing.xl,
-    alignItems: 'center',
-  },
-  back: { ...typography.bodyMedium, color: '#fff', alignSelf: 'flex-start' },
   bigLetter: { fontSize: 130, color: '#fff', lineHeight: 150 },
   letterName: { ...typography.h2, color: '#fff', marginTop: spacing.sm },
   letterAr: { ...typography.body, color: colors.accentLight, marginTop: 2 },

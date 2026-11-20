@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import Button from '../../components/Button';
@@ -65,10 +66,7 @@ export default function HadithsScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader onBack={() => navigation.goBack()} pattern>
         <View style={styles.titleRow}>
           <View style={{ flex: 1 }}>
             <Text style={styles.title}>Хадисы</Text>
@@ -78,11 +76,13 @@ export default function HadithsScreen({ navigation }) {
             onPress={() => setInfoOpen(true)}
             style={styles.infoBtn}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            accessibilityRole="button"
+            accessibilityLabel="О сборнике"
           >
             <Text style={styles.infoIcon}>ⓘ</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </DetailHeader>
 
       <FlatList
         data={data}
@@ -145,8 +145,6 @@ export default function HadithsScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
   titleRow: { flexDirection: 'row', alignItems: 'flex-start' },
   title: { ...typography.h1, color: '#fff' },
   subtitle: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },

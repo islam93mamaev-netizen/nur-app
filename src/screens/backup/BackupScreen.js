@@ -8,9 +8,10 @@
 // настройки намазов, Рамадан, счётчики), КРОМЕ API-ключа AI (секрет).
 
 import React, { useMemo, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, Share, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, Alert, Share, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
@@ -140,16 +141,14 @@ export default function BackupScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.title}>Резервная копия</Text>
         <Text style={styles.subtitle}>
           Прогресс хранится только на этом устройстве. Сделайте копию, чтобы не потерять
           его и переносить между телефоном и вебом.
         </Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {/* Экспорт */}
@@ -221,13 +220,6 @@ export default function BackupScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxxl,
-    paddingBottom: spacing.xl,
-  },
-  back: { ...typography.bodyMedium, color: '#fff' },
   title: { ...typography.h1, color: '#fff', marginTop: spacing.sm },
   subtitle: { ...typography.small, color: 'rgba(255,255,255,0.85)', marginTop: 4, lineHeight: 20 },
 

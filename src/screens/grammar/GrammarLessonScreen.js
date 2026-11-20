@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import Button from '../../components/Button';
@@ -12,7 +13,8 @@ import { useTheme } from '../../store/themeStore';
 export default function GrammarLessonScreen({ navigation, route }) {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
-  const lesson = findLesson(route.params.id);
+  // Принимаем оба варианта параметра: старые ссылки (закладки, путь) могли передавать lessonId
+  const lesson = findLesson(route.params?.id ?? route.params?.lessonId);
   const [pickedAnswer, setPickedAnswer] = useState(null);
 
   useEffect(() => () => { stop(); }, []);
@@ -21,14 +23,12 @@ export default function GrammarLessonScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: lesson.color }]}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginBottom: spacing.md }}>
-          <Text style={styles.back}>← К урокам</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К урокам" background={lesson.color}>
+        
         <Text style={styles.icon}>{lesson.icon}</Text>
         <Text style={styles.title}>{lesson.title}</Text>
         <Pill label={lesson.level} background="#fff" textColor={lesson.color} />
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {/* Введение от «преподавателя» */}
@@ -58,7 +58,7 @@ export default function GrammarLessonScreen({ navigation, route }) {
             <Text style={styles.phraseTr}>{phrase.tr}</Text>
             <Text style={styles.phraseRu}>{phrase.ru}</Text>
 
-            {phrase.context && (
+            {!!phrase.context && (
               <View style={[styles.contextBox, { borderLeftColor: lesson.color }]}>
                 <Text style={styles.context}>💡 {phrase.context}</Text>
               </View>
@@ -149,8 +149,6 @@ export default function GrammarLessonScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl, alignItems: 'center' },
-  back: { ...typography.bodyMedium, color: '#fff', alignSelf: 'flex-start' },
   icon: { fontSize: 40, marginBottom: spacing.sm },
   title: { ...typography.h1, color: '#fff', textAlign: 'center', marginBottom: spacing.sm },
 

@@ -4,8 +4,6 @@
 //   choice | match | audio | sequence | fill
 
 import { words } from './words';
-import { letters } from './alphabet';
-import { asma, popularAsma, findAsma } from './asma';
 import { ethicsPools, ethicsPoolInfo } from './ethicsQuestions';
 import { siraPools, siraPoolInfo } from './siraQuestions';
 import { prophetsPools, prophetsPoolInfo } from './prophetsQuestions';

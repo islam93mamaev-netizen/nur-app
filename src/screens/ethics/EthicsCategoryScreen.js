@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import CategoryIcon from '../../components/CategoryIcon';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
-import Pill from '../../components/Pill';
 import { spacing, typography } from '../../constants/theme';
 import { findCategory, getArticlesByCategory } from '../../data/ethics';
 import { useTheme } from '../../store/themeStore';
@@ -16,14 +17,12 @@ export default function EthicsCategoryScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: cat.color }]}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginBottom: spacing.md }}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
-        <Text style={styles.icon}>{cat.icon}</Text>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} background={cat.color}>
+        
+        <CategoryIcon icon={cat.icon} size={44} color="#fff" style={{ marginBottom: spacing.sm }} />
         <Text style={styles.title}>{cat.title}</Text>
         <Text style={styles.count}>{articles.length} тем для изучения</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {articles.map((a, i) => (
@@ -52,9 +51,6 @@ export default function EthicsCategoryScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl, alignItems: 'center' },
-  back: { ...typography.bodyMedium, color: '#fff', alignSelf: 'flex-start' },
-  icon: { fontSize: 48, marginBottom: spacing.sm },
   title: { ...typography.h1, color: '#fff', textAlign: 'center' },
   count: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
 

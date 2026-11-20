@@ -8,8 +8,6 @@
 // неправильном ответе в QuizScreen.
 
 import { words } from './words';
-import { letters } from './alphabet';
-import { asma } from './asma';
 
 function shuffle(arr) {
   const a = arr.slice();

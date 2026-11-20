@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import { spacing, radii, typography } from '../../constants/theme';
@@ -13,13 +14,11 @@ export default function ArbainScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.title}>40 хадисов ан-Навави</Text>
         <Text style={styles.subtitle}>Учебный фундамент: 42 хадиса с переводом и комментариями Ибн Раджаба</Text>
-      </View>
+      </DetailHeader>
 
       <FlatList
         data={arbainHadiths}
@@ -55,11 +54,6 @@ export default function ArbainScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg,
-  },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
   title: { ...typography.h1, color: '#fff' },
   subtitle: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
 

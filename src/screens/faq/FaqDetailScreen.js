@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import { spacing, typography } from '../../constants/theme';
@@ -18,11 +19,9 @@ export default function FaqDetailScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: cat?.color || colors.primary }]}>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} background={cat?.color || colors.primary}>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← Назад</Text>
-          </TouchableOpacity>
+          
           <BookmarkButton
             type="faq"
             refId={faq.id}
@@ -35,7 +34,7 @@ export default function FaqDetailScreen({ navigation, route }) {
         </View>
         <Pill label={`${cat?.icon || ''} ${cat?.title || 'Общее'}`} background="#fff" textColor={cat?.color || colors.primary} />
         <Text style={styles.question}>{faq.question}</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '12' }}>
@@ -78,9 +77,7 @@ export default function FaqDetailScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   question: { ...typography.h2, color: '#fff', marginTop: spacing.md, lineHeight: 30 },
 
   shortLabel: { ...typography.caption, color: colors.accentDark, fontWeight: '700', marginBottom: 4 },

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import CategoryIcon from '../../components/CategoryIcon';
 import Card from '../../components/Card';
 import ProgressBar from '../../components/ProgressBar';
 import { spacing, typography, radii } from '../../constants/theme';
@@ -35,7 +36,7 @@ export default function FoundationsScreen({ navigation }) {
               <Card style={{ marginBottom: spacing.md }}>
                 <View style={styles.row}>
                   <View style={[styles.iconBox, { backgroundColor: item.color + '15' }]}>
-                    <Text style={{ fontSize: 26 }}>{item.icon}</Text>
+                    <CategoryIcon icon={item.icon} size={24} color={item.color} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.moduleTitle}>{item.title}</Text>

@@ -18,7 +18,10 @@ let currentPlayer = null;  // expo-audio player (native) | HTMLAudioElement (web
 let currentUrl = null;
 let audioModeSet = false;
 
-async function ensureAudioMode() {
+// Экспортируется: единая точка настройки ГЛОБАЛЬНОГО аудио-режима.
+// Другие экраны (урок намаза и т.п.) должны использовать её, а не вызывать
+// setAudioModeAsync со своими параметрами — иначе перетирают режим друг друга.
+export async function ensureAudioMode() {
   if (audioModeSet) return;
   try {
     await setAudioModeAsync({

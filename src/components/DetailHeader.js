@@ -17,14 +17,18 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import BookmarkButton from './BookmarkButton';
+import PatternBackground from './PatternBackground';
 import { spacing, typography } from '../constants/theme';
 import { useTheme } from '../store/themeStore';
 
 export default function DetailHeader({
   onBack,
   backLabel = '← Назад',
+  title,          // готовый заголовок (вместо children для типового случая)
+  subtitle,       // подзаголовок под ним
   bookmark,
   background,
+  pattern = false, // геометрический орнамент поверх фона (как на Пути/Рамадане)
   align = 'flex-start',  // 'flex-start' | 'center'
   children,
 }) {
@@ -33,9 +37,15 @@ export default function DetailHeader({
   const bg = background || colors.primary;
 
   return (
-    <View style={[styles.header, { backgroundColor: bg, alignItems: align }]}>
+    <View style={[styles.header, { backgroundColor: bg, alignItems: align }, pattern && { overflow: 'hidden' }]}>
+      {pattern && <PatternBackground from={bg} to={colors.primaryDark} />}
       <View style={styles.top}>
-        <TouchableOpacity onPress={onBack} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+        <TouchableOpacity
+          onPress={onBack}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          accessibilityRole="button"
+          accessibilityLabel="Назад"
+        >
           <Text style={styles.back}>{backLabel}</Text>
         </TouchableOpacity>
         {bookmark && (
@@ -50,6 +60,8 @@ export default function DetailHeader({
           />
         )}
       </View>
+      {title != null && <Text style={[styles.title, align === 'center' && { textAlign: 'center' }]}>{title}</Text>}
+      {subtitle != null && <Text style={[styles.subtitle, align === 'center' && { textAlign: 'center' }]}>{subtitle}</Text>}
       {children}
     </View>
   );
@@ -69,4 +81,6 @@ const makeStyles = (colors) => StyleSheet.create({
     marginBottom: spacing.md,
   },
   back: { ...typography.bodyMedium, color: '#fff' },
+  title: { ...typography.h1, color: '#fff' },
+  subtitle: { ...typography.small, color: 'rgba(255,255,255,0.85)', marginTop: 4, lineHeight: 20 },
 });

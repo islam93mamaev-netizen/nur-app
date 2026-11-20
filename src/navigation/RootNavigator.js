@@ -7,9 +7,6 @@ import { useTheme } from '../store/themeStore';
 
 import TabNavigator from './TabNavigator';
 import WelcomeScreen from '../screens/onboarding/WelcomeScreen';
-import GoalScreen from '../screens/onboarding/GoalScreen';
-import LevelScreen from '../screens/onboarding/LevelScreen';
-import PlanScreen from '../screens/onboarding/PlanScreen';
 import LessonScreen from '../screens/foundations/LessonScreen';
 import ModuleScreen from '../screens/foundations/ModuleScreen';
 import SurahScreen from '../screens/quran/SurahScreen';
@@ -32,6 +29,7 @@ import RamadanScreen from '../screens/ramadan/RamadanScreen';
 import ArabicPathScreen from '../screens/path/ArabicPathScreen';
 import PathUnitScreen from '../screens/path/PathUnitScreen';
 import BackupScreen from '../screens/backup/BackupScreen';
+import SunnahScreen from '../screens/sunnah/SunnahScreen';
 import AsmaScreen from '../screens/asma/AsmaScreen';
 import AsmaDetailScreen from '../screens/asma/AsmaDetailScreen';
 import GrammarScreen from '../screens/grammar/GrammarScreen';
@@ -99,9 +97,6 @@ export default function RootNavigator() {
         {!state.onboardingDone ? (
           <>
             <Stack.Screen name="Welcome" component={WelcomeScreen} />
-            <Stack.Screen name="Goal" component={GoalScreen} />
-            <Stack.Screen name="Level" component={LevelScreen} />
-            <Stack.Screen name="Plan" component={PlanScreen} />
           </>
         ) : (
           <>
@@ -127,6 +122,7 @@ export default function RootNavigator() {
             <Stack.Screen name="ArabicPath" component={ArabicPathScreen} />
             <Stack.Screen name="PathUnit" component={PathUnitScreen} />
             <Stack.Screen name="Backup" component={BackupScreen} />
+            <Stack.Screen name="Sunnah" component={SunnahScreen} />
             <Stack.Screen name="FaqDetail" component={FaqDetailScreen} />
             <Stack.Screen name="Asma" component={AsmaScreen} />
             <Stack.Screen name="AsmaDetail" component={AsmaDetailScreen} />

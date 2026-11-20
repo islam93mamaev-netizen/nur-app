@@ -8,7 +8,6 @@ import { spacing, radii, typography } from '../../constants/theme';
 import { findLesson } from '../../data/modules';
 import { useProgress } from '../../store/progressStore';
 import WuduIllustration, { WUDU_STEP_ORDER } from '../../components/WuduIllustration';
-import { PrayerSequence } from '../../components/PrayerIllustration';
 import { getPrayerImage } from '../../data/prayerAssets';
 import { useTheme } from '../../store/themeStore';
 

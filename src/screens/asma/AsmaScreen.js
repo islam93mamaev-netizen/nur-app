@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import { spacing, radii, typography } from '../../constants/theme';
 import { asma } from '../../data/asma';
 import { useTheme } from '../../store/themeStore';
@@ -23,16 +24,13 @@ export default function AsmaScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader onBack={() => navigation.goBack()} align="center" pattern>
         <Text style={styles.bismi}>الأَسْمَاءُ الْحُسْنَى</Text>
         <Text style={styles.title}>99 имён Аллаха</Text>
         <Text style={styles.subtitle}>
           «У Аллаха 99 имён — кто их перечислит, войдёт в Рай» (Бухари, Муслим)
         </Text>
-      </View>
+      </DetailHeader>
 
       <View style={styles.searchBox}>
         <Text style={styles.searchIcon}>🔍</Text>
@@ -73,14 +71,6 @@ export default function AsmaScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxxl,
-    paddingBottom: spacing.lg,
-    alignItems: 'center',
-  },
-  back: { ...typography.bodyMedium, color: '#fff', alignSelf: 'flex-start' },
   bismi: { fontSize: 24, color: colors.accentLight, marginTop: spacing.md },
   title: { ...typography.h1, color: '#fff', marginTop: 4 },
   subtitle: {

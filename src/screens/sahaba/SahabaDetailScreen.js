@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import BookmarkButton from '../../components/BookmarkButton';
@@ -18,11 +19,9 @@ export default function SahabaDetailScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: g?.color || colors.primary }]}>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К сахабам" background={g?.color || colors.primary}>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← К сахабам</Text>
-          </TouchableOpacity>
+          
           <BookmarkButton
             type="sahaba"
             refId={p.id}
@@ -36,7 +35,7 @@ export default function SahabaDetailScreen({ navigation, route }) {
         <Text style={styles.nameAr}>{p.nameAr}</Text>
         <Text style={styles.name}>{p.name}</Text>
         <Pill label={p.period} background="#fff" textColor={g?.color || colors.primary} />
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '12' }}>
@@ -68,9 +67,7 @@ export default function SahabaDetailScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl, alignItems: 'center' },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'stretch', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   nameAr: { fontSize: 36, color: '#fff', marginVertical: spacing.sm },
   name: { ...typography.h2, color: '#fff', marginBottom: spacing.sm },
 

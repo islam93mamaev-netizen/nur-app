@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useProgress } from '../store/progressStore';
 import { spacing, radii, typography } from '../constants/theme';
 import { useTheme } from '../store/themeStore';

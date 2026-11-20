@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import ReferenceText from '../../components/ReferenceText';
 import { spacing, typography } from '../../constants/theme';
@@ -15,13 +16,11 @@ export default function TajwidSectionScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: section.color }]}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← К таджвиду</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К таджвиду" background={section.color}>
+        
         <Text style={styles.icon}>{section.icon}</Text>
         <Text style={styles.title}>{section.title}</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {section.rules.map((r, i) => (
@@ -39,8 +38,6 @@ export default function TajwidSectionScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl, alignItems: 'center' },
-  back: { ...typography.bodyMedium, color: '#fff', alignSelf: 'flex-start' },
   icon: { fontSize: 56, color: '#fff', marginBottom: spacing.sm },
   title: { ...typography.h1, color: '#fff', textAlign: 'center' },
 

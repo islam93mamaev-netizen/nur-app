@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import Pill from '../../components/Pill';
@@ -21,11 +22,9 @@ export default function ProphetDetailScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К пророкам" pattern>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← К пророкам</Text>
-          </TouchableOpacity>
+          
           <BookmarkButton
             type="prophet"
             refId={p.id}
@@ -40,7 +39,7 @@ export default function ProphetDetailScreen({ navigation, route }) {
         <Text style={styles.bigAr}>{p.nameAr}</Text>
         <Text style={styles.name}>{p.name}</Text>
         <Pill label={p.period} background="#fff" textColor={colors.primary} />
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '12' }}>
@@ -78,9 +77,7 @@ export default function ProphetDetailScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl, alignItems: 'center' },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'stretch', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   num: { ...typography.caption, color: colors.accentLight, fontWeight: '700' },
   bigAr: { fontSize: 48, color: '#fff', marginVertical: spacing.sm },
   name: { ...typography.h2, color: '#fff', marginBottom: spacing.sm },

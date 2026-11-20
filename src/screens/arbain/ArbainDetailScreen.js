@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import Pill from '../../components/Pill';
 import BookmarkButton from '../../components/BookmarkButton';
 import ReferenceText from '../../components/ReferenceText';
-import { spacing, radii, typography } from '../../constants/theme';
+import { spacing, typography } from '../../constants/theme';
 import { arbainHadiths, findArbain } from '../../data/arbain';
 import { useTheme } from '../../store/themeStore';
 
@@ -21,11 +22,9 @@ export default function ArbainDetailScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К сборнику" pattern>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← К сборнику</Text>
-          </TouchableOpacity>
+          
           <BookmarkButton
             type="hadith"
             refId={`arbain_${h.n}`}
@@ -39,7 +38,7 @@ export default function ArbainDetailScreen({ navigation, route }) {
         <Text style={styles.num}>Хадис №{h.n} из 42</Text>
         <Text style={styles.title}>{h.title}</Text>
         <Text style={styles.narrator}>Передал: {h.narrator}</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Card>
@@ -87,9 +86,7 @@ export default function ArbainDetailScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   num: { ...typography.caption, color: colors.accentLight, fontWeight: '700', marginTop: 4 },
   title: { ...typography.h2, color: '#fff', marginTop: spacing.sm },
   narrator: { ...typography.small, color: '#fff', opacity: 0.85, marginTop: spacing.sm },

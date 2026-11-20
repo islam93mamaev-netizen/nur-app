@@ -7,8 +7,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
-import Pill from '../../components/Pill';
 import { spacing, radii, typography } from '../../constants/theme';
 import { fetchMetalPrices, clearMetalPriceCache } from '../../services/goldPriceService';
 import { useTheme } from '../../store/themeStore';
@@ -141,13 +141,11 @@ export default function ZakatScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.title}>Калькулятор закята</Text>
         <Text style={styles.subtitle}>2,5% с активов, удерживаемых ≥ 1 лунного года</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {/* Выбор валюты */}
@@ -315,8 +313,6 @@ function Field({ label, value, onChange, suffix, colors, styles }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
   title: { ...typography.h1, color: '#fff' },
   subtitle: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
 

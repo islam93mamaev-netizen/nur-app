@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import BookmarkButton from '../../components/BookmarkButton';
@@ -18,11 +19,9 @@ export default function MazhabTopicScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: cat?.color || colors.primary }]}>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К сравнению" background={cat?.color || colors.primary}>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← К сравнению</Text>
-          </TouchableOpacity>
+          
           <BookmarkButton
             type="mazhab"
             refId={`topic_${q.id}`}
@@ -35,10 +34,10 @@ export default function MazhabTopicScreen({ navigation, route }) {
         </View>
         <Pill label={`${cat?.icon || ''} ${cat?.title || ''}`} background="#fff" textColor={cat?.color || colors.primary} />
         <Text style={styles.title}>{q.question}</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
-        {q.context && (
+        {!!q.context && (
           <Card style={{ marginBottom: spacing.md, backgroundColor: colors.info + '10' }}>
             <Text style={[styles.label, { color: colors.info }]}>📜 Контекст</Text>
             <ReferenceText text={q.context} style={styles.body} />
@@ -63,7 +62,7 @@ export default function MazhabTopicScreen({ navigation, route }) {
           );
         })}
 
-        {q.note && (
+        {!!q.note && (
           <Card style={{ marginTop: spacing.md, backgroundColor: colors.warning + '12' }}>
             <Text style={[styles.label, { color: colors.warning }]}>📝 Примечание</Text>
             <ReferenceText text={q.note} style={styles.body} />
@@ -84,9 +83,7 @@ export default function MazhabTopicScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   title: { ...typography.h3, color: '#fff', marginTop: spacing.md, lineHeight: 28 },
 
   label: { ...typography.caption, fontWeight: '700', marginBottom: 4 },

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import ReferenceText from '../../components/ReferenceText';
@@ -32,11 +33,9 @@ export default function AsmaDetailScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К списку" pattern>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← К списку</Text>
-          </TouchableOpacity>
+          
           <BookmarkButton
             type="asma"
             refId={item.id}
@@ -60,7 +59,7 @@ export default function AsmaDetailScreen({ navigation, route }) {
           <Text style={styles.playIcon}>🔊</Text>
           <Text style={styles.playText}>{speaking ? 'Произношу…' : 'Произнести имя'}</Text>
         </TouchableOpacity>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Text style={styles.sectionLabel}>Смысл</Text>
@@ -103,15 +102,7 @@ export default function AsmaDetailScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxxl,
-    paddingBottom: spacing.xl,
-    alignItems: 'center',
-  },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'stretch', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   num: { ...typography.caption, color: colors.accentLight, fontWeight: '700' },
   bigAr: { fontSize: 64, color: '#fff', marginVertical: spacing.md, lineHeight: 80 },
   tr: { ...typography.body, color: colors.accent, fontStyle: 'italic' },

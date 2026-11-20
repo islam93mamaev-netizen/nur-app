@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Button from '../../components/Button';
 import ProgressBar from '../../components/ProgressBar';
 import { spacing, radii, typography } from '../../constants/theme';
@@ -118,12 +119,10 @@ export default function QuizScreen({ navigation, route }) {
 
   return (
     <Screen padded>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Прервать</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← Прервать" pattern>
+        
         <Text style={styles.headerCount}>{idx + 1} / {total}</Text>
-      </View>
+      </DetailHeader>
       <ProgressBar value={idx + 1} max={total} />
 
       <ScrollView style={{ marginTop: spacing.lg }} contentContainerStyle={{ paddingBottom: spacing.xl }}>
@@ -369,8 +368,6 @@ function Sequence({ items, answer, answered, onAnswer }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
-  back: { ...typography.bodyMedium, color: colors.primary },
   headerCount: { ...typography.bodyMedium, color: colors.textSecondary, fontWeight: '700' },
 
   question: { ...typography.h3, color: colors.textPrimary },

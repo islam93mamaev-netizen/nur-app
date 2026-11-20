@@ -2,7 +2,7 @@
 // на источники (Коран / хадисы).
 
 import React, { useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { typography } from '../constants/theme';
 import { parseReferences } from '../utils/parseReferences';
 import ReferenceModal from './ReferenceModal';

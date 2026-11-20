@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
-import { spacing, radii, typography } from '../../constants/theme';
+import { spacing, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
 import { gregorianToHijri, HIJRI_MONTHS } from '../../utils/hijri';
 
@@ -50,12 +51,10 @@ export default function HijriScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.title}>Календарь хиджры</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Card style={{ marginBottom: spacing.lg }}>
@@ -127,8 +126,6 @@ function calculateDaysUntil(today, ev) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
   title: { ...typography.h1, color: '#fff' },
   todayLabel: { ...typography.caption, color: colors.textSecondary, fontWeight: '700' },
   todayDate: { ...typography.h2, color: colors.primary, marginTop: 4 },

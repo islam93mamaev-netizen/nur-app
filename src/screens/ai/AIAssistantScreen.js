@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Pill from '../../components/Pill';
 import { spacing, radii, typography } from '../../constants/theme';
 import { askAI, isAiConfigured } from '../../services/aiService';
@@ -108,10 +109,8 @@ export default function AIAssistantScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.title}>AI-помощник</Text>
         <View style={{ flexDirection: 'row', marginTop: 4, alignItems: 'center' }}>
           <Pill
@@ -128,7 +127,7 @@ export default function AIAssistantScreen({ navigation }) {
             </TouchableOpacity>
           )}
         </View>
-      </View>
+      </DetailHeader>
 
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -198,8 +197,6 @@ export default function AIAssistantScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, backgroundColor: colors.primary },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
   title: { ...typography.h2, color: '#fff' },
 
   bubble: { padding: spacing.md, borderRadius: radii.lg, marginBottom: spacing.sm, maxWidth: '85%' },

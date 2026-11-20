@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import { spacing, typography } from '../../constants/theme';
@@ -19,11 +20,9 @@ export default function HadithDetailScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
+      <DetailHeader onBack={() => navigation.goBack()} pattern>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← Назад</Text>
-          </TouchableOpacity>
+          
           <BookmarkButton
             type="hadith"
             refId={hadith.id}
@@ -37,7 +36,7 @@ export default function HadithDetailScreen({ navigation, route }) {
         <Pill label={`Хадис №${hadith.number}`} background="#fff" textColor={colors.primary} />
         <Text style={styles.title}>{hadith.title}</Text>
         <Text style={styles.narrator}>Передал: {hadith.narrator}</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Card>
@@ -73,14 +72,7 @@ export default function HadithDetailScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxxl,
-    paddingBottom: spacing.xl,
-  },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   title: { ...typography.h2, color: '#fff', marginTop: spacing.md },
   narrator: { ...typography.small, color: '#fff', opacity: 0.8, marginTop: spacing.sm },
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Vibration, Platform, Switch } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Button from '../../components/Button';
 import { spacing, radii, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
@@ -108,16 +109,14 @@ export default function TasbihScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← Назад</Text>
-          </TouchableOpacity>
+          
           <Text style={styles.totalCount}>📿 {totalEver}</Text>
         </View>
         <Text style={styles.title}>Тасбих</Text>
         <Text style={styles.subtitle}>Поминание Аллаха — за всё время вы насчитали {totalEver}</Text>
-      </View>
+      </DetailHeader>
 
       {/* Табы — горизонтальный скролл с фразами */}
       <ScrollView
@@ -232,9 +231,7 @@ export default function TasbihScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   totalCount: { ...typography.bodyMedium, color: '#fff', fontWeight: '700' },
   title: { ...typography.h1, color: '#fff' },
   subtitle: { ...typography.small, color: '#fff', opacity: 0.85, marginTop: 4 },

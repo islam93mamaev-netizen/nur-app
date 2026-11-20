@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import { spacing, typography } from '../../constants/theme';
@@ -18,11 +19,9 @@ export default function EthicsArticleScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: cat?.color || colors.primary }]}>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} background={cat?.color || colors.primary}>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← Назад</Text>
-          </TouchableOpacity>
+          
           <BookmarkButton
             type="ethics"
             refId={article.id}
@@ -35,7 +34,7 @@ export default function EthicsArticleScreen({ navigation, route }) {
         </View>
         <Pill label={`${cat?.icon || ''} ${cat?.title || ''}`} background="#fff" textColor={cat?.color || colors.primary} />
         <Text style={styles.title}>{article.title}</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '12' }}>
@@ -48,7 +47,7 @@ export default function EthicsArticleScreen({ navigation, route }) {
           <ReferenceText text={article.content} style={styles.content} />
         </Card>
 
-        {article.refs && (
+        {!!article.refs && (
           <Card style={{ marginTop: spacing.md, backgroundColor: colors.info + '10' }}>
             <Text style={[styles.label, { color: colors.info }]}>📚 Источники (нажмите чтобы открыть)</Text>
             <ReferenceText text={article.refs} style={styles.refs} />
@@ -60,9 +59,7 @@ export default function EthicsArticleScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   title: { ...typography.h2, color: '#fff', marginTop: spacing.md, lineHeight: 30 },
 
   label: { ...typography.caption, fontWeight: '700', marginBottom: 4 },

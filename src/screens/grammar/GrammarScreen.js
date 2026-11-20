@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import { spacing, radii, typography } from '../../constants/theme';
@@ -24,16 +25,14 @@ export default function GrammarScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.bismi}>تَعَلَّمِ ٱلْعَرَبِيَّة</Text>
         <Text style={styles.title}>Грамматика и разговорник</Text>
         <Text style={styles.subtitle}>
           {grammarLessons.length} уроков • от A1 до B2
         </Text>
-      </View>
+      </DetailHeader>
 
       {/* Табы по уровням */}
       <View style={styles.tabsWrap}>
@@ -144,14 +143,6 @@ function renderLessonCard(lesson, navigation, styles, colors) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxxl,
-    paddingBottom: spacing.lg,
-    alignItems: 'center',
-  },
-  back: { ...typography.bodyMedium, color: '#fff', alignSelf: 'flex-start' },
   bismi: { fontSize: 26, color: colors.accentLight, marginTop: spacing.md },
   title: { ...typography.h1, color: '#fff', marginTop: 4 },
   subtitle: { ...typography.small, color: '#fff', opacity: 0.85, marginTop: 4 },

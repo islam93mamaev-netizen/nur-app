@@ -223,3 +223,15 @@ export function transliterate(word) {
   const parsed = parseArabicWord(word);
   return parsed.map((p) => p.syllable).join('');
 }
+
+// Разбивка арабского текста на «смысловые куски» для озвучки по частям:
+// по коранич. знакам остановки, пунктуации и переносам строк.
+// Единая реализация (раньше дублировалась в экранах азкаров и урока намаза).
+export function splitArabic(text) {
+  if (!text) return [];
+  const parts = text
+    .split(/(?<=[ۚۖۗۘۙۛۜ،.!?۝])\s*|(\n+)/)
+    .map((s) => (s || '').trim())
+    .filter((s) => s.length > 0);
+  return parts.length ? parts : [text];
+}

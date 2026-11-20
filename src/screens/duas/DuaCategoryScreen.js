@@ -1,36 +1,46 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import CategoryIcon from '../../components/CategoryIcon';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
+import Icon from '../../components/Icon';
 import { spacing, radii, typography } from '../../constants/theme';
 import { duaCategories, getDuasByCategory } from '../../data/duas';
 import ReferenceText from '../../components/ReferenceText';
-import { speak, stop } from '../../services/ttsService';
 import BookmarkButton from '../../components/BookmarkButton';
 import { useTheme } from '../../store/themeStore';
+import useAdhkarPlayer from '../../hooks/useAdhkarPlayer';
 
 export default function DuaCategoryScreen({ navigation, route }) {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const cat = duaCategories.find((c) => c.id === route.params.categoryId);
   const list = getDuasByCategory(route.params.categoryId);
-
-  useEffect(() => () => { stop(); }, []);
+  // Тот же плеер, что в азкарах: пауза/возобновление, чтение по кускам,
+  // проверка арабского голоса, автостоп при уходе с экрана
+  const { playState, getStatus, togglePlay, resetPlay, stopAll } = useAdhkarPlayer();
 
   if (!cat) return null;
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: cat.color }]}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginBottom: spacing.md }}>
-          <Text style={styles.back}>← К дуа</Text>
-        </TouchableOpacity>
-        <Text style={styles.icon}>{cat.icon}</Text>
+      <DetailHeader align="center" onBack={() => { stopAll(); navigation.goBack(); }} backLabel="← К дуа" background={cat.color}>
+        
+        <CategoryIcon icon={cat.icon} size={44} color="#fff" style={{ marginBottom: spacing.sm }} />
         <Text style={styles.title}>{cat.title}</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
-        {list.map((d, i) => (
+        {list.map((d, i) => {
+          const status = getStatus(d.id);
+          const isPlaying = status === 'playing';
+          const isPaused = status === 'paused';
+          const cur = playState[d.id];
+          const progress = cur && cur.chunks?.length > 1
+            ? `${cur.idx + (isPlaying ? 1 : 0)}/${cur.chunks.length}`
+            : null;
+          return (
           <Card key={d.id} style={{ marginBottom: spacing.md }}>
             <View style={styles.duaHeader}>
               <View style={[styles.num, { backgroundColor: cat.color + '15' }]}>
@@ -46,10 +56,37 @@ export default function DuaCategoryScreen({ navigation, route }) {
                 params={{ categoryId: cat.id }}
                 color={cat.color}
               />
-              <TouchableOpacity onPress={() => speak(d.ar, { rate: 0.5 })} style={[styles.playBtn, { borderColor: cat.color, marginLeft: 8 }]}>
-                <Text style={{ color: cat.color, fontWeight: '700' }}>🔊</Text>
+              {(isPlaying || isPaused) && (
+                <TouchableOpacity
+                  onPress={() => resetPlay(d)}
+                  style={[styles.playBtn, { borderColor: cat.color, marginLeft: 8 }]}
+                  hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                  accessibilityRole="button"
+                  accessibilityLabel="Сначала"
+                >
+                  <Text style={{ color: cat.color, fontSize: 18, fontWeight: '700' }}>⟲</Text>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                onPress={() => togglePlay(d)}
+                style={[
+                  styles.playBtn,
+                  { borderColor: cat.color, marginLeft: 8 },
+                  isPlaying && { backgroundColor: cat.color + '30' },
+                  isPaused && { backgroundColor: cat.color + '15' },
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel={isPlaying ? 'Пауза' : 'Слушать'}
+              >
+                <Icon name={isPlaying ? 'pause' : 'play'} size={14} color={cat.color} />
               </TouchableOpacity>
             </View>
+
+            {(isPlaying || isPaused) && progress && (
+              <Text style={[styles.progress, { color: cat.color }]}>
+                {isPaused ? 'на паузе' : 'воспроизводится'} · фрагмент {progress}
+              </Text>
+            )}
 
             <Text style={styles.ar}>{d.ar}</Text>
             <Text style={styles.tr}>{d.tr}</Text>
@@ -69,16 +106,14 @@ export default function DuaCategoryScreen({ navigation, route }) {
               </View>
             ) : null}
           </Card>
-        ))}
+          );
+        })}
       </ScrollView>
     </Screen>
   );
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl, alignItems: 'center' },
-  back: { ...typography.bodyMedium, color: '#fff', alignSelf: 'flex-start' },
-  icon: { fontSize: 44, marginBottom: spacing.sm },
   title: { ...typography.h1, color: '#fff', textAlign: 'center' },
 
   duaHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm },
@@ -86,6 +121,7 @@ const makeStyles = (colors) => StyleSheet.create({
   numText: { ...typography.caption, fontWeight: '700' },
   duaTitle: { ...typography.h4, color: colors.textPrimary, flex: 1 },
   playBtn: { width: 36, height: 36, borderRadius: 18, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
+  progress: { ...typography.caption, fontWeight: '700', marginBottom: spacing.sm },
 
   ar: { fontSize: 26, color: colors.textPrimary, textAlign: 'right', writingDirection: 'rtl', lineHeight: 44 },
   tr: { ...typography.small, color: colors.textSecondary, fontStyle: 'italic', marginTop: 6 },

@@ -6,10 +6,11 @@
 //   - Кнопка «Следующее действие» внизу + прогресс-индикатор
 
 import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
+import { createAudioPlayer } from 'expo-audio';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import ProgressBar from '../../components/ProgressBar';
@@ -18,16 +19,11 @@ import { spacing, radii, typography } from '../../constants/theme';
 import { findPrayerLesson } from '../../data/prayerLesson';
 import { getPrayerImage, getPrayerAudio } from '../../data/prayerAssets';
 import { speak, stop as ttsStop } from '../../services/ttsService';
+import { ensureAudioMode } from '../../services/audioService';
+import { splitArabic } from '../../utils/arabicParser';
 import { useTheme } from '../../store/themeStore';
 
-function splitArabic(text) {
-  if (!text) return [];
-  const parts = text
-    .split(/(?<=[ۚۖۗۘۙۛۜ،.!?۝])\s*|(\n+)/)
-    .map((s) => (s || '').trim())
-    .filter((s) => s.length > 0);
-  return parts.length ? parts : [text];
-}
+// splitArabic теперь общий — см. utils/arabicParser.js
 
 const TABS = [
   { id: 'tr', label: 'Транскрипция' },
@@ -35,19 +31,10 @@ const TABS = [
   { id: 'ar', label: 'Арабский' },
 ];
 
-let audioModeSet = false;
-async function ensureAudioMode() {
-  if (audioModeSet) return;
-  try {
-    await setAudioModeAsync({
-      playsInSilentMode: true,
-      shouldPlayInBackground: false,
-      interruptionMode: 'duckOthers',
-      interruptionModeAndroid: 'duckOthers',
-    });
-    audioModeSet = true;
-  } catch { /* ignore */ }
-}
+// БАГФИКС: раньше здесь был свой setAudioModeAsync с shouldPlayInBackground: false —
+// он ГЛОБАЛЬНО перетирал режим, выставленный audioService, и после открытия
+// урока намаза фоновое чтение Корана переставало работать до перезапуска.
+// Теперь аудио-режим настраивается только в одном месте (audioService).
 
 export default function PrayerLessonScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -203,10 +190,8 @@ export default function PrayerLessonScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => { ttsStop(); navigation.goBack(); }}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => { ttsStop(); navigation.goBack(); }} pattern>
+        
         <Text style={styles.lessonTitle}>{lesson.title}</Text>
         <View style={styles.progressRow}>
           <Text style={styles.stepCount}>Шаг {stepIdx + 1} / {total}</Text>
@@ -214,7 +199,7 @@ export default function PrayerLessonScreen({ navigation, route }) {
             <ProgressBar value={stepIdx + 1} max={total} />
           </View>
         </View>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Text style={styles.stepTitle}>{step.title}</Text>
@@ -328,8 +313,6 @@ export default function PrayerLessonScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
   lessonTitle: { ...typography.h3, color: '#fff', marginBottom: spacing.md },
   progressRow: { flexDirection: 'row', alignItems: 'center' },
   stepCount: { ...typography.caption, color: '#fff', fontWeight: '700' },

@@ -23,7 +23,7 @@ Node 22.x LTS (на Node 26 ломается @expo/cli без патча).
 ## Конвенции кода
 
 - Стили: `const styles = useMemo(() => makeStyles(colors), [colors])` + `makeStyles(colors)` внизу файла. Цвета только из `useTheme()` — каждый экран обязан работать в светлой и тёмной теме
-- Шрифты: Manrope (кириллица), Amiri (арабский). Загружаются в `App.js` через expo-font. В `App.js` есть глобальный патч `Text.render`: масштабирует fontSize по настройке пользователя и автоматически подставляет Amiri любому тексту с арабскими символами — арабским стилям НЕ нужно прописывать fontFamily вручную
+- Шрифты: Manrope (кириллица), Amiri (арабский). Загружаются в `App.js` через expo-font. Глобальный патч `<Text>` (`src/utils/textPatch.web.js` / `.native.js`, логика в `textStyleAdjust.js`, подключается первым импортом в `App.js`): масштабирует fontSize/lineHeight по настройке пользователя и подставляет Noto Naskh тексту с арабскими символами — арабским стилям НЕ нужно прописывать fontFamily вручную. Web — обёртка `Text.render` (forwardRef в RNW), натив — подмена `default` модуля `react-native/Libraries/Text/Text` (в RN 0.81 у Text нет `.render`, старый патч молча не работал)
 - У Amiri высокие харакаты: lineHeight для арабского ≥ 1.7 × fontSize
 - Новые экраны регистрировать в `RootNavigator.js`
 - Никаких новых тяжёлых зависимостей без необходимости; react-native-svg уже есть
@@ -66,11 +66,47 @@ Node 22.x LTS (на Node 26 ломается @expo/cli без патча).
 как fonts.arabicCalligraphy). AI: openrouter/free + фолбэк-модели.
 Тесты: `npm test` (scripts/test.js, 14 проверок). Эмодзи-глифы плеера заменены на Icon.
 
-Возможные следующие шаги: синхронизация через Supabase (пользователь даст URL + anon key),
-скачивание аудио сур для офлайна, единый DetailHeader, иконки в данных категорий.
+Ревью (нояб. 2026): исправлено — конфликт глобального аудио-режима (PrayerLessonScreen
+перетирал shouldPlayInBackground=false; теперь ensureAudioMode экспортируется из
+audioService и используется всеми), дубли splitArabic (→ utils/arabicParser.js)
+и notifyNoVoice (→ ttsService.notifyNoArabicVoice).
+
+Рефакторинг (нояб. 2026) — сделано:
+- DetailHeader (components/DetailHeader.js, пропсы title/subtitle/pattern/align/background/backLabel)
+  используется на 45 экранах вместо копий «← Назад». Новые экраны — только через него.
+- hooks/useAdhkarPlayer.js — плеер (TTS + Коран-аудио + фрагменты, токены); используют
+  AdhkarSectionScreen и DuaCategoryScreen
+- components/PathQuiz.js — мини-тест с результатом (PathUnitScreen)
+- Главная: HomeScreen только компонует блоки из components/home/*, секции — data/homeSections.js
+- components/CategoryIcon.js — эмодзи из data → векторная иконка (таблица EMOJI_TO_ICON;
+  нет соответствия → показывает эмодзи). Слишком тёмные цвета данных на тёмной теме
+  автоматически подменяются на светлый изумрудный. Подключено: Дуа, FAQ, Азкары, Основы,
+  Этика, Слова. Ещё на эмодзи: Грамматика, Тесты, Сира, Сахабы, Мазхабы, Пост, Достижения.
+- Онбординг — один экран (Welcome): «Начать» сразу completeOnboarding с дефолтами
+- Намазы: ручной выбор города (data/cities.js, CityPickerModal), PRAYER_STORAGE.LOCATION_MODE,
+  formatTime(date, tz) показывает время в поясе выбранного города
+- Блок «Цель за день — сунна» убран с главной → отдельный экран «Сунны дня»
+  (screens/sunnah/SunnahScreen.js, маршрут Sunnah, кнопка «Сунны» в секции «Поклонение»):
+  чек-лист data/sunnahDaily.js, отметки getSunnahDoneToday/toggleSunnahDone, переходы по refRoute
+  (вкладки — через navigate('Main', { screen }))
+- Профиль: убраны цель, уровень/мин в день и карточка XP-уровня; осталась статистика 2×2
+  (стрик, уроки, слов изучено, на повторение) и достижения
+
+Найдено регрессией и исправлено:
+- GrammarLessonScreen читает route.params.id, а путь передавал lessonId (пустой урок)
+- `{строка && <X/>}` с пустой строкой → текст внутри View (краш на iOS). Правило:
+  для строковых полей всегда `{!!поле && ...}`
+
+Возможные следующие шаги: CategoryIcon на оставшиеся экраны, синхронизация Supabase,
+офлайн-аудио сур (expo-file-system), max-width контента на широком вебе.
 
 ВАЖНО: после этих изменений нужен `npm install` (новые пакеты: @expo-google-fonts/*, expo-haptics, expo-secure-store).
 
 ## Проверка
 
-Перед сдачей шага: прогнать изменённые файлы через babel-проверку синтаксиса, убедиться что экран работает в обеих темах. Тестов в проекте нет.
+Перед сдачей шага:
+- `npm test` (scripts/test.js, 19 проверок: хиджра, тексты сур, путь арабского, намазы, города)
+- babel-проверка синтаксиса всех файлов src/
+- живая проверка в браузере: `npx expo start` → http://localhost:8081, экран в обеих темах.
+  В вебе нижние вкладки и предыдущие экраны остаются в DOM скрытыми — в автоскриптах
+  фильтровать элементы по видимости.

@@ -5,7 +5,7 @@
 // Линейная разблокировка: шаг открывается после прохождения предыдущего.
 // Прогресс хранится в progressStore.completedPathUnits.
 
-import { letters, letterGroups, hamza } from './alphabet';
+import { letters, letterGroups } from './alphabet';
 import { harakat } from './harakat';
 import { words } from './words';
 import { grammarLessons } from './grammar';

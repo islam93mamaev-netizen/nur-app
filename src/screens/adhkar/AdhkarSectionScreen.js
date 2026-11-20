@@ -1,49 +1,24 @@
-import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform } from 'react-native';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
 import Screen from '../../components/Screen';
+import CategoryIcon from '../../components/CategoryIcon';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import ReferenceText from '../../components/ReferenceText';
 import { spacing, radii, typography } from '../../constants/theme';
 import { findAdhkarSection } from '../../data/adhkar';
-import { speak, stop, hasArabicVoice } from '../../services/ttsService';
-import * as audio from '../../services/audioService';
-import { resolveQuranAudio } from '../../data/quranAudioAssets';
 import { surahs } from '../../data/quran';
 import Icon from '../../components/Icon';
 import { useTheme } from '../../store/themeStore';
 import * as haptics from '../../utils/haptics';
+import useAdhkarPlayer from '../../hooks/useAdhkarPlayer';
 
 // Подпись фрагмента quranAudio: название суры или номер аята
 function fragmentLabel(q) {
   if (q.ayah != null) return `Аят ${q.ayah}`;
   const s = surahs.find((x) => x.id === q.surah);
   return s ? s.name : `Сура ${q.surah}`;
-}
-
-// Полная остановка всего звука: и TTS, и аудио-плеера Корана.
-async function stopAllSound() {
-  try { await stop(); } catch { /* ignore */ }
-  try { await audio.stop(); } catch { /* ignore */ }
-}
-
-// Кросс-платформенное уведомление об отсутствии арабского TTS-голоса.
-// Alert.alert не работает на вебе — там используем window.alert.
-function notifyNoVoice() {
-  const title = 'Озвучка недоступна';
-  const msg =
-    Platform.OS === 'ios'
-      ? 'На устройстве нет арабского голоса.\n\nУстановите его: Настройки → Универсальный доступ → Устный контент → Голоса → Арабский.'
-      : Platform.OS === 'android'
-        ? 'На устройстве нет арабского голоса.\n\nУстановите «Синтез речи Google» и добавьте арабский язык: Настройки → Система → Язык и ввод → Синтез речи.'
-        : 'В браузере нет арабского голоса. Попробуйте Chrome, Edge или Safari — в них арабские голоса доступны по умолчанию.';
-  if (Platform.OS === 'web') {
-    // eslint-disable-next-line no-alert
-    window.alert(`${title}\n\n${msg}`);
-  } else {
-    Alert.alert(title, msg);
-  }
 }
 
 // Длина текста, после которой включается expand/collapse (символов)
@@ -58,15 +33,7 @@ function todayStr() {
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
-// Разбивка арабского текста на «смысловые куски» — для псевдо-паузы.
-function splitArabic(text) {
-  if (!text) return [];
-  const parts = text
-    .split(/(?<=[ۚۖۗۘۙۛۜ،.!?])\s*|(\n+)/)
-    .map((s) => (s || '').trim())
-    .filter((s) => s.length > 0);
-  return parts.length ? parts : [text];
-}
+// splitArabic теперь общий — см. utils/arabicParser.js
 
 const TABS = [
   { id: 'ar', label: 'Арабский' },
@@ -83,11 +50,8 @@ export default function AdhkarSectionScreen({ navigation, route }) {
   const [tabs, setTabs] = useState({});
   // Раскрыт ли длинный текст (по id)
   const [expanded, setExpanded] = useState({});
-  // state: { [id]: { chunks, idx, status: 'idle' | 'playing' | 'paused' } }
-  const [playState, setPlayState] = useState({});
-  const tokenRef = useRef(null);
-
-  useEffect(() => () => { stopAllSound(); }, []);
+  // Вся логика воспроизведения — в хуке (TTS, Коран-аудио, фрагменты, токены)
+  const { playState, getStatus, togglePlay, toggleFragment, resetPlay, stopAll } = useAdhkarPlayer();
 
   // Загрузка счётчиков за сегодня (вчерашние — сбрасываются)
   const countsLoaded = useRef(false);
@@ -125,201 +89,12 @@ export default function AdhkarSectionScreen({ navigation, route }) {
     return () => clearTimeout(t);
   }, [counts, route.params.sectionId]);
 
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        tokenRef.current = null;
-        stopAllSound();
-        setPlayState({});
-      };
-    }, [])
-  );
-
   if (!section) return null;
 
   const getTab = (id) => tabs[id] || 'ar';
   const setTab = (id, t) => setTabs((s) => ({ ...s, [id]: t }));
   const isExpanded = (id) => !!expanded[id];
   const toggleExpand = (id) => setExpanded((s) => ({ ...s, [id]: !s[id] }));
-
-  const getStatus = (id) => playState[id]?.status || 'idle';
-
-  // ===== Отдельный фрагмент (одна сура / один аят) =====
-  // Тап по чипу: играет только этот фрагмент; повторный тап — пауза/возобновление.
-  const toggleFragment = async (it, i) => {
-    const cur = playState[it.id];
-    const sources = cur?.chunks?.length ? cur.chunks : it.quranAudio.map(resolveQuranAudio);
-
-    // Пауза, если играет именно этот фрагмент в одиночном режиме
-    if (cur?.single && cur.idx === i && cur.status === 'playing') {
-      await audio.pause();
-      setPlayState((s) => ({ ...s, [it.id]: { ...cur, status: 'paused' } }));
-      return;
-    }
-
-    // Возобновление того же фрагмента.
-    // ВАЖНО: токен НЕ трогаем — onFinish-слушатель первоначального запуска
-    // жив (привязан к старому токену) и корректно завершит фрагмент.
-    if (cur?.single && cur.idx === i && cur.status === 'paused') {
-      setPlayState((s) => ({ ...s, [it.id]: { ...cur, status: 'playing' } }));
-      try { await audio.play(sources[i]); } catch { /* ignore */ }
-      return;
-    }
-
-    // Свежий запуск фрагмента
-    const myToken = Date.now() + '_' + it.id + '_f' + i;
-    tokenRef.current = myToken;
-    await stop();        // глушим TTS
-    await audio.stop();  // сбрасываем плеер: гарантируем новый onFinish-слушатель
-
-    setPlayState((s) => {
-      const next = { ...s };
-      for (const k of Object.keys(next)) {
-        if (k !== it.id && next[k].status !== 'idle') {
-          next[k] = { ...next[k], status: 'idle', idx: 0 };
-        }
-      }
-      next[it.id] = { chunks: sources, idx: i, status: 'playing', single: true };
-      return next;
-    });
-
-    const finish = () => {
-      if (tokenRef.current === myToken) {
-        tokenRef.current = null;
-        setPlayState((s) => ({ ...s, [it.id]: { chunks: sources, idx: i, status: 'idle', single: true } }));
-      }
-    };
-    audio.play(sources[i], { onFinish: finish }).catch(finish);
-  };
-
-  // ===== Воспроизведение чтения Корана (quranAudio) =====
-  // Источники: локальный mp3 из ассетов или CDN. Играем последовательно.
-  const playQuranSequence = (it, sources, startIdx, myToken) => {
-    const playIdx = (i) => {
-      if (tokenRef.current !== myToken) return;
-      if (i >= sources.length) {
-        tokenRef.current = null;
-        setPlayState((s) => ({ ...s, [it.id]: { chunks: sources, idx: 0, status: 'idle' } }));
-        return;
-      }
-      setPlayState((s) => ({ ...s, [it.id]: { chunks: sources, idx: i, status: 'playing' } }));
-      audio
-        .play(sources[i], { onFinish: () => playIdx(i + 1) })
-        .catch(() => {
-          // Сетевая ошибка / нет файла — останавливаемся аккуратно
-          if (tokenRef.current === myToken) {
-            tokenRef.current = null;
-            setPlayState((s) => ({ ...s, [it.id]: { chunks: sources, idx: 0, status: 'idle' } }));
-          }
-        });
-    };
-    playIdx(startIdx);
-  };
-
-  const togglePlay = async (it) => {
-    const cur = playState[it.id];
-    const status = cur?.status || 'idle';
-    const isQuran = Array.isArray(it.quranAudio) && it.quranAudio.length > 0;
-
-    if (status === 'playing') {
-      if (isQuran) {
-        // Пауза аудио (без сброса позиции)
-        await audio.pause();
-        setPlayState((s) => ({ ...s, [it.id]: { ...cur, status: 'paused' } }));
-      } else {
-        tokenRef.current = null;
-        await stop();
-        setPlayState((s) => ({ ...s, [it.id]: { ...cur, status: 'paused' } }));
-      }
-      return;
-    }
-
-    // --- Чтение Корана (локальный файл или CDN) ---
-    if (isQuran) {
-      const sources = cur?.chunks?.length
-        ? cur.chunks
-        : it.quranAudio.map(resolveQuranAudio);
-
-      if (status === 'paused' && cur?.chunks?.length) {
-        // Возобновление: audio.play с тем же источником продолжает с места паузы.
-        // Токен НЕ меняем — слушатель первоначального запуска жив и продолжит
-        // цепочку (или завершит одиночный фрагмент).
-        setPlayState((s) => ({ ...s, [it.id]: { ...cur, status: 'playing' } }));
-        try { await audio.play(sources[cur.idx]); } catch { /* ignore */ }
-        return;
-      }
-
-      // Свежий запуск последовательности
-      const myToken = Date.now() + '_' + it.id;
-      tokenRef.current = myToken;
-
-      setPlayState((s) => {
-        const next = { ...s };
-        for (const k of Object.keys(next)) {
-          if (k !== it.id && next[k].status !== 'idle') {
-            next[k] = { ...next[k], status: 'idle', idx: 0 };
-          }
-        }
-        return next;
-      });
-
-      await stop();        // глушим TTS, если шёл
-      await audio.stop();  // сбрасываем плеер: гарантируем новый onFinish-слушатель
-      playQuranSequence(it, sources, 0, myToken);
-      return;
-    }
-
-    // --- Синтезатор речи (для текстов, которых нет в Коране) ---
-    // Прежде чем включать — проверяем, есть ли арабский голос.
-    if (!(await hasArabicVoice())) {
-      notifyNoVoice();
-      return;
-    }
-
-    const chunks = cur?.chunks?.length ? cur.chunks : splitArabic(it.ar);
-    const startIdx = status === 'paused' ? cur.idx : 0;
-
-    setPlayState((s) => {
-      const next = { ...s };
-      for (const k of Object.keys(next)) {
-        if (k !== it.id && next[k].status !== 'idle') {
-          next[k] = { ...next[k], status: 'idle', idx: 0 };
-        }
-      }
-      next[it.id] = { chunks, idx: startIdx, status: 'playing' };
-      return next;
-    });
-
-    const myToken = Date.now() + '_' + it.id;
-    tokenRef.current = myToken;
-    await stopAllSound();
-
-    for (let i = startIdx; i < chunks.length; i++) {
-      if (tokenRef.current !== myToken) return;
-      setPlayState((s) => ({ ...s, [it.id]: { chunks, idx: i, status: 'playing' } }));
-      await speak(chunks[i], { rate: 0.5 });
-      if (tokenRef.current !== myToken) return;
-    }
-
-    if (tokenRef.current === myToken) {
-      tokenRef.current = null;
-      setPlayState((s) => ({ ...s, [it.id]: { chunks, idx: 0, status: 'idle' } }));
-    }
-  };
-
-  const resetPlay = async (it) => {
-    tokenRef.current = null;
-    await stopAllSound();
-    const isQuran = Array.isArray(it.quranAudio) && it.quranAudio.length > 0;
-    setPlayState((s) => ({
-      ...s,
-      [it.id]: {
-        chunks: isQuran ? it.quranAudio.map(resolveQuranAudio) : splitArabic(it.ar),
-        idx: 0,
-        status: 'idle',
-      },
-    }));
-  };
 
   const tick = (id, target) => {
     setCounts((c) => {
@@ -337,14 +112,12 @@ export default function AdhkarSectionScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: section.color }]}>
-        <TouchableOpacity onPress={() => { stop(); navigation.goBack(); }}>
-          <Text style={styles.back}>← К азкарам</Text>
-        </TouchableOpacity>
-        <Text style={styles.icon}>{section.icon}</Text>
+      <DetailHeader align="center" onBack={() => { stopAll(); navigation.goBack(); }} backLabel="← К азкарам" background={section.color}>
+        
+        <CategoryIcon icon={section.icon} size={44} color="#fff" style={{ marginBottom: spacing.sm }} />
         <Text style={styles.title}>{section.title}</Text>
         <Text style={styles.subtitle}>{section.items.length} азкаров</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {allDone && (
@@ -488,14 +261,14 @@ export default function AdhkarSectionScreen({ navigation, route }) {
                 </TouchableOpacity>
               )}
 
-              {it.benefit && (
+              {!!it.benefit && (
                 <View style={[styles.benefit, { borderLeftColor: colors.accent }]}>
                   <Text style={styles.benefitLabel}>💎 Польза</Text>
                   <Text style={styles.benefitText}>{it.benefit}</Text>
                 </View>
               )}
 
-              {it.source && (
+              {!!it.source && (
                 <View style={styles.sourceBox}>
                   <Text style={styles.sourceLabel}>📚 Источник:</Text>
                   <ReferenceText text={it.source} style={styles.sourceText} />
@@ -525,9 +298,6 @@ export default function AdhkarSectionScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl, alignItems: 'center' },
-  back: { ...typography.bodyMedium, color: '#fff', alignSelf: 'flex-start' },
-  icon: { fontSize: 44, marginBottom: spacing.sm },
   title: { ...typography.h1, color: '#fff' },
   subtitle: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
 

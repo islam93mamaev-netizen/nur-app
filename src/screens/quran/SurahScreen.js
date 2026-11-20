@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Switch, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import WordBreakdown from '../../components/WordBreakdown';
 import { spacing, typography, radii } from '../../constants/theme';
@@ -186,16 +187,14 @@ export default function SurahScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginBottom: spacing.md }}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.surahNameAr}>{surah.nameAr}</Text>
         <Text style={styles.surahName}>{surah.name} — {surah.translation}</Text>
         <Text style={styles.meta}>
           Сура {surah.id} • {surah.ayatCount} аят. • {surah.type === 'meccan' ? 'Мекканская' : 'Мединская'}
         </Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView ref={scrollRef} contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {/* Панель управления: режим авто-продолжения + кнопка играть всю суру */}
@@ -394,14 +393,6 @@ const makeStyles = (colors) => StyleSheet.create({
   reciterChipText: { ...typography.caption, color: colors.textPrimary, fontWeight: '600' },
   reciterChipTextActive: { color: '#fff' },
 
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxxl,
-    paddingBottom: spacing.xl,
-    alignItems: 'center',
-  },
-  back: { ...typography.bodyMedium, color: '#fff', alignSelf: 'flex-start' },
   surahNameAr: { fontSize: 44, color: '#fff', marginVertical: spacing.sm },
   surahName: { ...typography.h3, color: '#fff', textAlign: 'center' },
   meta: { ...typography.small, color: '#fff', opacity: 0.8, marginTop: 4 },

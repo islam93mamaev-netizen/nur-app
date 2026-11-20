@@ -29,7 +29,7 @@ export default function WordBreakdown({ word, transcription }) {
           </Text>
         ))}
       </View>
-      {transcription && (
+      {!!transcription && (
         <Text style={styles.fullTranslit}>{transcription}</Text>
       )}
 

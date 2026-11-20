@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import BookmarkButton from '../../components/BookmarkButton';
@@ -17,11 +18,9 @@ export default function MazhabDetailScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: m.color }]}>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К мазхабам" background={m.color}>
         <View style={styles.headerTop}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.back}>← К мазхабам</Text>
-          </TouchableOpacity>
+          
           <BookmarkButton
             type="mazhab"
             refId={m.id}
@@ -35,7 +34,7 @@ export default function MazhabDetailScreen({ navigation, route }) {
         <Text style={styles.nameAr}>{m.nameAr}</Text>
         <Text style={styles.title}>{m.title}</Text>
         <Pill label={m.founderYears} background="#fff" textColor={m.color} />
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '12' }}>
@@ -69,9 +68,7 @@ export default function MazhabDetailScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl, alignItems: 'center' },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: 'stretch', marginBottom: spacing.md },
-  back: { ...typography.bodyMedium, color: '#fff' },
   nameAr: { fontSize: 32, color: '#fff', marginVertical: spacing.sm },
   title: { ...typography.h2, color: '#fff', marginBottom: spacing.sm },
 

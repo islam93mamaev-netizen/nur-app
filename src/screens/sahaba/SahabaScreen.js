@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Pill from '../../components/Pill';
 import SectionTestsBlock from '../../components/SectionTestsBlock';
-import { spacing, radii, typography } from '../../constants/theme';
+import { spacing, typography } from '../../constants/theme';
 import { sahaba, sahabaGroups, getSahabaByGroup } from '../../data/sahaba';
 import { useTheme } from '../../store/themeStore';
 
@@ -14,13 +15,11 @@ export default function SahabaScreen({ navigation }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.title}>Сподвижники пророка ﷺ</Text>
         <Text style={styles.subtitle}>Биографии {sahaba.length} ключевых сахабов</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {sahabaGroups.map((g) => {
@@ -64,8 +63,6 @@ export default function SahabaScreen({ navigation }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.lg },
-  back: { ...typography.bodyMedium, color: '#fff', marginBottom: spacing.md },
   title: { ...typography.h1, color: '#fff' },
   subtitle: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
 

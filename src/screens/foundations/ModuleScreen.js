@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Screen from '../../components/Screen';
+import CategoryIcon from '../../components/CategoryIcon';
 import Card from '../../components/Card';
-import { spacing, radii, typography } from '../../constants/theme';
+import { spacing, typography } from '../../constants/theme';
 import { findModule } from '../../data/modules';
 import { useProgress } from '../../store/progressStore';
 import { useTheme } from '../../store/themeStore';
@@ -21,7 +22,7 @@ export default function ModuleScreen({ navigation, route }) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back}>
           <Text style={styles.backText}>← Назад</Text>
         </TouchableOpacity>
-        <Text style={styles.icon}>{module.icon}</Text>
+        <CategoryIcon icon={module.icon} size={36} color="#fff" style={{ marginBottom: spacing.sm }} />
         <Text style={styles.title}>{module.title}</Text>
         <Text style={styles.desc}>{module.description}</Text>
       </View>
@@ -63,7 +64,6 @@ const makeStyles = (colors) => StyleSheet.create({
   header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl },
   back: { marginBottom: spacing.md },
   backText: { ...typography.bodyMedium, color: '#fff' },
-  icon: { fontSize: 36, marginBottom: spacing.sm },
   title: { ...typography.h1, color: '#fff', marginBottom: 4 },
   desc: { ...typography.body, color: '#fff', opacity: 0.85 },
   row: { flexDirection: 'row', alignItems: 'center' },

@@ -7,10 +7,11 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
-import ProgressBar from '../../components/ProgressBar';
 import Icon from '../../components/Icon';
+import PathQuiz from '../../components/PathQuiz';
 import { spacing, radii, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
 import { useProgress } from '../../store/progressStore';
@@ -34,12 +35,11 @@ export default function PathUnitScreen({ navigation, route }) {
   const { state, completePathUnit, markWordLearned } = useProgress();
   const found = findUnit(route.params.unitId);
 
-  // phase: learn → quiz → done
+  // phase: learn → quiz (сам квиз и экран результата — в компоненте PathQuiz)
   const [phase, setPhase] = useState('learn');
   const [quiz, setQuiz] = useState([]);
-  const [qIdx, setQIdx] = useState(0);
-  const [score, setScore] = useState(0);
-  const [picked, setPicked] = useState(null); // выбранный вариант текущего вопроса
+  // Новый key на каждый старт — PathQuiz монтируется заново со сброшенным счётом
+  const [quizKey, setQuizKey] = useState(0);
   const [expandedWord, setExpandedWord] = useState(null); // слово с раскрытым разбором по буквам
 
   if (!found) return null;
@@ -49,46 +49,20 @@ export default function PathUnitScreen({ navigation, route }) {
 
   const startQuiz = () => {
     stop();
-    setQuiz(buildUnitQuiz(unit));
-    setQIdx(0);
-    setScore(0);
-    setPicked(null);
+    setQuiz(buildUnitQuiz(unit)); // каждый раз новый набор вопросов
+    setQuizKey((k) => k + 1);
     setPhase('quiz');
   };
 
-  const finish = (finalScore, total) => {
-    const ratio = total > 0 ? finalScore / total : 1;
-    if (ratio >= PASS_RATIO) {
-      completePathUnit(unit.id, ratio);
-      // Слова пройденного батча уходят в интервальное повторение (SRS):
-      // завтра появятся в «Карточках» и в счётчике «на повторение».
-      if (unit.type === 'words' && !alreadyDone) {
-        for (const w of getWordsOfUnit(unit)) markWordLearned(w.id, true);
-      }
-      haptics.success();
-    } else {
-      haptics.error();
+  // Итог теста: при успехе фиксируем прогресс шага
+  const handleQuizComplete = (finalScore, total, passed) => {
+    if (!passed) return;
+    completePathUnit(unit.id, total > 0 ? finalScore / total : 1);
+    // Слова пройденного батча уходят в интервальное повторение (SRS):
+    // завтра появятся в «Карточках» и в счётчике «на повторение».
+    if (unit.type === 'words' && !alreadyDone) {
+      for (const w of getWordsOfUnit(unit)) markWordLearned(w.id, true);
     }
-    setPhase('done');
-  };
-
-  const pick = (opt) => {
-    if (picked !== null) return; // уже ответили
-    const q = quiz[qIdx];
-    const correct = opt === q.answer;
-    if (correct) haptics.success();
-    else haptics.error();
-    const newScore = score + (correct ? 1 : 0);
-    setScore(newScore);
-    setPicked(opt);
-    setTimeout(() => {
-      if (qIdx + 1 >= quiz.length) {
-        finish(newScore, quiz.length);
-      } else {
-        setQIdx(qIdx + 1);
-        setPicked(null);
-      }
-    }, 700);
   };
 
   const sayArabic = async (text) => {
@@ -125,7 +99,7 @@ export default function PathUnitScreen({ navigation, route }) {
               </View>
             ))}
           </View>
-          {l.example && (
+          {!!l.example && (
             <TouchableOpacity onPress={() => sayArabic(l.example.ar)} style={styles.exampleRow}>
               <Icon name="play" size={12} color={colors.primary} style={{ marginRight: 8 }} />
               <Text style={styles.exampleAr}>{l.example.ar}</Text>
@@ -149,7 +123,7 @@ export default function PathUnitScreen({ navigation, route }) {
               <Text style={styles.letterSound}>{h.desc}</Text>
             </View>
           </View>
-          {h.example && (
+          {!!h.example && (
             <TouchableOpacity onPress={() => sayArabic(h.example.ar)} style={styles.exampleRow}>
               <Icon name="play" size={12} color={colors.primary} style={{ marginRight: 8 }} />
               <Text style={styles.exampleAr}>{h.example.ar}</Text>
@@ -257,7 +231,7 @@ export default function PathUnitScreen({ navigation, route }) {
           </Text>
           <Button
             title="Открыть урок грамматики"
-            onPress={() => navigation.navigate('GrammarLesson', { lessonId: unit.lessonId })}
+            onPress={() => navigation.navigate('GrammarLesson', { id: unit.lessonId })}
             style={{ marginTop: spacing.md }}
           />
         </Card>
@@ -282,18 +256,13 @@ export default function PathUnitScreen({ navigation, route }) {
     return null;
   };
 
-  // ===== Рендер теста =====
-  const q = quiz[qIdx];
-
   return (
     <Screen padded={false}>
-      <View style={[styles.header, { backgroundColor: stage.color }]}>
-        <TouchableOpacity onPress={() => { stop(); navigation.goBack(); }}>
-          <Text style={styles.back}>← Путь</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => { stop(); navigation.goBack(); }} backLabel="← Путь" background={stage.color}>
+        
         <Text style={styles.title}>{unit.title}</Text>
         <Text style={styles.subtitle}>{stage.title}{alreadyDone ? ' · пройдено ✓' : ''}</Text>
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {phase === 'learn' && (
@@ -312,60 +281,16 @@ export default function PathUnitScreen({ navigation, route }) {
           </>
         )}
 
-        {phase === 'quiz' && q && (
-          <>
-            <ProgressBar value={qIdx} max={quiz.length} color={stage.color} />
-            <Text style={styles.quizCounter}>Вопрос {qIdx + 1} из {quiz.length}</Text>
-            <Card style={{ marginTop: spacing.md }}>
-              <Text style={styles.quizPrompt}>{q.prompt}</Text>
-              {q.promptAr ? <Text style={styles.quizAr}>{q.promptAr}</Text> : null}
-            </Card>
-            <View style={{ marginTop: spacing.md }}>
-              {q.options.map((opt) => {
-                const isPicked = picked === opt;
-                const isCorrect = picked !== null && opt === q.answer;
-                const isWrong = isPicked && opt !== q.answer;
-                return (
-                  <TouchableOpacity
-                    key={opt}
-                    onPress={() => pick(opt)}
-                    activeOpacity={0.8}
-                    style={[
-                      styles.option,
-                      isCorrect && { backgroundColor: colors.success + '20', borderColor: colors.success },
-                      isWrong && { backgroundColor: colors.danger + '15', borderColor: colors.danger },
-                    ]}
-                  >
-                    <Text style={[styles.optionText, q.arabicOptions && styles.optionAr]}>
-                      {opt}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </>
-        )}
-
-        {phase === 'done' && (
-          <Card style={{ alignItems: 'center', paddingVertical: spacing.xl }}>
-            {score / Math.max(1, quiz.length) >= PASS_RATIO ? (
-              <>
-                <Text style={styles.doneEmoji}>🎉</Text>
-                <Text style={[styles.doneTitle, { color: colors.success }]}>Шаг пройден!</Text>
-                <Text style={styles.doneScore}>{score} из {quiz.length} правильно · +XP</Text>
-                <Button title="К следующему шагу" onPress={() => navigation.goBack()} style={{ marginTop: spacing.lg, alignSelf: 'stretch' }} />
-              </>
-            ) : (
-              <>
-                <Text style={styles.doneEmoji}>📖</Text>
-                <Text style={[styles.doneTitle, { color: colors.danger }]}>Нужно ещё повторить</Text>
-                <Text style={styles.doneScore}>
-                  {score} из {quiz.length} — для прохождения нужно {Math.ceil(quiz.length * PASS_RATIO)}
-                </Text>
-                <Button title="Повторить материал" onPress={() => setPhase('learn')} style={{ marginTop: spacing.lg, alignSelf: 'stretch' }} />
-              </>
-            )}
-          </Card>
+        {phase === 'quiz' && (
+          <PathQuiz
+            key={quizKey}
+            questions={quiz}
+            color={stage.color}
+            passRatio={PASS_RATIO}
+            onComplete={handleQuizComplete}
+            onRetry={() => setPhase('learn')}
+            onContinue={() => navigation.goBack()}
+          />
         )}
       </ScrollView>
     </Screen>
@@ -373,8 +298,6 @@ export default function PathUnitScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl },
-  back: { ...typography.bodyMedium, color: '#fff' },
   title: { ...typography.h2, color: '#fff', marginTop: spacing.sm },
   subtitle: { ...typography.small, color: 'rgba(255,255,255,0.85)', marginTop: 2 },
 
@@ -439,21 +362,4 @@ const makeStyles = (colors) => StyleSheet.create({
   syllRu: { ...typography.bodyMedium, color: colors.primary, fontWeight: '700' },
 
   refText: { ...typography.body, color: colors.textPrimary, lineHeight: 23 },
-
-  quizCounter: { ...typography.caption, color: colors.textSecondary, marginTop: spacing.sm },
-  quizPrompt: { ...typography.bodyMedium, color: colors.textSecondary },
-  quizAr: { fontSize: 52, color: colors.textPrimary, textAlign: 'center', marginTop: spacing.md, lineHeight: 84 },
-  option: {
-    borderWidth: 1.5, borderColor: colors.border,
-    backgroundColor: colors.surface,
-    borderRadius: radii.md,
-    paddingVertical: spacing.md, paddingHorizontal: spacing.lg,
-    marginBottom: spacing.sm,
-  },
-  optionText: { ...typography.bodyMedium, color: colors.textPrimary, textAlign: 'center' },
-  optionAr: { fontSize: 32, lineHeight: 56 },
-
-  doneEmoji: { fontSize: 44, marginBottom: spacing.sm },
-  doneTitle: { ...typography.h3 },
-  doneScore: { ...typography.small, color: colors.textSecondary, marginTop: 4 },
 });

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
 import Pill from '../../components/Pill';
@@ -69,10 +70,8 @@ export default function WordDetailScreen({ navigation, route }) {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
+        
         <TouchableOpacity onPress={() => speak(word.ar)}>
           <Text style={styles.arabic}>{word.ar}</Text>
         </TouchableOpacity>
@@ -91,7 +90,7 @@ export default function WordDetailScreen({ navigation, route }) {
             textColor={colors.primary}
           />
         ) : null}
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {/* Разбор по буквам — это главная новая фича */}
@@ -103,7 +102,7 @@ export default function WordDetailScreen({ navigation, route }) {
           </View>
         </Card>
 
-        {word.root && (
+        {!!word.root && (
           <Card style={{ marginBottom: spacing.md }}>
             <Text style={styles.label}>🌱 Корень</Text>
             <Text style={styles.rootValue}>{word.root}</Text>
@@ -113,7 +112,7 @@ export default function WordDetailScreen({ navigation, route }) {
           </Card>
         )}
 
-        {sentence && (
+        {!!sentence && (
           <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '12' }}>
             <Text style={[styles.label, { color: colors.accentDark }]}>💬 В предложении</Text>
             <TouchableOpacity onPress={() => speak(sentence.ar)}>
@@ -126,7 +125,7 @@ export default function WordDetailScreen({ navigation, route }) {
           </Card>
         )}
 
-        {word.example && (
+        {!!word.example && (
           <Card style={{ marginBottom: spacing.md }}>
             <Text style={styles.label}>📜 Пример из Корана</Text>
             <TouchableOpacity onPress={() => speak(word.example)}>
@@ -183,14 +182,6 @@ export default function WordDetailScreen({ navigation, route }) {
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxxl,
-    paddingBottom: spacing.xl,
-    alignItems: 'center',
-  },
-  back: { ...typography.bodyMedium, color: '#fff', alignSelf: 'flex-start' },
   arabic: { fontSize: 56, color: '#fff', marginVertical: spacing.md },
   translit: { ...typography.body, color: '#fff', fontStyle: 'italic', opacity: 0.85 },
   translation: { ...typography.h3, color: '#fff', marginBottom: spacing.md },
