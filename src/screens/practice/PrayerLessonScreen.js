@@ -22,6 +22,8 @@ import { speak, stop as ttsStop } from '../../services/ttsService';
 import { ensureAudioMode } from '../../services/audioService';
 import { splitArabic } from '../../utils/arabicParser';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
+import CategoryIcon from '../../components/CategoryIcon';
 
 // splitArabic теперь общий — см. utils/arabicParser.js
 
@@ -210,7 +212,7 @@ export default function PrayerLessonScreen({ navigation, route }) {
             <Image source={imgSource} style={styles.image} resizeMode="contain" />
           ) : (
             <View style={styles.imagePlaceholder}>
-              <Text style={styles.imagePlaceholderText}>🕌</Text>
+              <CategoryIcon icon="🕌" textStyle={styles.imagePlaceholderText} />
             </View>
           )}
         </View>
@@ -265,7 +267,7 @@ export default function PrayerLessonScreen({ navigation, route }) {
                     {isPlaying ? 'Воспроизводится' : isPaused ? 'На паузе' : 'Прослушать'}
                   </Text>
                   <Text style={styles.playerSub}>
-                    {isMp3 ? '🎵 Аудиозапись' : '🔊 Озвучка (TTS)'}
+                    {isMp3 ? 'Аудиозапись' : 'Озвучка (TTS)'}
                     {showTtsProgress && ` · фрагмент ${ttsState.idx + 1}/${ttsState.chunks.length}`}
                   </Text>
                 </View>
@@ -303,7 +305,7 @@ export default function PrayerLessonScreen({ navigation, route }) {
         {/* Описание урока — только на первом шаге */}
         {stepIdx === 0 && (
           <Card style={{ marginTop: spacing.lg, backgroundColor: colors.info + '10' }}>
-            <Text style={[styles.label, { color: colors.info }]}>💡 О уроке</Text>
+            <IconText icon="bulb" style={[styles.label, { color: colors.info }]}>О уроке</IconText>
             <Text style={styles.actionText}>{lesson.description}</Text>
           </Card>
         )}

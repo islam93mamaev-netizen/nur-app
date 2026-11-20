@@ -9,6 +9,8 @@ import { spacing, radii, typography } from '../../constants/theme';
 import { findLesson } from '../../data/grammar';
 import { speak, stop } from '../../services/ttsService';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
+import IconText from '../../components/IconText';
 
 export default function GrammarLessonScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -25,7 +27,7 @@ export default function GrammarLessonScreen({ navigation, route }) {
     <Screen padded={false}>
       <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К урокам" background={lesson.color}>
         
-        <Text style={styles.icon}>{lesson.icon}</Text>
+        <CategoryIcon icon={lesson.icon} textStyle={styles.icon} />
         <Text style={styles.title}>{lesson.title}</Text>
         <Pill label={lesson.level} background="#fff" textColor={lesson.color} />
       </DetailHeader>
@@ -34,7 +36,7 @@ export default function GrammarLessonScreen({ navigation, route }) {
         {/* Введение от «преподавателя» */}
         <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '12' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-            <Text style={{ fontSize: 26, marginRight: spacing.sm }}>👨‍🏫</Text>
+            <CategoryIcon icon="👨‍🏫" textStyle={{ fontSize: 26, marginRight: spacing.sm }} />
             <Text style={[styles.label, { color: colors.accentDark }]}>Преподаватель</Text>
           </View>
           <Text style={styles.intro}>{lesson.intro}</Text>
@@ -50,7 +52,7 @@ export default function GrammarLessonScreen({ navigation, route }) {
                 onPress={() => speak(phrase.ar, { rate: 0.5 })}
                 style={[styles.playBtn, { borderColor: lesson.color }]}
               >
-                <Text style={{ color: lesson.color, fontWeight: '700' }}>🔊</Text>
+                <CategoryIcon icon="🔊" textStyle={{ color: lesson.color, fontWeight: '700' }} />
               </TouchableOpacity>
             </View>
 
@@ -60,7 +62,7 @@ export default function GrammarLessonScreen({ navigation, route }) {
 
             {!!phrase.context && (
               <View style={[styles.contextBox, { borderLeftColor: lesson.color }]}>
-                <Text style={styles.context}>💡 {phrase.context}</Text>
+                <IconText icon="bulb" style={styles.context}>{phrase.context}</IconText>
               </View>
             )}
 
@@ -82,7 +84,7 @@ export default function GrammarLessonScreen({ navigation, route }) {
         {/* Грамматика */}
         {lesson.grammar && (
           <>
-            <Text style={styles.sectionTitle}>📖 Грамматика</Text>
+            <IconText icon="bookOpen" style={styles.sectionTitle}>Грамматика</IconText>
             <Card style={{ backgroundColor: colors.info + '10' }}>
               <Text style={styles.grammar}>{lesson.grammar}</Text>
             </Card>
@@ -92,7 +94,7 @@ export default function GrammarLessonScreen({ navigation, route }) {
         {/* Мини-тест */}
         {lesson.mini && (
           <>
-            <Text style={styles.sectionTitle}>✅ Проверь себя</Text>
+            <IconText icon="check" style={styles.sectionTitle}>Проверь себя</IconText>
             <Card>
               <Text style={styles.miniQ}>{lesson.mini.q}</Text>
               {lesson.mini.options.map((opt, i) => {

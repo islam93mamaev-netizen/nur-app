@@ -8,6 +8,7 @@ import Pill from '../../components/Pill';
 import { spacing, radii, typography } from '../../constants/theme';
 import { faqCategories, faqs, getFaqsByCategory, searchFaqs } from '../../data/faq';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 export default function FaqScreen({ navigation }) {
   const { colors } = useTheme();
@@ -44,7 +45,7 @@ export default function FaqScreen({ navigation }) {
       />
 
       <View style={styles.searchBox}>
-        <Text style={styles.searchIcon}>🔍</Text>
+        <CategoryIcon icon="🔍" textStyle={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           value={search}
@@ -100,7 +101,7 @@ export default function FaqScreen({ navigation }) {
         keyboardShouldPersistTaps="handled"
         ListEmptyComponent={
           <View style={{ alignItems: 'center', paddingVertical: spacing.xxxl }}>
-            <Text style={{ fontSize: 40, marginBottom: spacing.md }}>🔍</Text>
+            <CategoryIcon icon="🔍" textStyle={{ fontSize: 40, marginBottom: spacing.md }} />
             <Text style={{ ...typography.body, color: colors.textSecondary }}>
               Ничего не нашлось по запросу
             </Text>
@@ -109,7 +110,7 @@ export default function FaqScreen({ navigation }) {
         ListFooterComponent={
           !search ? (
             <Card style={{ marginTop: spacing.lg, backgroundColor: colors.warning + '15' }}>
-              <Text style={[styles.tipTitle, { color: colors.warning }]}>⚠️ Важно</Text>
+              <IconText icon="alert" style={[styles.tipTitle, { color: colors.warning }]}>Важно</IconText>
               <Text style={styles.tipText}>
                 Эти ответы — учебная справка, основанная на классических трудах учёных. По вопросам, касающимся вашей жизненной ситуации (особенно в сложных случаях), всегда обращайтесь к знающему имаму или учёному вашей местности. В вопросах, где есть разногласие мазхабов, оно указано явно.
               </Text>

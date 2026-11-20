@@ -9,6 +9,7 @@ import { getQuiz } from '../../data/quizzes';
 import { useProgress } from '../../store/progressStore';
 import { useTheme } from '../../store/themeStore';
 import * as haptics from '../../utils/haptics';
+import CategoryIcon from '../../components/CategoryIcon';
 
 export default function QuizScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -95,13 +96,13 @@ export default function QuizScreen({ navigation, route }) {
     return (
       <Screen padded>
         <View style={styles.complete}>
-          <Text style={styles.emoji}>{pct >= 80 ? '🌟' : pct >= 50 ? '👍' : '💪'}</Text>
+          <CategoryIcon icon={pct >= 80 ? '🌟' : pct >= 50 ? '👍' : '💪'} textStyle={styles.emoji} />
           <Text style={styles.title}>Тест завершён</Text>
           <Text style={styles.bigScore}>{score} / {total}</Text>
           <Text style={styles.subtitle}>{pct}% правильных</Text>
           <View style={{ marginTop: spacing.xl, alignSelf: 'stretch' }}>
             {hasPool && (
-              <Button title="🎲 Новая попытка с другими вопросами" onPress={newAttempt} size="lg" />
+              <Button title="Новая попытка с другими вопросами" onPress={newAttempt} size="lg" />
             )}
             <Button
               title="Пройти те же вопросы"
@@ -206,7 +207,7 @@ function ChoiceList({ options, answerIdx, answered, onAnswer, audio }) {
     <View style={{ marginTop: spacing.lg }}>
       {audio && (
         <View style={styles.audioBanner}>
-          <Text style={styles.audioIcon}>🔊</Text>
+          <CategoryIcon icon="🔊" textStyle={styles.audioIcon} />
           <Text style={styles.audioText}>Произнесите слово или представьте его звучание</Text>
         </View>
       )}

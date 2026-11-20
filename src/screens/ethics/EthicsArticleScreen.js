@@ -9,6 +9,7 @@ import { findArticle, findCategory } from '../../data/ethics';
 import ReferenceText from '../../components/ReferenceText';
 import BookmarkButton from '../../components/BookmarkButton';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 export default function EthicsArticleScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -32,7 +33,7 @@ export default function EthicsArticleScreen({ navigation, route }) {
             color="#fff"
           />
         </View>
-        <Pill label={`${cat?.icon || ''} ${cat?.title || ''}`} background="#fff" textColor={cat?.color || colors.primary} />
+        <Pill label={cat?.title || ''} background="#fff" textColor={cat?.color || colors.primary} />
         <Text style={styles.title}>{article.title}</Text>
       </DetailHeader>
 
@@ -49,7 +50,7 @@ export default function EthicsArticleScreen({ navigation, route }) {
 
         {!!article.refs && (
           <Card style={{ marginTop: spacing.md, backgroundColor: colors.info + '10' }}>
-            <Text style={[styles.label, { color: colors.info }]}>📚 Источники (нажмите чтобы открыть)</Text>
+            <IconText icon="book" style={[styles.label, { color: colors.info }]}>Источники (нажмите чтобы открыть)</IconText>
             <ReferenceText text={article.refs} style={styles.refs} />
           </Card>
         )}

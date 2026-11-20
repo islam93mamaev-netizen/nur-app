@@ -7,6 +7,8 @@ import Pill from '../../components/Pill';
 import { spacing, radii, typography } from '../../constants/theme';
 import { grammarLessons, grammarLevels } from '../../data/grammar';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
+import IconText from '../../components/IconText';
 
 export default function GrammarScreen({ navigation }) {
   const { colors } = useTheme();
@@ -52,7 +54,7 @@ export default function GrammarScreen({ navigation }) {
                 onPress={() => setActiveLevel(lv.id)}
                 style={[styles.tab, active && { backgroundColor: lv.color, borderColor: lv.color }]}
               >
-                <Text style={[styles.tabIcon, active && { color: '#fff' }]}>{lv.icon}</Text>
+                <CategoryIcon icon={lv.icon} textStyle={[styles.tabIcon, active && { color: '#fff' }]} />
                 <Text style={[styles.tabCode, active && { color: '#fff' }]}>
                   {lv.code || lv.id.toUpperCase()}
                 </Text>
@@ -65,7 +67,7 @@ export default function GrammarScreen({ navigation }) {
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         <Card style={{ marginBottom: spacing.lg, backgroundColor: colors.accent + '12' }}>
-          <Text style={[styles.tipTitle, { color: colors.accentDark }]}>📚 Путь от A1 до B2</Text>
+          <IconText icon="book" style={[styles.tipTitle, { color: colors.accentDark }]}>Путь от A1 до B2</IconText>
           <Text style={styles.tipText}>
             • <Text style={styles.bold}>A1</Text> — приветствия, числа, семья, цвета, базовые вопросы{'\n'}
             • <Text style={styles.bold}>A2</Text> — настоящее время, еда, магазин, мечеть, указательные{'\n'}
@@ -82,7 +84,10 @@ export default function GrammarScreen({ navigation }) {
               if (!lv) return null;
               return (
                 <Card style={{ marginBottom: spacing.md, backgroundColor: lv.color + '12', borderLeftWidth: 4, borderLeftColor: lv.color }}>
-                  <Text style={[styles.lvHead, { color: lv.color }]}>{lv.icon} {lv.code} — {lv.title}</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <CategoryIcon icon={lv.icon} textStyle={[styles.lvHead, { color: lv.color, marginRight: 6 }]} />
+                    <Text style={[styles.lvHead, { color: lv.color }]}>{lv.code} — {lv.title}</Text>
+                  </View>
                   <Text style={styles.lvDesc}>{lv.desc}</Text>
                 </Card>
               );
@@ -94,7 +99,7 @@ export default function GrammarScreen({ navigation }) {
           byLevel.map((lv) => (
             <View key={lv.id} style={{ marginBottom: spacing.lg }}>
               <View style={[styles.lvHeader, { borderLeftColor: lv.color }]}>
-                <Text style={styles.lvHeaderIcon}>{lv.icon}</Text>
+                <CategoryIcon icon={lv.icon} textStyle={styles.lvHeaderIcon} />
                 <View style={{ flex: 1 }}>
                   <Text style={[styles.lvHead, { color: lv.color }]}>{lv.code} — {lv.title}</Text>
                   <Text style={styles.lvDesc}>{lv.desc} · {lv.lessons.length} уроков</Text>
@@ -118,7 +123,7 @@ function renderLessonCard(lesson, navigation, styles, colors) {
     >
       <Card style={[styles.card, { borderLeftWidth: 4, borderLeftColor: lesson.color }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={styles.icon}>{lesson.icon}</Text>
+          <CategoryIcon icon={lesson.icon} textStyle={styles.icon} />
           <View style={{ flex: 1 }}>
             <Text style={styles.lessonTitle}>{lesson.title}</Text>
             <Text style={styles.lessonIntro} numberOfLines={2}>{lesson.intro}</Text>

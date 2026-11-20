@@ -12,6 +12,7 @@ import Card from '../../components/Card';
 import { spacing, radii, typography } from '../../constants/theme';
 import { fetchMetalPrices, clearMetalPriceCache } from '../../services/goldPriceService';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 // Список валют — самые распространённые в мусульманских странах + основные мировые.
 const CURRENCIES = [
@@ -182,8 +183,8 @@ export default function ZakatScreen({ navigation }) {
           </View>
 
           <View style={styles.row}>
-            <Field label="🥇 Золото 24K" value={goldPrice} onChange={setGoldPrice} colors={colors} styles={styles} />
-            <Field label="⚪ Серебро" value={silverPrice} onChange={setSilverPrice} colors={colors} styles={styles} />
+            <Field label="Золото 24K" value={goldPrice} onChange={setGoldPrice} colors={colors} styles={styles} />
+            <Field label="Серебро" value={silverPrice} onChange={setSilverPrice} colors={colors} styles={styles} />
           </View>
 
           {lastFetchInfo && (
@@ -204,20 +205,20 @@ export default function ZakatScreen({ navigation }) {
         {/* Активы */}
         <Card style={{ marginTop: spacing.md }}>
           <Text style={styles.sectionLabel}>Ваши активы ({currency})</Text>
-          <Field label="💵 Наличность" value={cash} onChange={setCash} colors={colors} styles={styles} />
-          <Field label="🏦 На счетах / вкладах" value={bank} onChange={setBank} colors={colors} styles={styles} />
-          <Field label="🥇 Золото (граммы)" value={gold} onChange={setGold} colors={colors} styles={styles} suffix="г" />
-          <Field label="⚪ Серебро (граммы)" value={silver} onChange={setSilver} colors={colors} styles={styles} suffix="г" />
-          <Field label="🛒 Товары на продажу (рыночная цена)" value={businessStock} onChange={setBusinessStock} colors={colors} styles={styles} />
-          <Field label="📈 Инвестиции (акции/доли)" value={investments} onChange={setInvestments} colors={colors} styles={styles} />
-          <Field label="💳 Долги в вашу сторону" value={receivables} onChange={setReceivables} colors={colors} styles={styles} />
+          <Field label="Наличность" value={cash} onChange={setCash} colors={colors} styles={styles} />
+          <Field label="На счетах / вкладах" value={bank} onChange={setBank} colors={colors} styles={styles} />
+          <Field label="Золото (граммы)" value={gold} onChange={setGold} colors={colors} styles={styles} suffix="г" />
+          <Field label="Серебро (граммы)" value={silver} onChange={setSilver} colors={colors} styles={styles} suffix="г" />
+          <Field label="Товары на продажу (рыночная цена)" value={businessStock} onChange={setBusinessStock} colors={colors} styles={styles} />
+          <Field label="Инвестиции (акции/доли)" value={investments} onChange={setInvestments} colors={colors} styles={styles} />
+          <Field label="Долги в вашу сторону" value={receivables} onChange={setReceivables} colors={colors} styles={styles} />
         </Card>
 
         {/* Долги */}
         <Card style={{ marginTop: spacing.md, backgroundColor: colors.danger + '08' }}>
           <Text style={styles.sectionLabel}>Ваши долги (вычитаются)</Text>
           <Field
-            label="💸 Краткосрочные долги (≤ 1 года)"
+            label="Краткосрочные долги (≤ 1 года)"
             value={payables}
             onChange={setPayables}
             colors={colors}
@@ -261,7 +262,7 @@ export default function ZakatScreen({ navigation }) {
 
         {/* Памятка */}
         <Card style={{ marginTop: spacing.md, backgroundColor: colors.info + '10' }}>
-          <Text style={[styles.label, { color: colors.info }]}>📚 Что считается активами</Text>
+          <IconText icon="book" style={[styles.label, { color: colors.info }]}>Что считается активами</IconText>
           <Text style={styles.body}>
             ВКЛЮЧАЕТСЯ: золото, серебро, валюта, наличность, банковские средства, товары на продажу, инвестиционные доли по рыночной цене, ожидаемые возвраты долгов.{'\n\n'}
             НЕ включается: дом проживания, машина, мебель, личная одежда, инструменты профессии.
@@ -269,7 +270,7 @@ export default function ZakatScreen({ navigation }) {
         </Card>
 
         <Card style={{ marginTop: spacing.md, backgroundColor: colors.accent + '10' }}>
-          <Text style={[styles.label, { color: colors.accentDark }]}>👥 Кому отдавать (Коран 9:60)</Text>
+          <IconText icon="users" style={[styles.label, { color: colors.accentDark }]}>Кому отдавать (Коран 9:60)</IconText>
           <Text style={styles.body}>
             1. Бедным (фукара){'\n'}
             2. Нуждающимся (масакин){'\n'}
@@ -283,7 +284,7 @@ export default function ZakatScreen({ navigation }) {
         </Card>
 
         <Card style={{ marginTop: spacing.md, backgroundColor: colors.warning + '12' }}>
-          <Text style={[styles.label, { color: colors.warning }]}>⚠ Внимание</Text>
+          <IconText icon="alert" style={[styles.label, { color: colors.warning }]}>Внимание</IconText>
           <Text style={styles.body}>
             Расчёт — ориентировочный. По конкретным ситуациям (наследство, бизнес-партнёрство, особые активы) — посоветуйтесь с шариатским советом или знающим имамом.
           </Text>

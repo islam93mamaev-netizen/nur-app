@@ -7,6 +7,7 @@ import ReferenceText from '../../components/ReferenceText';
 import { spacing, typography } from '../../constants/theme';
 import { findTajwidSection } from '../../data/tajwid';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
 
 export default function TajwidSectionScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -18,7 +19,7 @@ export default function TajwidSectionScreen({ navigation, route }) {
     <Screen padded={false}>
       <DetailHeader align="center" onBack={() => navigation.goBack()} backLabel="← К таджвиду" background={section.color}>
         
-        <Text style={styles.icon}>{section.icon}</Text>
+        <CategoryIcon icon={section.icon} textStyle={styles.icon} />
         <Text style={styles.title}>{section.title}</Text>
       </DetailHeader>
 

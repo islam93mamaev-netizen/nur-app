@@ -13,6 +13,7 @@ import * as audio from '../../services/audioService';
 import Icon from '../../components/Icon';
 import { useTheme } from '../../store/themeStore';
 import { notify } from '../../utils/dialogs';
+import IconText from '../../components/IconText';
 
 // Нормализация арабского слова для поиска в словаре:
 // убираем огласовки, танвины, коранические знаки и татвиль.
@@ -235,9 +236,7 @@ export default function SurahScreen({ navigation, route }) {
             </View>
           </ScrollView>
 
-          <Text style={styles.tapHint}>
-            💡 Нажмите на любое слово аята — разбор по буквам и перевод
-          </Text>
+          <IconText icon="bulb" style={styles.tapHint}>Нажмите на любое слово аята — разбор по буквам и перевод</IconText>
           <TouchableOpacity
             onPress={playing ? pauseAudio : playFromBeginning}
             style={[styles.playAllBtn, { flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }]}

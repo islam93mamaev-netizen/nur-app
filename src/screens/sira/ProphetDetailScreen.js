@@ -10,6 +10,7 @@ import { prophets, findProphet } from '../../data/prophets';
 import ReferenceText from '../../components/ReferenceText';
 import BookmarkButton from '../../components/BookmarkButton';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 export default function ProphetDetailScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -54,7 +55,7 @@ export default function ProphetDetailScreen({ navigation, route }) {
 
         {p.ayats && (
           <Card style={{ marginTop: spacing.md, backgroundColor: colors.info + '10' }}>
-            <Text style={[styles.label, { color: colors.info }]}>📚 Аяты Корана о нём</Text>
+            <IconText icon="book" style={[styles.label, { color: colors.info }]}>Аяты Корана о нём</IconText>
             <ReferenceText text={p.ayats} style={styles.ayats} />
           </Card>
         )}

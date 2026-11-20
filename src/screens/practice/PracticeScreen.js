@@ -7,6 +7,7 @@ import Pill from '../../components/Pill';
 import { spacing, typography } from '../../constants/theme';
 import { modules } from '../../data/modules';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
 
 export default function PracticeScreen({ navigation }) {
   const { colors } = useTheme();
@@ -19,7 +20,7 @@ export default function PracticeScreen({ navigation }) {
     <Screen padded={false}>
       <DetailHeader onBack={() => navigation.goBack()} background={practice.color}>
         
-        <Text style={styles.icon}>{practice.icon}</Text>
+        <CategoryIcon icon={practice.icon} textStyle={styles.icon} />
         <Text style={styles.title}>{practice.title}</Text>
         <Text style={styles.desc}>{practice.description}</Text>
       </DetailHeader>
@@ -32,7 +33,7 @@ export default function PracticeScreen({ navigation }) {
         >
           <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '15', borderLeftWidth: 4, borderLeftColor: colors.accent }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ fontSize: 36, marginRight: spacing.md }}>🕌</Text>
+              <CategoryIcon icon="🕌" textStyle={{ fontSize: 36, marginRight: spacing.md }} />
               <View style={{ flex: 1 }}>
                 <Text style={[styles.lessonTitle, { color: colors.accentDark }]}>
                   Обучение намазу — пошаговый урок

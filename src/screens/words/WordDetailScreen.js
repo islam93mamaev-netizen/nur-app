@@ -11,6 +11,7 @@ import { findWord, words } from '../../data/words';
 import { useProgress } from '../../store/progressStore';
 import { speak } from '../../services/ttsService';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 // Несколько готовых простых предложений по словам — для запоминания в контексте.
 // Если слова нет в словаре — показываем только аят-пример.
@@ -81,7 +82,7 @@ export default function WordDetailScreen({ navigation, route }) {
           onPress={() => speak(word.ar, { rate: 0.5 })}
           style={styles.listenBtn}
         >
-          <Text style={{ color: colors.primary, fontWeight: '700' }}>🔊 Прослушать</Text>
+          <IconText icon="volume" style={{ color: colors.primary, fontWeight: '700' }}>Прослушать</IconText>
         </TouchableOpacity>
         {word.freq ? (
           <Pill
@@ -95,7 +96,7 @@ export default function WordDetailScreen({ navigation, route }) {
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {/* Разбор по буквам — это главная новая фича */}
         <Card style={{ marginBottom: spacing.md }}>
-          <Text style={styles.label}>📖 Разбор по буквам</Text>
+          <IconText icon="bookOpen" style={styles.label}>Разбор по буквам</IconText>
           <Text style={styles.caption}>Как из букв и огласовок складывается слово</Text>
           <View style={{ marginTop: spacing.sm }}>
             <WordBreakdown word={word.ar} transcription={word.tr} />
@@ -104,7 +105,7 @@ export default function WordDetailScreen({ navigation, route }) {
 
         {!!word.root && (
           <Card style={{ marginBottom: spacing.md }}>
-            <Text style={styles.label}>🌱 Корень</Text>
+            <IconText icon="leaf" style={styles.label}>Корень</IconText>
             <Text style={styles.rootValue}>{word.root}</Text>
             <Text style={styles.caption}>
               В арабском все слова строятся из 3-4 коренных букв. Понимание корня — ключ к словарному запасу.
@@ -114,20 +115,20 @@ export default function WordDetailScreen({ navigation, route }) {
 
         {!!sentence && (
           <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '12' }}>
-            <Text style={[styles.label, { color: colors.accentDark }]}>💬 В предложении</Text>
+            <IconText icon="messageCircle" style={[styles.label, { color: colors.accentDark }]}>В предложении</IconText>
             <TouchableOpacity onPress={() => speak(sentence.ar)}>
               <Text style={styles.sentenceAr}>{sentence.ar}</Text>
             </TouchableOpacity>
             <Text style={styles.sentenceRu}>{sentence.ru}</Text>
             <TouchableOpacity onPress={() => speak(sentence.ar, { rate: 0.45 })} style={styles.sentenceBtn}>
-              <Text style={{ color: colors.accentDark, fontWeight: '700' }}>🔊 Прослушать медленно</Text>
+              <IconText icon="volume" style={{ color: colors.accentDark, fontWeight: '700' }}>Прослушать медленно</IconText>
             </TouchableOpacity>
           </Card>
         )}
 
         {!!word.example && (
           <Card style={{ marginBottom: spacing.md }}>
-            <Text style={styles.label}>📜 Пример из Корана</Text>
+            <IconText icon="scroll" style={styles.label}>Пример из Корана</IconText>
             <TouchableOpacity onPress={() => speak(word.example)}>
               <Text style={styles.exampleAr}>{word.example}</Text>
             </TouchableOpacity>
@@ -136,7 +137,7 @@ export default function WordDetailScreen({ navigation, route }) {
 
         {sameRoot.length > 0 && (
           <Card style={{ marginBottom: spacing.md }}>
-            <Text style={styles.label}>🔗 Однокоренные слова</Text>
+            <IconText icon="link" style={styles.label}>Однокоренные слова</IconText>
             {sameRoot.map((w) => (
               <TouchableOpacity
                 key={w.id}
@@ -152,7 +153,7 @@ export default function WordDetailScreen({ navigation, route }) {
 
         {learnedInfo ? (
           <Card style={{ marginBottom: spacing.md }}>
-            <Text style={styles.label}>📊 Прогресс</Text>
+            <IconText icon="barChart" style={styles.label}>Прогресс</IconText>
             <Text style={styles.value}>Этап SRS: {learnedInfo.stage + 1}</Text>
             <Text style={styles.caption}>
               Следующее повторение: {new Date(learnedInfo.nextReview).toLocaleDateString('ru-RU')}

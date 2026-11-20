@@ -11,6 +11,7 @@ import ReferenceText from '../../components/ReferenceText';
 import BookmarkButton from '../../components/BookmarkButton';
 import { useTheme } from '../../store/themeStore';
 import useAdhkarPlayer from '../../hooks/useAdhkarPlayer';
+import IconText from '../../components/IconText';
 
 export default function DuaCategoryScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -95,13 +96,13 @@ export default function DuaCategoryScreen({ navigation, route }) {
 
             {d.ctx ? (
               <View style={[styles.ctxBox, { borderLeftColor: cat.color }]}>
-                <Text style={styles.ctx}>💡 {d.ctx}</Text>
+                <IconText icon="bulb" style={styles.ctx}>{d.ctx}</IconText>
               </View>
             ) : null}
 
             {d.refs ? (
               <View style={styles.refsBox}>
-                <Text style={styles.refsLabel}>📚 Источник:</Text>
+                <IconText icon="book" style={styles.refsLabel}>Источник:</IconText>
                 <ReferenceText text={d.refs} style={styles.refs} />
               </View>
             ) : null}

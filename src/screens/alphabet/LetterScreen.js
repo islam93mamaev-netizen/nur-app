@@ -12,6 +12,7 @@ import {
   getArabicVoices, getSelectedVoiceId, setVoice, loadSettings,
 } from '../../services/ttsService';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 export default function LetterScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -90,7 +91,7 @@ export default function LetterScreen({ navigation, route }) {
             onPress={() => setVoiceModalOpen(true)}
             style={styles.voiceBtn}
           >
-            <Text style={styles.voiceBtnText}>🗣 Голос: {currentVoiceName}</Text>
+            <IconText icon="volume" style={styles.voiceBtnText}>Голос: {currentVoiceName}</IconText>
             <Text style={styles.voiceBtnChev}>›</Text>
           </TouchableOpacity>
         )}
@@ -99,11 +100,7 @@ export default function LetterScreen({ navigation, route }) {
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {arVoiceWarn && (
           <Card style={{ marginBottom: spacing.md, backgroundColor: colors.warning + '15' }}>
-            <Text style={{ ...typography.small, color: colors.warning }}>
-              ⚠️ В системе не найден арабский голос для TTS.
-              На iOS: Настройки → Универсальный доступ → Контент → Голоса → Арабский.
-              На Android установите Google TTS + арабский язык.
-            </Text>
+            <IconText icon="alert" style={{ ...typography.small, color: colors.warning }}>В системе не найден арабский голос для TTS. На iOS: Настройки → Универсальный доступ → Контент → Голоса → Арабский. На Android установите Google TTS + арабский язык.</IconText>
           </Card>
         )}
 
@@ -115,7 +112,7 @@ export default function LetterScreen({ navigation, route }) {
 
         {!!letter.tip && (
           <Card style={{ marginBottom: spacing.md, backgroundColor: colors.accent + '12' }}>
-            <Text style={[styles.label, { color: colors.accentDark }]}>💡 Подсказка</Text>
+            <IconText icon="bulb" style={[styles.label, { color: colors.accentDark }]}>Подсказка</IconText>
             <Text style={styles.bodyText}>{letter.tip}</Text>
           </Card>
         )}
@@ -139,7 +136,7 @@ export default function LetterScreen({ navigation, route }) {
             </View>
             {!letter.connectsLeft && (
               <Card style={{ marginBottom: spacing.md, backgroundColor: colors.info + '12' }}>
-                <Text style={[styles.label, { color: colors.info }]}>📌 Особенность</Text>
+                <IconText icon="pin" style={[styles.label, { color: colors.info }]}>Особенность</IconText>
                 <Text style={styles.bodyText}>
                   Эта буква НЕ соединяется со следующей. После неё всегда «разрыв», даже в середине слова.
                 </Text>
@@ -170,7 +167,7 @@ export default function LetterScreen({ navigation, route }) {
           <Text style={styles.exampleTr}>{letter.example.tr}</Text>
           <Text style={styles.exampleRu}>{letter.example.ru}</Text>
           <Button
-            title="🔊 Прослушать пример"
+            title="Прослушать пример"
             variant="outline"
             onPress={sayExample}
             style={{ marginTop: spacing.md }}

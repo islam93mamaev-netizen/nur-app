@@ -2,6 +2,8 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Linking } from 'react-native';
 import Screen from '../../components/Screen';
 import Card from '../../components/Card';
+import Icon from '../../components/Icon';
+import PatternBackground from '../../components/PatternBackground';
 import Button from '../../components/Button';
 import { spacing, radii, typography } from '../../constants/theme';
 import { useProgress } from '../../store/progressStore';
@@ -11,6 +13,16 @@ import { hadiths } from '../../data/hadiths';
 import { useTheme, FONT_SCALES } from '../../store/themeStore';
 import { useSettings, HADITH_SERVICES, HADITH_SERVICE_LABEL, AI_PROVIDERS, AI_PROVIDER_LABEL } from '../../store/settingsStore';
 import { confirmAction, notify } from '../../utils/dialogs';
+import CategoryIcon from '../../components/CategoryIcon';
+import IconText from '../../components/IconText';
+
+// 1 день, 2 дня, 5 дней
+function dayWord(n) {
+  const m10 = n % 10, m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return 'день';
+  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return 'дня';
+  return 'дней';
+}
 
 const ACHIEVEMENTS = [
   { id: 'first_lesson', icon: '🌱', title: 'Первый шаг', desc: 'Пройдите 1 урок', test: (s) => Object.keys(s.completedLessons).length >= 1 },
@@ -59,11 +71,21 @@ export default function ProfileScreen({ navigation }) {
   return (
     <Screen padded={false}>
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
+        {/* Компактная шапка: аватар, имя и серия дней на фоне с орнаментом */}
         <View style={styles.headerCard}>
+          <PatternBackground from={colors.primary} to={colors.primaryDark} />
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{(state.profile.name || 'А').charAt(0).toUpperCase()}</Text>
+            <Text style={styles.avatarText}>{(state.profile.name || 'У').charAt(0).toUpperCase()}</Text>
           </View>
-          <Text style={styles.userName}>{state.profile.name || 'Ученик'}</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.userName} numberOfLines={1}>{state.profile.name || 'Ученик'}</Text>
+            <View style={styles.streakRow}>
+              <Icon name="flame" size={15} color={colors.accentLight || '#E8C77A'} />
+              <Text style={styles.streakText}>
+                {state.streak.count > 0 ? `${state.streak.count} ${dayWord(state.streak.count)} подряд` : 'Начните серию сегодня'}
+              </Text>
+            </View>
+          </View>
         </View>
 
         <View style={styles.statsRow}>
@@ -91,7 +113,7 @@ export default function ProfileScreen({ navigation }) {
             const unlocked = a.test(state);
             return (
               <View key={a.id} style={[styles.achCard, !unlocked && styles.achLocked]}>
-                <Text style={[styles.achIcon, !unlocked && { opacity: 0.3 }]}>{a.icon}</Text>
+                <CategoryIcon icon={a.icon} textStyle={[styles.achIcon, !unlocked && { opacity: 0.3 }]} />
                 <Text style={[styles.achTitle, !unlocked && { color: colors.textMuted }]}>{a.title}</Text>
                 <Text style={styles.achDesc}>{a.desc}</Text>
               </View>
@@ -117,7 +139,7 @@ export default function ProfileScreen({ navigation }) {
                   mode === opt.id && styles.themeBtnActive,
                 ]}
               >
-                <Text style={styles.themeIcon}>{opt.icon}</Text>
+                <CategoryIcon icon={opt.icon} textStyle={styles.themeIcon} />
                 <Text style={[styles.themeLabel, mode === opt.id && styles.themeLabelActive]}>
                   {opt.label}
                 </Text>
@@ -180,7 +202,7 @@ export default function ProfileScreen({ navigation }) {
                   hadithService === opt.id && styles.themeBtnActive,
                 ]}
               >
-                <Text style={styles.themeIcon}>{opt.icon}</Text>
+                <CategoryIcon icon={opt.icon} textStyle={styles.themeIcon} />
                 <Text style={[styles.themeLabel, hadithService === opt.id && styles.themeLabelActive]}>
                   {opt.label}
                 </Text>
@@ -210,7 +232,7 @@ export default function ProfileScreen({ navigation }) {
                   aiProvider === opt.id && styles.themeBtnActive,
                 ]}
               >
-                <Text style={styles.themeIcon}>{opt.icon}</Text>
+                <CategoryIcon icon={opt.icon} textStyle={styles.themeIcon} />
                 <Text style={[styles.themeLabel, aiProvider === opt.id && styles.themeLabelActive]}>
                   {opt.label}
                 </Text>
@@ -236,7 +258,7 @@ export default function ProfileScreen({ navigation }) {
               style={styles.keyInput}
             />
             <TouchableOpacity onPress={() => setAiKeyVisible((v) => !v)} style={styles.keyEyeBtn}>
-              <Text style={styles.keyEyeText}>{aiKeyVisible ? '🙈' : '👁'}</Text>
+              <CategoryIcon icon={aiKeyVisible ? '🙈' : '👁'} textStyle={styles.keyEyeText} />
             </TouchableOpacity>
           </View>
           <View style={styles.keyActions}>
@@ -261,19 +283,19 @@ export default function ProfileScreen({ navigation }) {
         <Text style={styles.sectionTitle}>База контента</Text>
         <Card>
           <View style={styles.dataRow}>
-            <Text style={styles.dataLabel}>📚 Модулей</Text>
+            <IconText icon="book" style={styles.dataLabel}>Модулей</IconText>
             <Text style={styles.dataValue}>{modules.length}</Text>
           </View>
           <View style={styles.dataRow}>
-            <Text style={styles.dataLabel}>📖 Уроков</Text>
+            <IconText icon="bookOpen" style={styles.dataLabel}>Уроков</IconText>
             <Text style={styles.dataValue}>{totalLessons}</Text>
           </View>
           <View style={styles.dataRow}>
-            <Text style={styles.dataLabel}>📜 Хадисов</Text>
+            <IconText icon="scroll" style={styles.dataLabel}>Хадисов</IconText>
             <Text style={styles.dataValue}>{hadiths.length}</Text>
           </View>
           <View style={styles.dataRow}>
-            <Text style={styles.dataLabel}>🔤 Слов</Text>
+            <IconText icon="type" style={styles.dataLabel}>Слов</IconText>
             <Text style={styles.dataValue}>{words.length}</Text>
           </View>
         </Card>
@@ -301,20 +323,25 @@ const makeStyles = (colors) => StyleSheet.create({
   headerCard: {
     backgroundColor: colors.primary,
     borderRadius: radii.lg,
-    padding: spacing.xl,
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.lg,
+    flexDirection: 'row',
     alignItems: 'center',
+    overflow: 'hidden',
   },
   avatar: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.md,
+    marginRight: spacing.md,
   },
-  avatarText: { fontSize: 30, color: colors.primary, fontWeight: '700' },
-  userName: { ...typography.h2, color: '#fff' },
+  avatarText: { fontSize: 22, color: colors.primaryDark || colors.primary, fontWeight: '800' },
+  userName: { ...typography.h3, color: '#fff' },
+  streakRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 6 },
+  streakText: { ...typography.caption, color: 'rgba(255,255,255,0.85)', fontWeight: '600' },
 
   label: { ...typography.caption, color: colors.textSecondary },
   caption: { ...typography.caption, color: colors.textSecondary },

@@ -7,6 +7,7 @@ import Card from '../../components/Card';
 import { spacing, typography } from '../../constants/theme';
 import { adhkarSections } from '../../data/adhkar';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 export default function AdhkarScreen({ navigation }) {
   const { colors } = useTheme();
@@ -42,7 +43,7 @@ export default function AdhkarScreen({ navigation }) {
         ))}
 
         <Card style={{ marginTop: spacing.md, backgroundColor: colors.accent + '12' }}>
-          <Text style={[styles.label, { color: colors.accentDark }]}>💡 Как пользоваться</Text>
+          <IconText icon="bulb" style={[styles.label, { color: colors.accentDark }]}>Как пользоваться</IconText>
           <Text style={styles.bodyText}>
             На каждом азкаре есть счётчик. Нажимайте на круг — пока не выполните нужное число повторов.
             Утренние — после Фаджра до восхода. Вечерние — после Аср до заката. Перед сном — последние действия после Иша.

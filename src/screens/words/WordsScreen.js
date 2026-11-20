@@ -14,6 +14,7 @@ import { words, wordCategories, getWordsByCategory } from '../../data/words';
 import { useProgress } from '../../store/progressStore';
 import { speak, stop, getArabicVoices, getSelectedVoiceId, setVoice, getRate, setRate, loadSettings, platformInfo } from '../../services/ttsService';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 const SPEED_OPTIONS = [
   { id: 'slow',   label: 'Медленно', rate: 0.4 },
@@ -111,7 +112,7 @@ export default function WordsScreen({ navigation }) {
           style={styles.audioRow}
           activeOpacity={0.85}
         >
-          <Text style={styles.audioIcon}>🎙️</Text>
+          <IconText icon="mic" style={styles.audioIcon}>️</IconText>
           <View style={{ flex: 1 }}>
             <Text style={styles.audioLabel}>Голос</Text>
             <Text style={styles.audioValue} numberOfLines={1}>{currentVoiceLabel}</Text>
@@ -120,7 +121,7 @@ export default function WordsScreen({ navigation }) {
         </TouchableOpacity>
 
         <View style={styles.audioRow}>
-          <Text style={styles.audioIcon}>⚡</Text>
+          <CategoryIcon icon="⚡" textStyle={styles.audioIcon} />
           <View style={{ flex: 1 }}>
             <Text style={styles.audioLabel}>Скорость</Text>
             <View style={styles.speedRow}>

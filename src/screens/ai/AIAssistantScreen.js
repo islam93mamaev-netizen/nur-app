@@ -89,7 +89,7 @@ export default function AIAssistantScreen({ navigation }) {
         const scripted = findScripted(q);
         reply = {
           role: 'assistant',
-          text: scripted || `🔌 AI-помощник работает в офлайн-режиме (заготовленные ответы).
+          text: scripted || `AI-помощник работает в офлайн-режиме (заготовленные ответы).
 
 Чтобы получить настоящие ответы DeepSeek:
 1. Откройте Профиль → AI-помощник

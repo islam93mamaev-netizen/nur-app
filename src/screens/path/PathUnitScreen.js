@@ -26,6 +26,7 @@ import {
 import WordBreakdown from '../../components/WordBreakdown';
 import { speak, stop, hasArabicVoice, notifyNoArabicVoice } from '../../services/ttsService';
 import * as haptics from '../../utils/haptics';
+import IconText from '../../components/IconText';
 
 const PASS_RATIO = 0.7; // порог прохождения теста
 
@@ -106,7 +107,7 @@ export default function PathUnitScreen({ navigation, route }) {
               <Text style={styles.exampleRu}> — {l.example.ru}</Text>
             </TouchableOpacity>
           )}
-          {l.tip ? <Text style={styles.tip}>💡 {l.tip}</Text> : null}
+          {l.tip ? <IconText icon="bulb" style={styles.tip}>{l.tip}</IconText> : null}
         </Card>
       ));
     }

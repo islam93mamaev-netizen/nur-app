@@ -9,6 +9,7 @@ import { siraChapters, findSiraChapter } from '../../data/sira';
 import ReferenceText from '../../components/ReferenceText';
 import BookmarkButton from '../../components/BookmarkButton';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
 
 export default function SiraChapterScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -34,7 +35,7 @@ export default function SiraChapterScreen({ navigation, route }) {
             color="#fff"
           />
         </View>
-        <Text style={styles.icon}>{ch.icon}</Text>
+        <CategoryIcon icon={ch.icon} textStyle={styles.icon} />
         <Text style={styles.num}>Глава {ch.n}</Text>
         <Text style={styles.title}>{ch.title}</Text>
         <Text style={styles.period}>{ch.period}</Text>

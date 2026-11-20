@@ -10,6 +10,7 @@ import { useProgress } from '../../store/progressStore';
 import WuduIllustration, { WUDU_STEP_ORDER } from '../../components/WuduIllustration';
 import { getPrayerImage } from '../../data/prayerAssets';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 // Главные позиции намаза для галереи в уроке m4l2.
 // Ссылки на ключи из prayerAssets.js (наши собственные картинки).
@@ -52,7 +53,7 @@ export default function LessonScreen({ navigation, route }) {
         {/* Иллюстрации для урока про омовение */}
         {lesson.id === 'm4l1' && (
           <>
-            <Text style={styles.sectionLabel}>🖼️ Пошагово</Text>
+            <IconText icon="image" style={styles.sectionLabel}>Пошагово</IconText>
             {WUDU_STEP_ORDER.map((s, i) => (
               <View key={s} style={{ marginBottom: spacing.sm }}>
                 <View style={styles.stepHead}>
@@ -69,7 +70,7 @@ export default function LessonScreen({ navigation, route }) {
         {/* Иллюстрации для урока про намаз */}
         {lesson.id === 'm4l2' && (
           <>
-            <Text style={styles.sectionLabel}>🖼️ Позиции намаза</Text>
+            <IconText icon="image" style={styles.sectionLabel}>Позиции намаза</IconText>
             {PRAYER_GALLERY.map((p, i) => {
               const img = getPrayerImage(p.image);
               return (
@@ -98,7 +99,7 @@ export default function LessonScreen({ navigation, route }) {
             </Card>
 
             <Button
-              title="🕌 Открыть пошаговый интерактивный урок"
+              title="Открыть пошаговый интерактивный урок"
               size="lg"
               onPress={() => navigation.navigate('PrayerLesson', { lessonId: 'zuhr_4' })}
               style={{ marginBottom: spacing.md }}

@@ -24,6 +24,8 @@ import {
   getArabicVoices, getSelectedVoiceId, setVoice, loadSettings,
 } from '../../services/ttsService';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
+import CategoryIcon from '../../components/CategoryIcon';
 
 const SESSION_SIZE = 10;
 
@@ -127,7 +129,7 @@ export default function FlashcardsScreen({ navigation }) {
     return (
       <Screen padded>
         <View style={styles.complete}>
-          <Text style={styles.emoji}>{pct >= 80 ? '🌟' : pct >= 50 ? '👍' : '💪'}</Text>
+          <CategoryIcon icon={pct >= 80 ? '🌟' : pct >= 50 ? '👍' : '💪'} textStyle={styles.emoji} />
           <Text style={styles.title}>Сессия завершена</Text>
           <Text style={styles.bigScore}>{stats.known} / {total}</Text>
           <Text style={styles.subtitle}>{pct}% правильных</Text>
@@ -192,7 +194,7 @@ export default function FlashcardsScreen({ navigation }) {
           onPress={() => setVoiceModalOpen(true)}
           style={styles.voiceBtn}
         >
-          <Text style={styles.voiceBtnText} numberOfLines={1}>🗣 Голос: {currentVoiceName}</Text>
+          <IconText icon="volume" style={styles.voiceBtnText} numberOfLines={1}>Голос: {currentVoiceName}</IconText>
           <Text style={styles.voiceBtnChev}>›</Text>
         </TouchableOpacity>
       )}
@@ -206,7 +208,7 @@ export default function FlashcardsScreen({ navigation }) {
           onPress={() => speak(current.ar, { rate: 0.5 })}
           style={styles.speakBtn}
         >
-          <Text style={styles.speakText}>🔊 Озвучить</Text>
+          <IconText icon="volume" style={styles.speakText}>Озвучить</IconText>
         </TouchableOpacity>
       </View>
 

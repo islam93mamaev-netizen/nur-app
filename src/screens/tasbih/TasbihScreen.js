@@ -6,6 +6,7 @@ import DetailHeader from '../../components/DetailHeader';
 import Button from '../../components/Button';
 import { spacing, radii, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 const KEY = '@nur_app/tasbih';
 const SETTINGS_KEY = '@nur_app/tasbih_settings';
@@ -112,7 +113,7 @@ export default function TasbihScreen({ navigation }) {
       <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
         <View style={styles.headerTop}>
           
-          <Text style={styles.totalCount}>📿 {totalEver}</Text>
+          <IconText icon="beads" style={styles.totalCount}>{totalEver}</IconText>
         </View>
         <Text style={styles.title}>Тасбих</Text>
         <Text style={styles.subtitle}>Поминание Аллаха — за всё время вы насчитали {totalEver}</Text>
@@ -199,7 +200,7 @@ export default function TasbihScreen({ navigation }) {
 
           <View style={styles.settingRow}>
             <View style={{ flex: 1 }}>
-              <Text style={styles.settingTitle}>📳 Вибрация</Text>
+              <IconText icon="smartphone" style={styles.settingTitle}>Вибрация</IconText>
               <Text style={styles.settingDesc}>Короткая вибрация при каждом нажатии</Text>
             </View>
             <Switch

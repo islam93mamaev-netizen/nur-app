@@ -13,6 +13,7 @@ import { hadithSourceLabel, hadithSourceMeta, hadithUrlForService, findIsnadChap
 import * as audio from '../services/audioService';
 import { useTheme } from '../store/themeStore';
 import { useSettings, HADITH_SERVICES } from '../store/settingsStore';
+import IconText from './IconText';
 
 export default function ReferenceModal({ visible, reference, onClose }) {
   const { colors } = useTheme();
@@ -112,7 +113,7 @@ export default function ReferenceModal({ visible, reference, onClose }) {
                   <Text style={styles.source}>{ayat.ref}</Text>
 
                   <TouchableOpacity onPress={playAyat} style={[styles.playBtn, playing && styles.playBtnActive]}>
-                    <Text style={styles.playText}>{playing ? '⏸ Остановить' : '🔊 Прослушать (Mishary Alafasy)'}</Text>
+                    <Text style={styles.playText}>{playing ? '⏸ Остановить' : 'Прослушать (Mishary Alafasy)'}</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -159,19 +160,16 @@ export default function ReferenceModal({ visible, reference, onClose }) {
                         </TouchableOpacity>
                         <Text style={styles.urlText}>{isnadHref}</Text>
                         <TouchableOpacity onPress={() => openExternal(sunnahHref)} style={styles.openBtnSecondary}>
-                          <Text style={styles.openTextSecondary}>🌍 Открыть на Sunnah.com</Text>
+                          <IconText icon="globe" style={styles.openTextSecondary}>Открыть на Sunnah.com</IconText>
                         </TouchableOpacity>
                         {chapterRange && (
-                          <Text style={styles.hintText}>
-                            💡 На Isnad.link откроется глава с хадисами {chapterRange.from}–{chapterRange.to}.
-                            Найдите № {reference.ref.number} прокруткой.
-                          </Text>
+                          <IconText icon="bulb" style={styles.hintText}>На Isnad.link откроется глава с хадисами {chapterRange.from}–{chapterRange.to}. Найдите № {reference.ref.number} прокруткой.</IconText>
                         )}
                       </>
                     ) : (
                       <>
                         <TouchableOpacity onPress={() => openExternal(sunnahHref)} style={styles.openBtn}>
-                          <Text style={styles.openText}>📖 Открыть на Sunnah.com</Text>
+                          <IconText icon="bookOpen" style={styles.openText}>Открыть на Sunnah.com</IconText>
                         </TouchableOpacity>
                         <Text style={styles.urlText}>{sunnahHref}</Text>
                         {isnadAvailable && (

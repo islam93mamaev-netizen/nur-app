@@ -7,6 +7,7 @@ import Pill from '../../components/Pill';
 import { spacing, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
 import { gregorianToHijri, HIJRI_MONTHS } from '../../utils/hijri';
+import IconText from '../../components/IconText';
 
 // Календарные события исламского года (по лунному календарю)
 const EVENTS = [
@@ -70,7 +71,7 @@ export default function HijriScreen({ navigation }) {
         {/* Подсказки о желательных постах */}
         {(isWhiteDays(hijri.day) || isMondayOrThursday(today)) && (
           <Card style={{ marginBottom: spacing.md, backgroundColor: colors.success + '12', borderLeftWidth: 4, borderLeftColor: colors.success }}>
-            <Text style={[styles.todayLabel, { color: colors.success }]}>🌿 Желательный пост сегодня</Text>
+            <IconText icon="leaf" style={[styles.todayLabel, { color: colors.success }]}>Желательный пост сегодня</IconText>
             {isWhiteDays(hijri.day) && (
               <Text style={styles.note}>
                 Айям аль-Бид (13, 14, 15 числа лунного месяца) — пост каждого месяца, по сунне равен непрерывному посту в течение года.
@@ -105,7 +106,7 @@ export default function HijriScreen({ navigation }) {
         ))}
 
         <Card style={{ marginTop: spacing.lg, backgroundColor: colors.info + '10' }}>
-          <Text style={[styles.sectionTitle, { color: colors.info, marginTop: 0 }]}>📅 О хиджре</Text>
+          <IconText icon="calendar" style={[styles.sectionTitle, { color: colors.info, marginTop: 0 }]}>О хиджре</IconText>
           <Text style={styles.note}>
             Хиджра — исламский лунный календарь, начатый с переселения пророка Мухаммада ﷺ из Мекки в Медину в 622 году. Лунный год короче солнечного на ~11 дней.{'\n\n'}
             Конвертация выполняется по астрономической формуле и может расходиться с официальным календарём Умм аль-Кура на ±1 день.

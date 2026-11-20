@@ -19,6 +19,8 @@ import { spacing, radii, typography } from '../../constants/theme';
 import { useProgress } from '../../store/progressStore';
 import { useTheme } from '../../store/themeStore';
 import { confirmAction } from '../../utils/dialogs';
+import CategoryIcon from '../../components/CategoryIcon';
+import IconText from '../../components/IconText';
 
 const TYPE_LABELS = {
   ayat: { label: 'Аят', icon: '📖', color: '#0F4C3A' },
@@ -111,17 +113,13 @@ export default function BookmarksScreen({ navigation }) {
           onPress={() => setTab('bookmarks')}
           style={[styles.tab, tab === 'bookmarks' && styles.tabActive]}
         >
-          <Text style={[styles.tabText, tab === 'bookmarks' && styles.tabTextActive]}>
-            🔖 Закладки {bookmarks.length > 0 ? `(${bookmarks.length})` : ''}
-          </Text>
+          <IconText icon="bookmark" style={[styles.tabText, tab === 'bookmarks' && styles.tabTextActive]}>Закладки {bookmarks.length > 0 ? `(${bookmarks.length})` : ''}</IconText>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setTab('notes')}
           style={[styles.tab, tab === 'notes' && styles.tabActive]}
         >
-          <Text style={[styles.tabText, tab === 'notes' && styles.tabTextActive]}>
-            📝 Заметки {notes.length > 0 ? `(${notes.length})` : ''}
-          </Text>
+          <IconText icon="pen" style={[styles.tabText, tab === 'notes' && styles.tabTextActive]}>Заметки {notes.length > 0 ? `(${notes.length})` : ''}</IconText>
         </TouchableOpacity>
       </View>
 
@@ -140,7 +138,7 @@ export default function BookmarksScreen({ navigation }) {
                 <Card key={`${b.type}:${b.refId}`} style={{ marginBottom: spacing.md }} onPress={() => openBookmark(b)}>
                   <View style={styles.cardRow}>
                     <View style={[styles.iconBox, { backgroundColor: meta.color + '15' }]}>
-                      <Text style={{ fontSize: 22 }}>{meta.icon}</Text>
+                      <CategoryIcon icon={meta.icon} textStyle={{ fontSize: 22 }} color={meta.color} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <Pill label={meta.label} background={meta.color + '15'} textColor={meta.color} />
@@ -229,7 +227,7 @@ function EmptyState({ icon, title, text }) {
   const styles = useMemo(() => makeStyles(colors), [colors]);
   return (
     <View style={styles.empty}>
-      <Text style={styles.emptyIcon}>{icon}</Text>
+      <CategoryIcon icon={icon} textStyle={styles.emptyIcon} />
       <Text style={styles.emptyTitle}>{title}</Text>
       <Text style={styles.emptyText}>{text}</Text>
     </View>

@@ -3,6 +3,7 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useProgress } from '../store/progressStore';
 import { spacing, radii, typography } from '../constants/theme';
 import { useTheme } from '../store/themeStore';
+import CategoryIcon from './CategoryIcon';
 
 /**
  * BookmarkButton — переключатель закладки.
@@ -43,7 +44,7 @@ export default function BookmarkButton({
         onPress={onPress}
         style={[styles.pill, { borderColor: accent, backgroundColor: active ? accent + '20' : 'transparent' }]}
       >
-        <Text style={[styles.icon, { color: accent }]}>{active ? '★' : '☆'}</Text>
+        <CategoryIcon icon={active ? '★' : '☆'} textStyle={[styles.icon, { color: accent }]} />
         <Text style={[styles.pillText, { color: accent }]}>
           {active ? 'В закладках' : 'В закладки'}
         </Text>
@@ -53,7 +54,7 @@ export default function BookmarkButton({
 
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress} style={styles.iconBox} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-      <Text style={[styles.iconBig, { color: accent }]}>{active ? '★' : '☆'}</Text>
+      <CategoryIcon icon={active ? '★' : '☆'} textStyle={[styles.iconBig, { color: accent }]} />
     </TouchableOpacity>
   );
 }

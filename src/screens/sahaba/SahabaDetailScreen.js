@@ -9,6 +9,7 @@ import ReferenceText from '../../components/ReferenceText';
 import { spacing, typography } from '../../constants/theme';
 import { findSahaba, sahabaGroups } from '../../data/sahaba';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 export default function SahabaDetailScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -50,7 +51,7 @@ export default function SahabaDetailScreen({ navigation, route }) {
 
         {p.virtue && (
           <Card style={{ marginTop: spacing.md, backgroundColor: colors.success + '10' }}>
-            <Text style={[styles.label, { color: colors.success }]}>⭐ Достоинство</Text>
+            <IconText icon="star" style={[styles.label, { color: colors.success }]}>Достоинство</IconText>
             <ReferenceText text={p.virtue} style={styles.body} />
           </Card>
         )}

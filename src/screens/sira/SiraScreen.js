@@ -8,6 +8,8 @@ import { spacing, radii, typography } from '../../constants/theme';
 import { siraChapters } from '../../data/sira';
 import { prophets } from '../../data/prophets';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
+import IconText from '../../components/IconText';
 
 export default function SiraScreen({ navigation }) {
   const { colors } = useTheme();
@@ -26,10 +28,10 @@ export default function SiraScreen({ navigation }) {
 
       <View style={styles.tabsRow}>
         <TouchableOpacity onPress={() => setTab('sira')} style={[styles.tab, tab === 'sira' && styles.tabActive]}>
-          <Text style={[styles.tabText, tab === 'sira' && styles.tabTextActive]}>🌹 Сира пророка ﷺ</Text>
+          <IconText icon="heart" style={[styles.tabText, tab === 'sira' && styles.tabTextActive]}>Сира пророка ﷺ</IconText>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setTab('prophets')} style={[styles.tab, tab === 'prophets' && styles.tabActive]}>
-          <Text style={[styles.tabText, tab === 'prophets' && styles.tabTextActive]}>📜 25 пророков</Text>
+          <IconText icon="scroll" style={[styles.tabText, tab === 'prophets' && styles.tabTextActive]}>25 пророков</IconText>
         </TouchableOpacity>
       </View>
 
@@ -44,7 +46,7 @@ export default function SiraScreen({ navigation }) {
               <Card style={{ marginBottom: spacing.md }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={[styles.iconBox, { backgroundColor: colors.primary + '15' }]}>
-                    <Text style={{ fontSize: 24 }}>{c.icon}</Text>
+                    <CategoryIcon icon={c.icon} textStyle={{ fontSize: 24 }} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.chTitle}>{c.n}. {c.title}</Text>

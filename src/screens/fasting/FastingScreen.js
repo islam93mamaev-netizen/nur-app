@@ -7,6 +7,8 @@ import ReferenceText from '../../components/ReferenceText';
 import { spacing, radii, typography } from '../../constants/theme';
 import { fastingSections, getFastsBySection } from '../../data/fasting';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
+import IconText from '../../components/IconText';
 
 // Сколько символов «why» показывать в свёрнутом виде
 const COLLAPSE_THRESHOLD = 180;
@@ -39,7 +41,7 @@ export default function FastingScreen({ navigation }) {
               onPress={() => setSection(s.id)}
               style={[styles.tab, active && { backgroundColor: s.color }]}
             >
-              <Text style={styles.tabIcon}>{s.icon}</Text>
+              <CategoryIcon icon={s.icon} textStyle={styles.tabIcon} />
               <Text style={[styles.tabTitle, active && { color: '#fff' }]} numberOfLines={1}>
                 {s.title.split(' ')[0]}
               </Text>
@@ -66,7 +68,7 @@ export default function FastingScreen({ navigation }) {
               <Text style={[styles.fastTitle, { color: curSec?.color }]}>{f.title}</Text>
 
               <View style={styles.whenBox}>
-                <Text style={styles.whenLabel}>📅 Когда</Text>
+                <IconText icon="calendar" style={styles.whenLabel}>Когда</IconText>
                 <Text style={styles.whenText}>{f.when}</Text>
               </View>
 
@@ -83,7 +85,7 @@ export default function FastingScreen({ navigation }) {
               {/* Доказательства из Корана и сунны */}
               {f.proofs?.length > 0 && (
                 <View style={styles.proofsBlock}>
-                  <Text style={styles.sectionLabel}>📚 Доказательства</Text>
+                  <IconText icon="book" style={styles.sectionLabel}>Доказательства</IconText>
                   {f.proofs.map((p, i) => (
                     <View key={i} style={styles.proofItem}>
                       <Text style={styles.proofText}>«{p.text}»</Text>
@@ -95,7 +97,7 @@ export default function FastingScreen({ navigation }) {
 
               {!!f.note && (
                 <View style={styles.noteBox}>
-                  <Text style={styles.noteLabel}>💡 Замечание</Text>
+                  <IconText icon="bulb" style={styles.noteLabel}>Замечание</IconText>
                   <Text style={styles.noteText}>{f.note}</Text>
                 </View>
               )}

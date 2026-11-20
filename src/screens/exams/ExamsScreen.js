@@ -10,6 +10,8 @@ import { exams, examLevels, getExamsByLevel } from '../../data/exams';
 import { useProgress } from '../../store/progressStore';
 import { useTheme } from '../../store/themeStore';
 import { confirmAction } from '../../utils/dialogs';
+import CategoryIcon from '../../components/CategoryIcon';
+import IconText from '../../components/IconText';
 
 export default function ExamsScreen({ navigation }) {
   const { colors } = useTheme();
@@ -60,7 +62,7 @@ export default function ExamsScreen({ navigation }) {
         >
           <Card style={[styles.master, { backgroundColor: masterExam.color }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.masterIcon}>{masterExam.icon}</Text>
+              <CategoryIcon icon={masterExam.icon} textStyle={styles.masterIcon} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.masterTitle}>{masterExam.title}</Text>
                 <Text style={styles.masterDesc}>{masterExam.description}</Text>
@@ -89,7 +91,7 @@ export default function ExamsScreen({ navigation }) {
             <View key={level.id} style={{ marginTop: spacing.xl }}>
               <View style={styles.levelHeader}>
                 <View style={[styles.levelDot, { backgroundColor: level.color }]}>
-                  <Text style={{ fontSize: 16 }}>{level.icon}</Text>
+                  <CategoryIcon icon={level.icon} textStyle={{ fontSize: 16 }} />
                 </View>
                 <View style={{ flex: 1, marginLeft: spacing.md }}>
                   <Text style={[styles.levelTitle, { color: level.color }]}>
@@ -115,7 +117,7 @@ export default function ExamsScreen({ navigation }) {
                   >
                     <Card style={[styles.examCard, { borderLeftColor: e.color }]}>
                       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={styles.examIcon}>{e.icon}</Text>
+                        <CategoryIcon icon={e.icon} textStyle={styles.examIcon} />
                         <View style={{ flex: 1 }}>
                           <Text style={styles.examTitle}>{e.title}</Text>
                           <Text style={styles.examDesc} numberOfLines={2}>{e.description}</Text>
@@ -148,7 +150,7 @@ export default function ExamsScreen({ navigation }) {
         })}
 
         <Card style={{ marginTop: spacing.xl, backgroundColor: colors.accent + '15' }}>
-          <Text style={styles.tipTitle}>💡 Как проходить тесты</Text>
+          <IconText icon="bulb" style={styles.tipTitle}>Как проходить тесты</IconText>
           <Text style={styles.tipText}>
             • Начните с уровня «Новичок», чтобы знакомиться с темами.{'\n'}
             • Переходите на «Средний», когда основы освоены.{'\n'}

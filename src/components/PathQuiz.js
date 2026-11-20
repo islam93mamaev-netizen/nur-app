@@ -20,6 +20,7 @@ import ProgressBar from './ProgressBar';
 import { spacing, radii, typography } from '../constants/theme';
 import { useTheme } from '../store/themeStore';
 import * as haptics from '../utils/haptics';
+import CategoryIcon from './CategoryIcon';
 
 const NEXT_DELAY_MS = 700; // пауза, чтобы увидеть подсветку ответа
 
@@ -75,14 +76,14 @@ export default function PathQuiz({
       <Card style={{ alignItems: 'center', paddingVertical: spacing.xl }}>
         {passed ? (
           <>
-            <Text style={styles.doneEmoji}>🎉</Text>
+            <CategoryIcon icon="🎉" textStyle={styles.doneEmoji} />
             <Text style={[styles.doneTitle, { color: colors.success }]}>Шаг пройден!</Text>
             <Text style={styles.doneScore}>{score} из {total} правильно · +XP</Text>
             <Button title="К следующему шагу" onPress={onContinue} style={styles.doneBtn} />
           </>
         ) : (
           <>
-            <Text style={styles.doneEmoji}>📖</Text>
+            <CategoryIcon icon="📖" textStyle={styles.doneEmoji} />
             <Text style={[styles.doneTitle, { color: colors.danger }]}>Нужно ещё повторить</Text>
             <Text style={styles.doneScore}>
               {score} из {total} — для прохождения нужно {Math.ceil(total * passRatio)}

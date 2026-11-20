@@ -9,6 +9,7 @@ import { findFaq, faqCategories } from '../../data/faq';
 import ReferenceText from '../../components/ReferenceText';
 import BookmarkButton from '../../components/BookmarkButton';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 export default function FaqDetailScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -66,7 +67,7 @@ export default function FaqDetailScreen({ navigation, route }) {
         )}
 
         <Card style={{ marginTop: spacing.xl, backgroundColor: colors.warning + '12' }}>
-          <Text style={[styles.shortLabel, { color: colors.warning }]}>⚠️ Важно</Text>
+          <IconText icon="alert" style={[styles.shortLabel, { color: colors.warning }]}>Важно</IconText>
           <Text style={styles.disclaimer}>
             Это учебная справка. По вашей конкретной ситуации лучше обратиться к знающему имаму или учёному. В вопросах, где есть разногласие мазхабов, у каждого мнения есть свои основания.
           </Text>

@@ -10,6 +10,7 @@ import { asma, findAsma } from '../../data/asma';
 import { speak, stop } from '../../services/ttsService';
 import BookmarkButton from '../../components/BookmarkButton';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
 
 export default function AsmaDetailScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -56,7 +57,7 @@ export default function AsmaDetailScreen({ navigation, route }) {
           onPress={sayName}
           style={[styles.playBtn, speaking && styles.playBtnActive]}
         >
-          <Text style={styles.playIcon}>🔊</Text>
+          <CategoryIcon icon="🔊" textStyle={styles.playIcon} />
           <Text style={styles.playText}>{speaking ? 'Произношу…' : 'Произнести имя'}</Text>
         </TouchableOpacity>
       </DetailHeader>

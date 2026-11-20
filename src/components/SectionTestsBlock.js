@@ -10,6 +10,8 @@ import { spacing, radii, typography } from '../constants/theme';
 import { exams } from '../data/exams';
 import { useProgress } from '../store/progressStore';
 import { useTheme } from '../store/themeStore';
+import IconText from './IconText';
+import CategoryIcon from './CategoryIcon';
 
 export default function SectionTestsBlock({ examIds, title = 'Проверь себя', navigation }) {
   const { colors } = useTheme();
@@ -20,7 +22,7 @@ export default function SectionTestsBlock({ examIds, title = 'Проверь с�
 
   return (
     <View style={{ marginTop: spacing.xl }}>
-      <Text style={styles.sectionTitle}>🎯 {title}</Text>
+      <IconText icon="target" style={styles.sectionTitle}>{title}</IconText>
       <Text style={styles.sectionSub}>Тесты по этому разделу. Каждая попытка — случайные вопросы из пула.</Text>
       {available.map(({ id, exam }) => {
         const result = state.completedQuizzes?.[`exam_${id}_${1}`]; // legacy; reset gives latest
@@ -37,7 +39,7 @@ export default function SectionTestsBlock({ examIds, title = 'Проверь с�
           >
             <View style={styles.row}>
               <View style={[styles.iconBox, { backgroundColor: exam.color + '20' }]}>
-                <Text style={styles.icon}>{exam.icon}</Text>
+                <CategoryIcon icon={exam.icon} textStyle={styles.icon} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.examTitle}>{exam.title}</Text>

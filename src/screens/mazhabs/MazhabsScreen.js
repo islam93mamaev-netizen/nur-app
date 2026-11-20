@@ -7,6 +7,8 @@ import Pill from '../../components/Pill';
 import { spacing, radii, typography } from '../../constants/theme';
 import { mazhabs, mazhabCategories, getComparisonsByCategory } from '../../data/mazhabs';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
+import IconText from '../../components/IconText';
 
 export default function MazhabsScreen({ navigation }) {
   const { colors } = useTheme();
@@ -26,13 +28,13 @@ export default function MazhabsScreen({ navigation }) {
           onPress={() => setTab('schools')}
           style={[styles.tab, tab === 'schools' && styles.tabActive]}
         >
-          <Text style={[styles.tabText, tab === 'schools' && styles.tabTextActive]}>🕌 Школы</Text>
+          <IconText icon="mosque" style={[styles.tabText, tab === 'schools' && styles.tabTextActive]}>Школы</IconText>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setTab('compare')}
           style={[styles.tab, tab === 'compare' && styles.tabActive]}
         >
-          <Text style={[styles.tabText, tab === 'compare' && styles.tabTextActive]}>⚖️ Сравнение</Text>
+          <IconText icon="scale" style={[styles.tabText, tab === 'compare' && styles.tabTextActive]}>Сравнение</IconText>
         </TouchableOpacity>
       </View>
 
@@ -78,7 +80,7 @@ export default function MazhabsScreen({ navigation }) {
             return (
               <View key={c.id} style={{ marginBottom: spacing.lg }}>
                 <View style={styles.catHeader}>
-                  <Text style={styles.catIcon}>{c.icon}</Text>
+                  <CategoryIcon icon={c.icon} textStyle={styles.catIcon} />
                   <Text style={[styles.catTitle, { color: c.color }]}>{c.title}</Text>
                   <Text style={styles.catCount}>{items.length}</Text>
                 </View>

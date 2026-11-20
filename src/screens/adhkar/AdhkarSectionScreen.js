@@ -13,6 +13,7 @@ import Icon from '../../components/Icon';
 import { useTheme } from '../../store/themeStore';
 import * as haptics from '../../utils/haptics';
 import useAdhkarPlayer from '../../hooks/useAdhkarPlayer';
+import IconText from '../../components/IconText';
 
 // Подпись фрагмента quranAudio: название суры или номер аята
 function fragmentLabel(q) {
@@ -263,14 +264,14 @@ export default function AdhkarSectionScreen({ navigation, route }) {
 
               {!!it.benefit && (
                 <View style={[styles.benefit, { borderLeftColor: colors.accent }]}>
-                  <Text style={styles.benefitLabel}>💎 Польза</Text>
+                  <IconText icon="sparkle" style={styles.benefitLabel}>Польза</IconText>
                   <Text style={styles.benefitText}>{it.benefit}</Text>
                 </View>
               )}
 
               {!!it.source && (
                 <View style={styles.sourceBox}>
-                  <Text style={styles.sourceLabel}>📚 Источник:</Text>
+                  <IconText icon="book" style={styles.sourceLabel}>Источник:</IconText>
                   <ReferenceText text={it.source} style={styles.sourceText} />
                 </View>
               )}

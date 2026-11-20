@@ -5,6 +5,7 @@ import DetailHeader from '../../components/DetailHeader';
 import { spacing, radii, typography } from '../../constants/theme';
 import { asma } from '../../data/asma';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
 
 export default function AsmaScreen({ navigation }) {
   const { colors } = useTheme();
@@ -33,7 +34,7 @@ export default function AsmaScreen({ navigation }) {
       </DetailHeader>
 
       <View style={styles.searchBox}>
-        <Text style={styles.searchIcon}>🔍</Text>
+        <CategoryIcon icon="🔍" textStyle={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           value={query}

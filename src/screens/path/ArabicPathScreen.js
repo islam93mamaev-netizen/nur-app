@@ -12,6 +12,8 @@ import { spacing, radii, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
 import { useProgress } from '../../store/progressStore';
 import { pathStages, allUnits, getNextUnit, isUnitUnlocked } from '../../data/arabicPath';
+import CategoryIcon from '../../components/CategoryIcon';
+import IconText from '../../components/IconText';
 
 export default function ArabicPathScreen({ navigation }) {
   const { colors } = useTheme();
@@ -78,9 +80,7 @@ export default function ArabicPathScreen({ navigation }) {
         )}
         {!next && (
           <Card style={{ backgroundColor: colors.success + '15', marginBottom: spacing.lg }}>
-            <Text style={{ ...typography.h4, color: colors.success, textAlign: 'center' }}>
-              🌟 МашаАллах! Весь путь пройден
-            </Text>
+            <IconText icon="star" style={{ ...typography.h4, color: colors.success, textAlign: 'center' }}>МашаАллах! Весь путь пройден</IconText>
           </Card>
         )}
 
@@ -130,7 +130,7 @@ export default function ArabicPathScreen({ navigation }) {
                         ) : unlocked ? (
                           <Icon name="play" size={11} color={stage.color} />
                         ) : (
-                          <Text style={styles.lock}>🔒</Text>
+                          <CategoryIcon icon="🔒" textStyle={styles.lock} />
                         )}
                       </View>
                       <View style={{ flex: 1 }}>

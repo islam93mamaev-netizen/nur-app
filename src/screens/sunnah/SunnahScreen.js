@@ -15,6 +15,7 @@ import { useTheme } from '../../store/themeStore';
 import { useProgress } from '../../store/progressStore';
 import { sunnahDaily } from '../../data/sunnahDaily';
 import * as haptics from '../../utils/haptics';
+import IconText from '../../components/IconText';
 
 // Экраны-вкладки лежат внутри навигатора «Main»: в React Navigation 7
 // к ним нужно переходить через родителя, иначе переход не сработает.
@@ -67,7 +68,7 @@ export default function SunnahScreen({ navigation }) {
             <ProgressBar value={doneCount} max={total} color={pct === 100 ? colors.success : colors.primary} />
           </View>
           {pct === 100 && (
-            <Text style={styles.allDone}>🌟 МашаАллах! Все сунны на сегодня выполнены</Text>
+            <IconText icon="star" style={styles.allDone}>МашаАллах! Все сунны на сегодня выполнены</IconText>
           )}
         </Card>
 

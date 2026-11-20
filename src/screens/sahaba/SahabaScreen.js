@@ -8,6 +8,7 @@ import SectionTestsBlock from '../../components/SectionTestsBlock';
 import { spacing, typography } from '../../constants/theme';
 import { sahaba, sahabaGroups, getSahabaByGroup } from '../../data/sahaba';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
 
 export default function SahabaScreen({ navigation }) {
   const { colors } = useTheme();
@@ -28,7 +29,7 @@ export default function SahabaScreen({ navigation }) {
           return (
             <View key={g.id} style={{ marginBottom: spacing.lg }}>
               <View style={styles.groupHeader}>
-                <Text style={styles.groupIcon}>{g.icon}</Text>
+                <CategoryIcon icon={g.icon} textStyle={styles.groupIcon} />
                 <Text style={[styles.groupTitle, { color: g.color }]}>{g.title}</Text>
               </View>
               {items.map((p) => (

@@ -8,6 +8,7 @@ import Card from '../../components/Card';
 import { spacing, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
 import { notify } from '../../utils/dialogs';
+import IconText from '../../components/IconText';
 
 const KAABA = { lat: 21.4225, lon: 39.8262 };
 
@@ -141,17 +142,14 @@ export default function QiblaScreen({ navigation }) {
 
         {!supported && (
           <Card style={{ marginTop: spacing.md, backgroundColor: colors.warning + '15' }}>
-            <Text style={{ color: colors.warning, ...typography.small }}>
-              ⚠️ Магнитометр недоступен в этом окружении (например, в браузере или эмуляторе).
-              На реальном устройстве стрелка будет крутиться вместе с поворотом телефона.
-            </Text>
+            <IconText icon="alert" style={{ color: colors.warning, ...typography.small }}>Магнитометр недоступен в этом окружении (например, в браузере или эмуляторе). На реальном устройстве стрелка будет крутиться вместе с поворотом телефона.</IconText>
           </Card>
         )}
 
         <Card style={{ marginTop: spacing.md, backgroundColor: colors.info + '10' }}>
-          <Text style={[styles.infoLabel, { color: colors.info }]}>💡 Как пользоваться</Text>
+          <IconText icon="bulb" style={[styles.infoLabel, { color: colors.info }]}>Как пользоваться</IconText>
           <Text style={styles.tip}>
-            Положите телефон горизонтально. Поворачивайте его так, чтобы стрелка с 🕋 указывала вверх — это и есть направление на Каабу. Удалите от электроники для точности.
+            Положите телефон горизонтально. Поворачивайте его так, чтобы стрелка с Каабой указывала вверх — это и есть направление на Каабу. Удалите от электроники для точности.
           </Text>
         </Card>
       </View>

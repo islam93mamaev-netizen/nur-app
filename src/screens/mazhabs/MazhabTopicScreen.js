@@ -9,6 +9,7 @@ import ReferenceText from '../../components/ReferenceText';
 import { spacing, radii, typography } from '../../constants/theme';
 import { findComparison, mazhabs, mazhabCategories } from '../../data/mazhabs';
 import { useTheme } from '../../store/themeStore';
+import IconText from '../../components/IconText';
 
 export default function MazhabTopicScreen({ navigation, route }) {
   const { colors } = useTheme();
@@ -39,7 +40,7 @@ export default function MazhabTopicScreen({ navigation, route }) {
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
         {!!q.context && (
           <Card style={{ marginBottom: spacing.md, backgroundColor: colors.info + '10' }}>
-            <Text style={[styles.label, { color: colors.info }]}>📜 Контекст</Text>
+            <IconText icon="scroll" style={[styles.label, { color: colors.info }]}>Контекст</IconText>
             <ReferenceText text={q.context} style={styles.body} />
           </Card>
         )}
@@ -64,13 +65,13 @@ export default function MazhabTopicScreen({ navigation, route }) {
 
         {!!q.note && (
           <Card style={{ marginTop: spacing.md, backgroundColor: colors.warning + '12' }}>
-            <Text style={[styles.label, { color: colors.warning }]}>📝 Примечание</Text>
+            <IconText icon="pen" style={[styles.label, { color: colors.warning }]}>Примечание</IconText>
             <ReferenceText text={q.note} style={styles.body} />
           </Card>
         )}
 
         <Card style={{ marginTop: spacing.md, backgroundColor: colors.accent + '12' }}>
-          <Text style={[styles.label, { color: colors.accentDark }]}>💡 Как пользоваться</Text>
+          <IconText icon="bulb" style={[styles.label, { color: colors.accentDark }]}>Как пользоваться</IconText>
           <Text style={styles.body}>
             Все 4 мнения — иджтихад признанных учёных и имеют шариатские основания.
             Если вы следуете определённому мазхабу — придерживайтесь его позиции в практике.

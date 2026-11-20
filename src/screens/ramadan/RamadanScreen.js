@@ -24,6 +24,7 @@ import {
   MECCA_COORDS,
 } from '../../services/prayerService';
 import * as haptics from '../../utils/haptics';
+import IconText from '../../components/IconText';
 
 const STORAGE_KEY = '@nur_app/ramadan_v1';
 
@@ -166,7 +167,7 @@ export default function RamadanScreen({ navigation }) {
         {/* Подсказка о Лейлят аль-Кадр */}
         {lastTen && (
           <Card style={{ marginTop: spacing.md, backgroundColor: colors.accent + '15', borderLeftWidth: 4, borderLeftColor: colors.accent }}>
-            <Text style={styles.qadrTitle}>✨ Последняя декада</Text>
+            <IconText icon="sparkle" style={styles.qadrTitle}>Последняя декада</IconText>
             <Text style={styles.qadrText}>
               Ищите Ночь Предопределения (Лейлят аль-Кадр) в нечётные ночи: 21, 23, 25, 27, 29.
               Она лучше тысячи месяцев (сура «Аль-Кадр», 97:3).

@@ -7,6 +7,8 @@ import SectionTestsBlock from '../../components/SectionTestsBlock';
 import { spacing, radii, typography } from '../../constants/theme';
 import { tajwidSections } from '../../data/tajwid';
 import { useTheme } from '../../store/themeStore';
+import CategoryIcon from '../../components/CategoryIcon';
+import IconText from '../../components/IconText';
 
 export default function TajwidScreen({ navigation }) {
   const { colors } = useTheme();
@@ -30,7 +32,7 @@ export default function TajwidScreen({ navigation }) {
             <Card style={{ marginBottom: spacing.md, borderLeftWidth: 4, borderLeftColor: s.color }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={[styles.iconBox, { backgroundColor: s.color + '15' }]}>
-                  <Text style={[styles.iconText, { color: s.color }]}>{s.icon}</Text>
+                  <CategoryIcon icon={s.icon} textStyle={[styles.iconText, { color: s.color }]} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.secTitle}>{s.title}</Text>
@@ -43,7 +45,7 @@ export default function TajwidScreen({ navigation }) {
         ))}
 
         <Card style={{ marginTop: spacing.md, backgroundColor: colors.accent + '12' }}>
-          <Text style={[styles.label, { color: colors.accentDark }]}>💡 Главный совет</Text>
+          <IconText icon="bulb" style={[styles.label, { color: colors.accentDark }]}>Главный совет</IconText>
           <Text style={styles.body}>
             Таджвид нельзя выучить только по книге — нужен учитель. Слушайте признанных чтецов и подражайте им,
             это первый шаг. Для серьёзного освоения найдите шейха в местной мечети или на онлайн-курсах.
