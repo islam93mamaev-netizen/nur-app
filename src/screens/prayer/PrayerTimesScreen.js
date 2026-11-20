@@ -2,65 +2,141 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Platform } from 'react-native';
 import * as Location from 'expo-location';
 import Screen from '../../components/Screen';
+import DetailHeader from '../../components/DetailHeader';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
-import Pill from '../../components/Pill';
 import { spacing, typography, radii } from '../../constants/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getPrayerTimes, PRAYER_NAMES_RU, formatTime, METHODS, PRAYER_STORAGE, MECCA_COORDS } from '../../services/prayerService';
+import {
+  getPrayerTimes, getNextPrayer, PRAYER_NAMES_RU, formatTime, METHODS, PRAYER_STORAGE, MECCA_COORDS,
+} from '../../services/prayerService';
 import { schedulePrayerReminders, requestPermissions } from '../../services/notificationService';
 import { useTheme } from '../../store/themeStore';
+import { findCity } from '../../data/cities';
+import CityPickerModal from '../../components/CityPickerModal';
+import Icon from '../../components/Icon';
+
+// Alert.alert не работает на вебе — там window.alert
+function notify(title, msg) {
+  if (Platform.OS === 'web') window.alert(`${title}\n\n${msg}`); // eslint-disable-line no-alert
+  else Alert.alert(title, msg);
+}
 
 export default function PrayerTimesScreen({ navigation }) {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [coords, setCoords] = useState(null);
   const [city, setCity] = useState('');
+  // Местоположение: 'auto' — GPS, 'manual' — город выбран вручную
+  const [mode, setMode] = useState('auto');
+  const [manualCity, setManualCity] = useState(null); // объект из data/cities
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [method, setMethod] = useState('MuslimWorldLeague');
   const [madhab, setMadhab] = useState('Shafi');
   const [times, setTimes] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notifEnabled, setNotifEnabled] = useState(false);
 
+  // Часовой пояс для отображения: у ручного города — его пояс, у GPS — пояс устройства
+  const tz = mode === 'manual' ? manualCity?.tz : undefined;
+
+  // Запасной вариант без GPS: Мекка. Сохраняем, чтобы виджет и Рамадан
+  // не продолжали показывать ранее выбранный вручную город.
+  const fallbackToMecca = () => {
+    setCoords(MECCA_COORDS);
+    setCity('Мекка');
+    AsyncStorage.setItem(PRAYER_STORAGE.COORDS, JSON.stringify({ ...MECCA_COORDS, city: 'Мекка' })).catch(() => {});
+  };
+
+  // Определение позиции по GPS
+  const detectByGps = async () => {
+    setLoading(true);
+    try {
+      const perm = await Location.requestForegroundPermissionsAsync();
+      if (perm.status !== 'granted') {
+        notify(
+          'Нет доступа к местоположению',
+          'Пока используется Мекка. Можно выбрать свой город вручную — кнопка «Вручную» вверху.'
+        );
+        fallbackToMecca();
+        return;
+      }
+      const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+      const next = { latitude: loc.coords.latitude, longitude: loc.coords.longitude };
+      setCoords(next);
+      let cityName = '';
+      try {
+        const r = await Location.reverseGeocodeAsync(loc.coords);
+        if (r?.[0]) cityName = [r[0].city, r[0].country].filter(Boolean).join(', ');
+      } catch {/* ignore */}
+      setCity(cityName || 'Текущее местоположение');
+      // Сохраняем для виджета «Следующий намаз» и Рамадана
+      AsyncStorage.setItem(PRAYER_STORAGE.COORDS, JSON.stringify({ ...next, city: cityName })).catch(() => {});
+    } catch {
+      fallbackToMecca();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Применение вручную выбранного города
+  const applyManualCity = (c) => {
+    setManualCity(c);
+    setCoords({ latitude: c.latitude, longitude: c.longitude });
+    setCity(`${c.name}, ${c.country}`);
+  };
+
   useEffect(() => {
     (async () => {
-      // Восстанавливаем сохранённые метод и мазхаб (общие с виджетом на главной)
+      let savedMode = 'auto';
+      let saved = null;
       try {
-        const [m, mz] = await Promise.all([
+        const [m, mz, lm, c] = await Promise.all([
           AsyncStorage.getItem(PRAYER_STORAGE.METHOD),
           AsyncStorage.getItem(PRAYER_STORAGE.MADHAB),
+          AsyncStorage.getItem(PRAYER_STORAGE.LOCATION_MODE),
+          AsyncStorage.getItem(PRAYER_STORAGE.COORDS),
         ]);
         if (m && METHODS[m]) setMethod(m);
         if (mz === 'Shafi' || mz === 'Hanafi') setMadhab(mz);
+        if (lm === 'manual') savedMode = 'manual';
+        try { saved = c ? JSON.parse(c) : null; } catch {/* ignore */}
       } catch {/* ignore */}
 
-      try {
-        const perm = await Location.requestForegroundPermissionsAsync();
-        if (perm.status !== 'granted') {
-          Alert.alert('Разрешение', 'Без доступа к местоположению используется Мекка по умолчанию.');
-          setCoords(MECCA_COORDS);
-          setCity('Мекка');
-          return;
-        }
-        const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
-        const next = { latitude: loc.coords.latitude, longitude: loc.coords.longitude };
-        setCoords(next);
-        let cityName = '';
-        try {
-          const r = await Location.reverseGeocodeAsync(loc.coords);
-          if (r?.[0]) {
-            cityName = [r[0].city, r[0].country].filter(Boolean).join(', ');
-            setCity(cityName);
-          }
-        } catch {/* ignore */}
-        // Сохраняем для виджета «Следующий намаз» на главной
-        AsyncStorage.setItem(PRAYER_STORAGE.COORDS, JSON.stringify({ ...next, city: cityName })).catch(() => {});
-      } catch {
-        setCoords(MECCA_COORDS);
-        setCity('Мекка');
+      const savedCity = saved?.cityId ? findCity(saved.cityId) : null;
+      if (savedMode === 'manual' && savedCity) {
+        // Ручной режим: GPS не запрашиваем вообще
+        setMode('manual');
+        applyManualCity(savedCity);
+      } else {
+        setMode('auto');
+        await detectByGps();
       }
     })();
   }, []);
+
+  // Пользователь выбрал город в списке → ручной режим
+  const onPickCity = (c) => {
+    setPickerOpen(false);
+    setMode('manual');
+    applyManualCity(c);
+    AsyncStorage.multiSet([
+      [PRAYER_STORAGE.LOCATION_MODE, 'manual'],
+      [PRAYER_STORAGE.COORDS, JSON.stringify({
+        latitude: c.latitude, longitude: c.longitude,
+        city: `${c.name}, ${c.country}`, tz: c.tz, cityId: c.id,
+      })],
+    ]).catch(() => {});
+  };
+
+  // Возврат к автоматическому определению
+  const switchToAuto = () => {
+    if (mode === 'auto') return;
+    setMode('auto');
+    setManualCity(null);
+    AsyncStorage.setItem(PRAYER_STORAGE.LOCATION_MODE, 'auto').catch(() => {});
+    detectByGps();
+  };
 
   // Сохраняем выбор метода/мазхаба — виджет на главной использует те же настройки
   const setMethodPersist = (m) => {
@@ -74,7 +150,6 @@ export default function PrayerTimesScreen({ navigation }) {
 
   useEffect(() => {
     if (!coords) return;
-    setLoading(true);
     try {
       const t = getPrayerTimes({
         latitude: coords.latitude,
@@ -84,7 +159,7 @@ export default function PrayerTimesScreen({ navigation }) {
       });
       setTimes(t);
     } catch (e) {
-      Alert.alert('Ошибка', 'Не удалось вычислить времена намазов.');
+      notify('Ошибка', 'Не удалось вычислить времена намазов.');
     } finally {
       setLoading(false);
     }
@@ -109,19 +184,56 @@ export default function PrayerTimesScreen({ navigation }) {
     }
   };
 
-  const next = times?.nextPrayer?.();
+  // Следующий намаз без восхода; после иши — завтрашний фаджр (как в виджете на главной)
+  let next = null;
+  if (coords) {
+    try { next = getNextPrayer({ ...coords, method, madhab }); } catch {/* ignore */}
+  }
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginBottom: spacing.md }}>
-          <Text style={styles.back}>← Назад</Text>
-        </TouchableOpacity>
+      <DetailHeader align="center" onBack={() => navigation.goBack()} pattern>
+        
         <Text style={styles.title}>Времена намазов</Text>
         {city ? <Text style={styles.city}>{city}</Text> : null}
-      </View>
+      </DetailHeader>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: spacing.xxxl }}>
+        {/* Местоположение: автоматически по GPS или город вручную */}
+        <Card style={{ marginBottom: spacing.lg }}>
+          <Text style={styles.locLabel}>Местоположение</Text>
+          <View style={styles.segment}>
+            {[
+              { id: 'auto', label: 'Автоматически' },
+              { id: 'manual', label: 'Вручную' },
+            ].map((o) => {
+              const active = mode === o.id;
+              return (
+                <TouchableOpacity
+                  key={o.id}
+                  onPress={() => (o.id === 'auto' ? switchToAuto() : setPickerOpen(true))}
+                  style={[styles.segmentBtn, active && styles.segmentBtnActive]}
+                  accessibilityRole="button"
+                >
+                  <Text style={[styles.segmentText, active && styles.segmentTextActive]}>{o.label}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+          {mode === 'manual' && manualCity ? (
+            <TouchableOpacity onPress={() => setPickerOpen(true)} style={styles.cityRow} accessibilityRole="button">
+              <View style={{ flex: 1 }}>
+                <Text style={styles.cityName}>{manualCity.name}</Text>
+                <Text style={styles.cityMeta}>{manualCity.country} · время по местному поясу города</Text>
+              </View>
+              <Text style={styles.cityChange}>Изменить</Text>
+              <Icon name="chevronRight" size={16} color={colors.primary} />
+            </TouchableOpacity>
+          ) : (
+            <Text style={styles.locHint}>По GPS устройства. Если определяется неверно — выберите город вручную.</Text>
+          )}
+        </Card>
+
         {loading || !times ? (
           <View style={{ alignItems: 'center', paddingVertical: spacing.xl }}>
             <ActivityIndicator size="large" color={colors.primary} />
@@ -132,7 +244,7 @@ export default function PrayerTimesScreen({ navigation }) {
               <Card style={{ marginBottom: spacing.lg, backgroundColor: colors.primary }}>
                 <Text style={[styles.nextLabel, { color: '#fff', opacity: 0.85 }]}>Следующий намаз</Text>
                 <Text style={[styles.nextName, { color: '#fff' }]}>{PRAYER_NAMES_RU[next.name]}</Text>
-                <Text style={[styles.nextTime, { color: colors.accent }]}>{formatTime(next.time)}</Text>
+                <Text style={[styles.nextTime, { color: colors.accent }]}>{formatTime(next.time, tz)}</Text>
               </Card>
             )}
 
@@ -140,7 +252,7 @@ export default function PrayerTimesScreen({ navigation }) {
               <Card key={key} style={{ marginBottom: spacing.sm }}>
                 <View style={styles.row}>
                   <Text style={styles.prayerName}>{PRAYER_NAMES_RU[key]}</Text>
-                  <Text style={styles.prayerTime}>{formatTime(times[key])}</Text>
+                  <Text style={styles.prayerTime}>{formatTime(times[key], tz)}</Text>
                 </View>
               </Card>
             ))}
@@ -183,15 +295,38 @@ export default function PrayerTimesScreen({ navigation }) {
           </>
         )}
       </ScrollView>
+
+      <CityPickerModal
+        visible={pickerOpen}
+        selectedId={manualCity?.id}
+        onSelect={onPickCity}
+        onClose={() => setPickerOpen(false)}
+      />
     </Screen>
   );
 }
 
 const makeStyles = (colors) => StyleSheet.create({
-  header: { backgroundColor: colors.primary, padding: spacing.lg, paddingTop: spacing.xxxl, paddingBottom: spacing.xl },
-  back: { ...typography.bodyMedium, color: '#fff' },
   title: { ...typography.h1, color: '#fff' },
   city: { ...typography.body, color: '#fff', opacity: 0.85, marginTop: 4 },
+
+  // Блок местоположения
+  locLabel: { ...typography.caption, color: colors.textSecondary, fontWeight: '700', marginBottom: spacing.sm },
+  segment: {
+    flexDirection: 'row',
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: radii.md,
+    padding: 3,
+  },
+  segmentBtn: { flex: 1, paddingVertical: 9, alignItems: 'center', borderRadius: radii.sm },
+  segmentBtnActive: { backgroundColor: colors.primary },
+  segmentText: { ...typography.small, color: colors.textSecondary, fontWeight: '600' },
+  segmentTextActive: { color: colors.textOnPrimary, fontWeight: '700' },
+  locHint: { ...typography.caption, color: colors.textMuted, marginTop: spacing.sm, lineHeight: 17 },
+  cityRow: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.md },
+  cityName: { ...typography.h4, color: colors.textPrimary },
+  cityMeta: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
+  cityChange: { ...typography.small, color: colors.primary, fontWeight: '600', marginRight: 2 },
 
   nextLabel: { ...typography.caption },
   nextName: { ...typography.h2, marginTop: 4 },

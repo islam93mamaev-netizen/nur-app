@@ -177,7 +177,7 @@ const prayer = loadModule(
     Madhab: adhan.Madhab,
     HighLatitudeRule: adhan.HighLatitudeRule,
   },
-  ['getPrayerTimes', 'getNextPrayer', 'PRAYER_NAMES_RU', 'MECCA_COORDS']
+  ['getPrayerTimes', 'getNextPrayer', 'PRAYER_NAMES_RU', 'MECCA_COORDS', 'formatTime']
 );
 
 test('времена намазов в Мекке идут по порядку', () => {
@@ -190,6 +190,44 @@ test('getNextPrayer возвращает намаз (не восход) в бу�
   assert.ok(['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'].includes(next.name), next.name);
   assert.ok(next.time > new Date(Date.now() - 60000), 'время в прошлом');
   assert.ok(prayer.PRAYER_NAMES_RU[next.name], 'нет русского названия');
+});
+
+// ===== data/cities (ручной выбор местоположения) =====
+console.log('\ndata/cities.js');
+const citiesMod = loadModule('src/data/cities.js', {}, ['cities', 'findCity', 'citiesByCountry']);
+
+test('у всех городов корректные координаты и уникальные id', () => {
+  const ids = new Set();
+  for (const c of citiesMod.cities) {
+    assert.ok(!ids.has(c.id), `дубль id ${c.id}`);
+    ids.add(c.id);
+    assert.ok(Math.abs(c.latitude) <= 90 && Math.abs(c.longitude) <= 180, `координаты ${c.id}`);
+  }
+});
+
+test('все часовые пояса существуют в ICU', () => {
+  for (const c of citiesMod.cities) {
+    assert.doesNotThrow(
+      () => new Date().toLocaleTimeString('ru-RU', { timeZone: c.tz }),
+      `неизвестный пояс ${c.tz} у ${c.id}`
+    );
+  }
+});
+
+test('поиск и группировка по странам', () => {
+  const ru = citiesMod.citiesByCountry('казань');
+  assert.strictEqual(ru.length, 1);
+  assert.strictEqual(ru[0].title, 'Россия');
+  const by = citiesMod.citiesByCountry('беларусь');
+  assert.ok(by[0].data.some((c) => c.id === 'minsk'));
+  assert.strictEqual(citiesMod.citiesByCountry('xyz-нет-такого').length, 0);
+});
+
+test('formatTime показывает время в поясе выбранного города', () => {
+  const d = new Date(Date.UTC(2026, 0, 1, 12, 0)); // 12:00 UTC
+  assert.strictEqual(prayer.formatTime(d, 'Europe/Moscow'), '15:00');
+  assert.strictEqual(prayer.formatTime(d, 'Asia/Almaty').length, 5);
+  assert.ok(prayer.formatTime(d, 'Нет/Такого').length === 5, 'неизвестный пояс должен падать на время устройства');
 });
 
 // ===== Итог =====

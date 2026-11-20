@@ -80,17 +80,29 @@ export const PRAYER_NAMES_RU = {
   isha: 'Иша',
 };
 
-export function formatTime(date) {
+// tz (необязательно) — часовой пояс IANA выбранного вручную города:
+// время показывается по местному времени города, а не телефона.
+// Если движок не знает этот пояс — показываем по времени устройства.
+export function formatTime(date, tz) {
   if (!date) return '';
-  return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+  const opts = { hour: '2-digit', minute: '2-digit' };
+  if (tz) {
+    try {
+      return date.toLocaleTimeString('ru-RU', { ...opts, timeZone: tz });
+    } catch { /* неизвестный пояс — fallback ниже */ }
+  }
+  return date.toLocaleTimeString('ru-RU', opts);
 }
 
 // Общие ключи AsyncStorage — используются экраном «Намазы» и виджетом на главной,
 // чтобы настройки и последние координаты были едиными во всём приложении.
 export const PRAYER_STORAGE = {
-  COORDS: '@nur_app/prayer_coords_v1',   // JSON: { latitude, longitude, city }
+  // JSON: { latitude, longitude, city, tz?, cityId? } — tz/cityId есть у ручного выбора
+  COORDS: '@nur_app/prayer_coords_v1',
   METHOD: '@nur_app/prayer_method_v1',   // строка из METHODS
   MADHAB: '@nur_app/prayer_madhab_v1',   // 'Shafi' | 'Hanafi'
+  // 'auto' — по GPS (по умолчанию), 'manual' — город выбран вручную
+  LOCATION_MODE: '@nur_app/prayer_location_mode_v1',
 };
 
 // Мекка — запасные координаты, когда геолокация недоступна.

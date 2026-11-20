@@ -42,6 +42,7 @@ export default function RamadanScreen({ navigation }) {
 
   const [data, setData] = useState({ year: hijri.year, fasts: {}, taraweeh: {} });
   const [coords, setCoords] = useState(null);
+  const [tz, setTz] = useState(undefined);
   const [method, setMethod] = useState('MuslimWorldLeague');
   const [madhab, setMadhab] = useState('Shafi');
   const [, setTick] = useState(0);
@@ -69,6 +70,7 @@ export default function RamadanScreen({ navigation }) {
           try {
             const p = JSON.parse(c);
             if (p?.latitude) setCoords({ latitude: p.latitude, longitude: p.longitude });
+            if (p?.tz) setTz(p.tz); // пояс вручную выбранного города
           } catch { /* ignore */ }
         }
         setCoords((prev) => prev || MECCA_COORDS);
@@ -146,13 +148,13 @@ export default function RamadanScreen({ navigation }) {
             <View style={styles.timeBox}>
               <Icon name="sunrise" size={20} color={colors.accentDark} />
               <Text style={styles.timeLabel}>Сухур до</Text>
-              <Text style={styles.timeValue}>{formatTime(suhoor) || '—'}</Text>
+              <Text style={styles.timeValue}>{formatTime(suhoor, tz) || '—'}</Text>
             </View>
             <View style={styles.timeDivider} />
             <View style={styles.timeBox}>
               <Icon name="moon" size={20} color={colors.primary} />
               <Text style={styles.timeLabel}>Ифтар в</Text>
-              <Text style={styles.timeValue}>{formatTime(iftar) || '—'}</Text>
+              <Text style={styles.timeValue}>{formatTime(iftar, tz) || '—'}</Text>
             </View>
           </View>
           {countdown ? <Text style={styles.countdown}>{countdown}</Text> : null}

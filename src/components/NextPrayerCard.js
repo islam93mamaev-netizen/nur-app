@@ -28,6 +28,7 @@ export default function NextPrayerCard({ onPress }) {
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [coords, setCoords] = useState(null);
   const [city, setCity] = useState('');
+  const [tz, setTz] = useState(undefined); // пояс вручную выбранного города
   const [method, setMethod] = useState('MuslimWorldLeague');
   const [madhab, setMadhab] = useState('Shafi');
   // «Тикер»: раз в 30 секунд пересчитываем отсчёт
@@ -37,10 +38,11 @@ export default function NextPrayerCard({ onPress }) {
     let alive = true;
     (async () => {
       try {
-        const [c, m, mz] = await Promise.all([
+        const [c, m, mz, lm] = await Promise.all([
           AsyncStorage.getItem(PRAYER_STORAGE.COORDS),
           AsyncStorage.getItem(PRAYER_STORAGE.METHOD),
           AsyncStorage.getItem(PRAYER_STORAGE.MADHAB),
+          AsyncStorage.getItem(PRAYER_STORAGE.LOCATION_MODE),
         ]);
         if (!alive) return;
         if (m) setMethod(m);
@@ -53,6 +55,12 @@ export default function NextPrayerCard({ onPress }) {
         if (saved?.latitude) {
           setCoords({ latitude: saved.latitude, longitude: saved.longitude });
           setCity(saved.city || '');
+        }
+
+        // Город выбран вручную — GPS не трогаем, показываем время по поясу города
+        if (lm === 'manual' && saved?.latitude) {
+          setTz(saved.tz);
+          return;
         }
 
         // Только если разрешение уже выдано — уточняем позицию (без диалога).
@@ -109,7 +117,7 @@ export default function NextPrayerCard({ onPress }) {
         <Text style={styles.label}>Следующий намаз</Text>
         <View style={styles.row}>
           <Text style={styles.prayer}>{PRAYER_NAMES_RU[next.name]}</Text>
-          <Text style={styles.time}>{formatTime(next.time)}</Text>
+          <Text style={styles.time}>{formatTime(next.time, tz)}</Text>
         </View>
         <Text style={styles.countdown}>
           {countdown}
