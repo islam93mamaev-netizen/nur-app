@@ -2,10 +2,9 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, TextInput, Linking } from 'react-native';
 import Screen from '../../components/Screen';
 import Card from '../../components/Card';
-import ProgressBar from '../../components/ProgressBar';
 import Button from '../../components/Button';
 import { spacing, radii, typography } from '../../constants/theme';
-import { useProgress, levelFromXp } from '../../store/progressStore';
+import { useProgress } from '../../store/progressStore';
 import { modules } from '../../data/modules';
 import { words } from '../../data/words';
 import { hadiths } from '../../data/hadiths';
@@ -21,19 +20,6 @@ const ACHIEVEMENTS = [
   { id: 'xp_100', icon: '⭐', title: '100 XP', desc: 'Набрать 100 XP', test: (s) => s.xp >= 100 },
   { id: 'all_modules', icon: '🏆', title: 'Все основы', desc: 'Все уроки основ', test: (s) => modules.every((m) => m.lessons.every((l) => s.completedLessons[l.id])) },
 ];
-
-const GOAL_LABELS = {
-  islam: 'Изучать Ислам',
-  quran: 'Читать Коран',
-  arabic: 'Учить арабский',
-  salat: 'Подготовиться к намазу',
-};
-
-const LEVEL_LABELS = {
-  beginner: 'Новичок',
-  middle: 'Средний',
-  advanced: 'Продвинутый',
-};
 
 export default function ProfileScreen({ navigation }) {
   const { colors, mode, setMode, fontScale, setFontScale } = useTheme();
@@ -54,7 +40,6 @@ export default function ProfileScreen({ navigation }) {
     const url = AI_PROVIDER_LABEL[aiProvider]?.keyUrl;
     if (url) Linking.openURL(url).catch(() => {});
   };
-  const level = levelFromXp(state.xp);
 
   const totalLessons = modules.reduce((acc, m) => acc + m.lessons.length, 0);
   const completedLessons = Object.keys(state.completedLessons).length;
@@ -80,23 +65,7 @@ export default function ProfileScreen({ navigation }) {
             <Text style={styles.avatarText}>{(state.profile.name || 'А').charAt(0).toUpperCase()}</Text>
           </View>
           <Text style={styles.userName}>{state.profile.name || 'Ученик'}</Text>
-          <Text style={styles.userMeta}>
-            {LEVEL_LABELS[state.profile.level] || 'Новичок'} • {state.profile.dailyMinutes} мин/день
-          </Text>
-          <Text style={styles.userGoal}>Цель: {GOAL_LABELS[state.profile.goal] || 'Изучать Ислам'}</Text>
         </View>
-
-        <Card style={{ marginTop: spacing.lg }}>
-          <Text style={styles.label}>Уровень</Text>
-          <Text style={styles.levelName}>{level.name}</Text>
-          <View style={{ marginVertical: spacing.sm }}>
-            <ProgressBar value={level.current} max={level.next} />
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={styles.caption}>{state.xp} XP</Text>
-            <Text style={styles.caption}>{level.current}/{level.next}</Text>
-          </View>
-        </Card>
 
         <View style={styles.statsRow}>
           <Card style={styles.statCard}>
@@ -341,11 +310,8 @@ const makeStyles = (colors) => StyleSheet.create({
   },
   avatarText: { fontSize: 30, color: colors.primary, fontWeight: '700' },
   userName: { ...typography.h2, color: '#fff' },
-  userMeta: { ...typography.body, color: '#fff', opacity: 0.8, marginTop: 4 },
-  userGoal: { ...typography.small, color: colors.accentLight, marginTop: spacing.sm },
 
   label: { ...typography.caption, color: colors.textSecondary },
-  levelName: { ...typography.h3, color: colors.textPrimary },
   caption: { ...typography.caption, color: colors.textSecondary },
 
   // Сетка статистики 2×2

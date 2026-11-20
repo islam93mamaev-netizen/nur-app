@@ -4,10 +4,16 @@ import Screen from '../../components/Screen';
 import Button from '../../components/Button';
 import { spacing, typography } from '../../constants/theme';
 import { useTheme } from '../../store/themeStore';
+import { useProgress } from '../../store/progressStore';
 
-export default function WelcomeScreen({ navigation }) {
+// Онбординг — один экран: «Начать» сразу открывает приложение.
+// Цель/уровень/дневная норма ставятся по умолчанию (как раньше на последнем шаге).
+const DEFAULT_PROFILE = { goal: 'islam', level: 'beginner', dailyMinutes: 10 };
+
+export default function WelcomeScreen() {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
+  const { completeOnboarding } = useProgress();
   return (
     <Screen background={colors.primary} edges={['top', 'bottom']}>
       <View style={styles.center}>
@@ -24,7 +30,7 @@ export default function WelcomeScreen({ navigation }) {
           title="Начать"
           variant="secondary"
           size="lg"
-          onPress={() => navigation.navigate('Goal')}
+          onPress={() => completeOnboarding(DEFAULT_PROFILE)}
           style={{ marginTop: spacing.xl }}
         />
       </View>
