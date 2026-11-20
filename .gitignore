@@ -13,3 +13,4 @@ web-build/
 
 # Локальный кэш npm (создавался при установке с --cache) — 465 МБ мусора
 .npm-cache/
+push.command
