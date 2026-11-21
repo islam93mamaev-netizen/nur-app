@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 // Глобальная подстройка <Text>: масштаб шрифта из настроек + Noto Naskh для арабского.
 // Должна загрузиться раньше экранов. См. src/utils/textPatch.web.js / .native.js
@@ -53,6 +53,14 @@ export default function App() {
     Manrope_800ExtraBold,
   });
 
+  // Страховка: если загрузка шрифтов зависла (на iOS так было из-за несовместимого
+  // expo-asset), через 4 секунды запускаемся на системных шрифтах, а не висим на пустом экране.
+  const [fontTimeout, setFontTimeout] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setFontTimeout(true), 4000);
+    return () => clearTimeout(t);
+  }, []);
+
   useEffect(() => {
     // Восстанавливаем выбранного чтеца Корана и настройки TTS (голос, скорость) —
     // раньше они подгружались только при заходе в «Слова»/«Букву».
@@ -73,7 +81,7 @@ export default function App() {
 
   // Пока шрифты грузятся (сотни миллисекунд) — держим пустой экран,
   // чтобы не было «прыжка» типографики. fontError => запускаемся на системных.
-  if (!fontsLoaded && !fontError) return null;
+  if (!fontsLoaded && !fontError && !fontTimeout) return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
