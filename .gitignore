@@ -15,3 +15,6 @@ web-build/
 .npm-cache/
 push.command
 fetch.command
+
+# видео для App Review (не в git)
+release/*.mp4

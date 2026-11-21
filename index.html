@@ -110,7 +110,7 @@
   <main>
     <section id="privacy">
       <h2>Политика конфиденциальности</h2>
-      <p class="updated">Последнее обновление: 14 сентября 2026 г.</p>
+      <p class="updated">Последнее обновление: 22 ноября 2026 г.</p>
 
       <p>Приложение <strong>«Нур»</strong> — это оффлайн-ресурс для изучения основ ислама, чтения Корана и хадисов, поминаний, времён намаза и других повседневных инструментов практикующего мусульманина.</p>
 
@@ -119,11 +119,11 @@
         <li>Мы <strong>не собираем персональные данные</strong> и <strong>не отправляем их на наши серверы</strong> — у нас нет серверов.</li>
         <li>Весь ваш прогресс, закладки и настройки хранятся <strong>только на вашем устройстве</strong>.</li>
         <li>Уведомления, геолокация и микрофон — используются локально.</li>
-        <li>Сторонние сервисы (Quran.com, Sunnah.com, isnad.link, OpenRouter/DeepSeek) имеют собственные политики и вызываются только когда вы явно этого требуете.</li>
+        <li>Сторонние сервисы (AlQuran Cloud, Islamic Network, EveryAyah, gold-api.com, Frankfurter, Sunnah.com, isnad.link, Quran.com, OpenRouter/DeepSeek) имеют собственные политики. Приложение не передаёт им персональные данные.</li>
       </ul>
 
       <h3>1. Данные, которые обрабатывает приложение</h3>
-      <p><strong>Локально — на вашем устройстве:</strong> прогресс уроков, тестов, серии дней, XP, уровень, закладки, заметки, ваш AI API-ключ (если вводите), настройки. Всё это хранится в <code>AsyncStorage</code> и никогда не отправляется наружу.</p>
+      <p><strong>Локально — на вашем устройстве:</strong> прогресс уроков, тестов, серии дней, XP, уровень, закладки, заметки, настройки — в <code>AsyncStorage</code>; ваш AI API-ключ (если вводите) — в защищённом хранилище устройства (Keychain). Эти данные никогда не отправляются наружу.</p>
 
       <p><strong>Геолокация.</strong> Приложение запрашивает разрешение при использовании раздела «Времена намаза». Координаты обрабатываются локально через библиотеку <code>adhan</code> и никуда не отправляются.</p>
 
@@ -134,10 +134,10 @@
       <h3>2. Сторонние сервисы</h3>
       <p>Обращение происходит только в момент вашего действия. Приложение не отправляет туда персональные данные — только контент запроса.</p>
       <ul>
-        <li><a href="https://quran.com/terms" target="_blank" rel="noopener">Quran.com API</a> — текст и переводы сур, аудио</li>
-        <li><a href="https://sunnah.com/about" target="_blank" rel="noopener">Sunnah.com</a> — ссылки на хадисы</li>
-        <li><a href="https://isnad.link" target="_blank" rel="noopener">isnad.link</a> — ссылки на хадисы на русском</li>
-        <li>quran.ksu.edu.sa / everyayah.com — CDN для аудио аятов</li>
+        <li><a href="https://alquran.cloud" target="_blank" rel="noopener">AlQuran Cloud</a> (api.alquran.cloud, alquran.api.islamic.network) — арабский текст Корана, транслитерация и русский перевод Э. Кулиева</li>
+        <li>cdn.islamic.network и <a href="https://everyayah.com" target="_blank" rel="noopener">everyayah.com</a> — аудио чтения Корана</li>
+        <li><a href="https://gold-api.com" target="_blank" rel="noopener">gold-api.com</a> и <a href="https://frankfurter.app" target="_blank" rel="noopener">frankfurter.app</a> — цена золота и курсы валют для калькулятора закята</li>
+        <li><a href="https://sunnah.com/about" target="_blank" rel="noopener">Sunnah.com</a>, <a href="https://isnad.link" target="_blank" rel="noopener">isnad.link</a>, <a href="https://quran.com" target="_blank" rel="noopener">Quran.com</a> — ссылки на источники, открываются в браузере</li>
         <li><strong>AI-помощник</strong>: <a href="https://openrouter.ai/terms" target="_blank" rel="noopener">OpenRouter</a> / <a href="https://platform.deepseek.com/terms" target="_blank" rel="noopener">DeepSeek</a>. Работает <em>только если вы ввели свой API-ключ</em> в Профиле. Мы не имеем доступа к вашим сообщениям.</li>
       </ul>
 
@@ -167,7 +167,7 @@
     <section id="en">
       <hr>
       <h2>Privacy Policy (English)</h2>
-      <p class="updated">Last updated: September 14, 2026</p>
+      <p class="updated">Last updated: November 22, 2026</p>
 
       <p><strong>Nur</strong> is an offline-first educational app for Islamic studies: Qur'an reading, hadith, adhkar, prayer times and daily worship tools.</p>
 
@@ -176,17 +176,17 @@
         <li>We collect <strong>no personal data</strong> and have <strong>no servers</strong>.</li>
         <li>Progress, bookmarks, settings and your (optional) AI API key are stored <strong>on-device only</strong>.</li>
         <li>Location, notifications, and microphone permissions are used locally.</li>
-        <li>Third-party services (Quran.com, Sunnah.com, isnad.link, OpenRouter/DeepSeek) are contacted only when you explicitly invoke them.</li>
+        <li>Third-party services (AlQuran Cloud, Islamic Network, EveryAyah, gold-api.com, Frankfurter, Sunnah.com, isnad.link, Quran.com, OpenRouter/DeepSeek) receive no personal data from the app.</li>
       </ul>
 
       <h3>Data handled by the app</h3>
-      <p><strong>On-device only</strong> via AsyncStorage: progress, XP, streak, bookmarks, notes, settings, your AI API key.</p>
+      <p><strong>On-device only</strong>: progress, XP, streak, bookmarks, notes and settings (AsyncStorage); your optional AI API key (device Keychain).</p>
       <p><strong>Location:</strong> requested for prayer time calculation via the on-device <code>adhan</code> library. Coordinates are never transmitted.</p>
       <p><strong>Notifications:</strong> local only, scheduled via iOS/Android APIs. No push servers.</p>
       <p><strong>Microphone:</strong> not used. <code>NSMicrophoneUsageDescription</code> is declared solely because <code>expo-audio</code> requires it.</p>
 
       <h3>Third-party services</h3>
-      <p>Contacted only on your explicit action: Quran.com API, Sunnah.com / isnad.link (external hadith links), everyayah.com / quran.ksu.edu.sa (audio CDN), OpenRouter / DeepSeek (AI, only if you paste your own key).</p>
+      <p>Used only to load content you request: AlQuran Cloud / Islamic Network (Quran text, transliteration, Russian translation by E. Kuliev), cdn.islamic.network / everyayah.com (Quran audio), gold-api.com / frankfurter.app (gold price and currency rates for the zakat calculator), Sunnah.com / isnad.link / Quran.com (source links opened in the browser), OpenRouter / DeepSeek (AI, only if you paste your own key). No personal data is sent.</p>
 
       <h3>Children</h3>
       <p>No data is collected about any users, including children.</p>
