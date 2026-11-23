@@ -17,6 +17,7 @@ import * as Speech from 'expo-speech';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { notify } from '../utils/dialogs';
+import { ensureAudioMode } from './audioService';
 
 const VOICE_KEY = '@nur_app/tts_voice_id';
 const RATE_KEY = '@nur_app/tts_rate';
@@ -228,6 +229,10 @@ export async function hasArabicVoice() {
 export async function speak(text, opts = {}) {
   try {
     if (isWeb) return await webSpeak(text, opts);
+    // iOS: expo-speech говорит через аудиосессию приложения. Без режима playback
+    // (playsInSilentMode) бесшумный режим iPhone глушит озвучку слов — кнопка
+    // «играет», а звука нет. Режим раньше ставил только плеер Корана.
+    await ensureAudioMode();
     return await nativeSpeak(text, opts);
   } catch {
     currentlySpeaking = false;
