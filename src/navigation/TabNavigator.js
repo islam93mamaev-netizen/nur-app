@@ -26,6 +26,10 @@ export default function TabNavigator() {
   // уезжали в зону скруглённых углов и полоски Home («Главная»/«Профиль» срезались).
   // Поэтому высоту считаем сами: контент таб-бара + нижний safe-area отступ.
   const bottomInset = Platform.OS === 'web' ? 14 : Math.max(insets.bottom, 8);
+  // На iPhone с полоской Home контент сдвигаем на 4pt вниз, чтобы отступ от верхней
+  // линии таб-бара и до полоски был одинаковым (~18pt). Высота таб-бара та же.
+  const hasHomeIndicator = Platform.OS !== 'web' && insets.bottom > 0;
+  const shift = hasHomeIndicator ? 4 : 0;
   return (
     <Tab.Navigator
       screenOptions={{
@@ -36,8 +40,8 @@ export default function TabNavigator() {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
           height: 54 + bottomInset,
-          paddingBottom: bottomInset,
-          paddingTop: 6,
+          paddingBottom: bottomInset - shift,
+          paddingTop: 6 + shift,
           // Крайние вкладки не прижимаем к закруглённым краям экрана
           paddingHorizontal: 8,
         },
