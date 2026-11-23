@@ -23,7 +23,7 @@ Node 22.x LTS (на Node 26 ломается @expo/cli без патча).
 ## Конвенции кода
 
 - Стили: `const styles = useMemo(() => makeStyles(colors), [colors])` + `makeStyles(colors)` внизу файла. Цвета только из `useTheme()` — каждый экран обязан работать в светлой и тёмной теме
-- Шрифты: Manrope (кириллица), Amiri (арабский). Загружаются в `App.js` через expo-font. Глобальный патч `<Text>` (`src/utils/textPatch.web.js` / `.native.js`, логика в `textStyleAdjust.js`, подключается первым импортом в `App.js`): масштабирует fontSize/lineHeight по настройке пользователя и подставляет Noto Naskh тексту с арабскими символами — арабским стилям НЕ нужно прописывать fontFamily вручную. Web — обёртка `Text.render` (forwardRef в RNW), натив — подмена `default` модуля `react-native/Libraries/Text/Text` (в RN 0.81 у Text нет `.render`, старый патч молча не работал)
+- Шрифты: Manrope (кириллица), Amiri (арабский). Загружаются в `App.js` через expo-font. Глобальный патч `<Text>` (`src/utils/textPatch.web.js` / `.native.js`, логика в `textStyleAdjust.js`, подключается первым импортом в `App.js`): масштабирует fontSize/lineHeight по настройке пользователя и подставляет Noto Naskh тексту с арабскими символами — арабским стилям НЕ нужно прописывать fontFamily вручную. Web — обёртка `Text.render` (forwardRef в RNW), натив — подмена геттера `Text` у объекта экспорта `react-native` через `Object.defineProperty` (подмена `default` модуля Libraries/Text/Text НЕ работает в продакшен-сборке: там это неперенастраиваемый геттер — патч молча отключался, размер шрифта на iPhone не менялся). Проверять патч на реальном iOS-бандле: `npx expo export --platform ios --no-bytecode` + загрузка модулей в node vm
 - У Amiri высокие харакаты: lineHeight для арабского ≥ 1.7 × fontSize
 - Новые экраны регистрировать в `RootNavigator.js`
 - Никаких новых тяжёлых зависимостей без необходимости; react-native-svg уже есть
@@ -136,6 +136,11 @@ Connect хранится на серверах Expo (env-переменные EX
   Новые expo-* пакеты ставить только `npx expo install ...`; после установки проверить `npm ls expo-asset expo-font`
 - нативную сборку обязательно проверять в TestFlight до отправки на ревью (веб не ловит нативные баги)
 - политика конфиденциальности (index.html → GitHub Pages) должна перечислять все внешние сервисы приложения
+- iOS-only баги, которые веб не показывает: (1) у ScrollView по умолчанию flexShrink: 1 — горизонтальная полоса
+  чипов рядом с вертикальным ScrollView сжимается (ставить flexGrow: 0, flexShrink: 0); (2) явная height у
+  tabBarStyle перебивает safe area — высоту считать от useSafeAreaInsets; (3) любой звук (expo-speech тоже)
+  только после ensureAudioMode() из audioService, иначе бесшумный режим iPhone глушит звук
+- в TestFlight проверять именно сборку из TestFlight, а не версию из App Store (на 1.0.0 OTA не приходит)
 
 ## Проверка
 
