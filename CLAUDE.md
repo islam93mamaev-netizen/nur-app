@@ -115,6 +115,28 @@ audioService и используется всеми), дубли splitArabic (�
 
 ВАЖНО: после этих изменений нужен `npm install` (новые пакеты: @expo-google-fonts/*, expo-haptics, expo-secure-store).
 
+## Релизы (App Store, com.nurapp.islam, ASC App ID 6816754440)
+
+Приложение в App Store с 1.0.0 (ноябрь 2026). Сборка — EAS в облаке, номер сборки ведёт EAS (`appVersionSource: remote`,
+`autoIncrement`), в app.json его НЕ пишем. `eas` не в PATH — запускать через `npx -y eas-cli@latest`. Ключ App Store
+Connect хранится на серверах Expo (env-переменные EXPO_ASC_* не нужны). Перед сборкой: `export EXPO_NO_CAPABILITY_SYNC=1`
+(баг синхронизации Push capability).
+
+Два пути обновления:
+1. **EAS Update (по воздуху)** — только JS/контент/стили, без новых нативных модулей и разрешений:
+   `npx -y eas-cli@latest update --channel production --message "..."`. Доходит до пользователей при следующем запуске,
+   без ревью. Работает только для сборок с тем же runtimeVersion (`policy: appVersion` = значение `version`).
+2. **Новая сборка** — если менялись нативные зависимости, app.json (разрешения, плагины), иконка/сплэш:
+   поднять `version` (1.0.1 → 1.0.2 …) → `npx -y eas-cli@latest build --platform ios --profile production --auto-submit`
+   → проверка в TestFlight → в ASC новая версия, «Что нового», выбрать билд, отправить на проверку.
+   Новая `version` = новый runtime: OTA-апдейты старой версии на неё не попадут, и наоборот.
+
+Грабли, на которые уже наступили:
+- peer-зависимости Expo-пакетов npm ставит «последней» версии (expo-audio → expo-asset@56 → чёрный экран на iOS).
+  Новые expo-* пакеты ставить только `npx expo install ...`; после установки проверить `npm ls expo-asset expo-font`
+- нативную сборку обязательно проверять в TestFlight до отправки на ревью (веб не ловит нативные баги)
+- политика конфиденциальности (index.html → GitHub Pages) должна перечислять все внешние сервисы приложения
+
 ## Проверка
 
 Перед сдачей шага:

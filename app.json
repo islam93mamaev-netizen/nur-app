@@ -2,7 +2,7 @@
   "expo": {
     "name": "Нур",
     "slug": "nur-app",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -17,7 +17,6 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.nurapp.islam",
-      "buildNumber": "1",
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "NSLocationWhenInUseUsageDescription": "Для расчёта точных времён намазов нам нужно ваше местоположение.",
@@ -30,7 +29,6 @@
     },
     "android": {
       "package": "com.nurapp.islam",
-      "versionCode": 1,
       "permissions": [
         "NOTIFICATIONS",
         "ACCESS_COARSE_LOCATION",
@@ -76,6 +74,14 @@
         "projectId": "d69a642a-2cb1-4c81-b8bc-ce0fd92b7a1f"
       }
     },
-    "owner": "is.mamaev"
+    "owner": "is.mamaev",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d69a642a-2cb1-4c81-b8bc-ce0fd92b7a1f",
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    }
   }
 }
