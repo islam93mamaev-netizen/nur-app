@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../store/themeStore';
 import Icon from '../components/Icon';
 
@@ -20,6 +21,11 @@ function tabIcon(name) {
 
 export default function TabNavigator() {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
+  // Явная height перебивает системный отступ снизу: на iPhone без кнопки «Домой» подписи
+  // уезжали в зону скруглённых углов и полоски Home («Главная»/«Профиль» срезались).
+  // Поэтому высоту считаем сами: контент таб-бара + нижний safe-area отступ.
+  const bottomInset = Platform.OS === 'web' ? 14 : Math.max(insets.bottom, 8);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -29,12 +35,11 @@ export default function TabNavigator() {
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
-          // На вебе нет системных safe-area insets снизу — подписи подрезались,
-          // поэтому там высота/отступ больше. На нативе safe-area добавляется сама,
-          // и 84px сделали бы таб-бар слишком высоким.
-          height: Platform.OS === 'web' ? 72 : 62,
-          paddingBottom: Platform.OS === 'web' ? 14 : 8,
+          height: 54 + bottomInset,
+          paddingBottom: bottomInset,
           paddingTop: 6,
+          // Крайние вкладки не прижимаем к закруглённым краям экрана
+          paddingHorizontal: 8,
         },
         tabBarLabelStyle: {
           fontSize: 10,

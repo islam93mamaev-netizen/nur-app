@@ -123,6 +123,7 @@ export default function TasbihScreen({ navigation }) {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={styles.tabsScroll}
         contentContainerStyle={styles.tabsRow}
       >
         {PHRASES.map((p, i) => {
@@ -237,6 +238,9 @@ const makeStyles = (colors) => StyleSheet.create({
   title: { ...typography.h1, color: '#fff' },
   subtitle: { ...typography.small, color: '#fff', opacity: 0.85, marginTop: 4 },
 
+  // На iOS у ScrollView по умолчанию flexShrink: 1 — рядом с вертикальным ScrollView
+  // полоса чипов сжималась по высоте и счётчик «34/33» вылезал за кнопку.
+  tabsScroll: { flexGrow: 0, flexShrink: 0 },
   tabsRow: { paddingHorizontal: spacing.lg, paddingVertical: spacing.md },
   tab: {
     backgroundColor: colors.surface,
