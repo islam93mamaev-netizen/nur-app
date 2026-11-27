@@ -18,3 +18,4 @@ fetch.command
 
 # видео для App Review (не в git)
 release/*.mp4
+release/*.apk
